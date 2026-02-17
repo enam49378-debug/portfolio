@@ -816,7 +816,10 @@ footer {
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
   margin-bottom:4px;
 }
-.mp-track-artist { font-size:0.58rem; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; }
+.mp-track-artist { font-size:0.58rem; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:6px; }
+.mp-track-links { display:flex; gap:0; flex-wrap:wrap; }
+.mp-track-links a { transition:opacity 0.2s, transform 0.2s; }
+.mp-track-links a:hover { opacity:0.8; transform:scale(1.1); }
 
 .mp-progress-wrap { display:flex; flex-direction:column; gap:6px; }
 .mp-progress {
