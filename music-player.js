@@ -7,7 +7,15 @@ const PLAYLIST_RAW = [
     title:    'MmmM',
     artist:   'Milo J & Paula Prieto',
     ytId:     '8Z_Vz9lLDK0',
-    audioSrc: 'Musica/Milo_J__Paula_Prieto_-_MmmM__Instrumental_.mp3'
+    audioSrc: 'Musica/Milo_J__Paula_Prieto_-_MmmM__Instrumental_.mp3',
+    spotifyId: '6gRT9V6RZGky3jrqPIggr5'
+  },
+  {
+    title:    'Solifican12',
+    artist:   'Milo J',
+    ytId:     'l5u9AMn30yY',
+    audioSrc: 'Musica/Solifican12.mp3',
+    spotifyId: '4fDmgQfKMY7GcAwp2nNoQ0'
   }
   // ← más canciones aquí
 ];
@@ -95,6 +103,12 @@ function loadTrack(autoplay = true) {
   // }
   if (mpYtLink) {
     mpYtLink.href = 'https://music.youtube.com/watch?v=' + t.ytId;
+  }
+  
+  // Actualizar link de Spotify
+  const mpSpotifyLink = document.getElementById('mpSpotifyLink');
+  if (mpSpotifyLink && t.spotifyId) {
+    mpSpotifyLink.href = 'https://open.spotify.com/intl-es/track/' + t.spotifyId;
   }
 
   renderPlaylist();
