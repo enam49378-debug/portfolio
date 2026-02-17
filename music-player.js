@@ -1,174 +1,177 @@
-    const PLAYLIST_RAW = [
-      {
-        title:    'MmmM',
-        artist:   'Milo J & Paula Prieto',
-        ytId:     '8Z_Vz9lLDK0',
-        audioSrc: 'Milo_J__Paula_Prieto_-_MmmM__Instrumental_.mp3'
-      }
-      // ← más canciones aquí
-    ];
+// ═══════════════════════════════════════════
+// REPRODUCTOR DE MÚSICA
+// ═══════════════════════════════════════════
 
-    // Fisher-Yates shuffle
-    function shuffle(arr) {
-      const a = [...arr];
-      for (let i = a.length-1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i+1));
-        [a[i], a[j]] = [a[j], a[i]];
-      }
-      return a;
-    }
+const PLAYLIST_RAW = [
+  {
+    title:    'MmmM',
+    artist:   'Milo J & Paula Prieto',
+    ytId:     '8Z_Vz9lLDK0',
+    audioSrc: 'Milo_J__Paula_Prieto_-_MmmM__Instrumental_.mp3'
+  }
+  // ← más canciones aquí
+];
 
-    // Mezcla aleatoria al cargar
-    const playlist = shuffle(PLAYLIST_RAW);
-    let trackIndex = 0;
-    let isLooping  = false;
-    let isShuffle  = true;
-    let panelOpen  = false;
+// Fisher-Yates shuffle
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i+1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
-    const mpPlayer     = document.getElementById('music-player');
-    const mpPanel      = document.getElementById('mpPanel');
-    const mpPill       = document.getElementById('mpPill');
-    const mpPillLbl    = document.getElementById('mpPillLabel');
-    const mpAudio      = document.getElementById('mpAudio');
-    const mpPlayBtn    = document.getElementById('mpPlayBtn');
-    const mpPlayIcon   = document.getElementById('mpPlayIcon');
-    const mpPrev       = document.getElementById('mpPrev');
-    const mpNext       = document.getElementById('mpNext');
-    const mpLoop       = document.getElementById('mpLoop');
-    const mpShuffleBtn = document.getElementById('mpShuffle');
-    const mpVolume     = document.getElementById('mpVolume');
-    const mpFill       = document.getElementById('mpProgressFill');
-    const mpBar        = document.getElementById('mpProgressBar');
-    const mpCurrent    = document.getElementById('mpCurrent');
-    const mpDuration   = document.getElementById('mpDuration');
-    const mpTrackName  = document.getElementById('mpTrackName');
-    const mpTrackArtist= document.getElementById('mpTrackArtist');
-    const mpCover      = document.getElementById('mpCover');
-    const mpYtLink     = document.getElementById('mpYtLink');
-    const mpPlaylistEl = document.getElementById('mpPlaylist');
+// Mezcla aleatoria al cargar
+const playlist = shuffle(PLAYLIST_RAW);
+let trackIndex = 0;
+let isLooping  = false;
+let isShuffle  = true;
+let panelOpen  = false;
 
-    function fmtTime(s) {
-      if (isNaN(s)||!isFinite(s)) return '0:00';
-      return Math.floor(s/60) + ':' + String(Math.floor(s%60)).padStart(2,'0');
-    }
+const mpPlayer     = document.getElementById('music-player');
+const mpPanel      = document.getElementById('mpPanel');
+const mpPill       = document.getElementById('mpPill');
+const mpPillLbl    = document.getElementById('mpPillLabel');
+const mpAudio      = document.getElementById('mpAudio');
+const mpPlayBtn    = document.getElementById('mpPlayBtn');
+const mpPlayIcon   = document.getElementById('mpPlayIcon');
+const mpPrev       = document.getElementById('mpPrev');
+const mpNext       = document.getElementById('mpNext');
+const mpLoop       = document.getElementById('mpLoop');
+const mpShuffleBtn = document.getElementById('mpShuffle');
+const mpVolume     = document.getElementById('mpVolume');
+const mpFill       = document.getElementById('mpProgressFill');
+const mpBar        = document.getElementById('mpProgressBar');
+const mpCurrent    = document.getElementById('mpCurrent');
+const mpDuration   = document.getElementById('mpDuration');
+const mpTrackName  = document.getElementById('mpTrackName');
+const mpTrackArtist= document.getElementById('mpTrackArtist');
+const mpCover      = document.getElementById('mpCover');
+const mpYtLink     = document.getElementById('mpYtLink');
+const mpPlaylistEl = document.getElementById('mpPlaylist');
 
-    function renderPlaylist() {
-      mpPlaylistEl.innerHTML = '';
-      playlist.forEach((t, i) => {
-        const row = document.createElement('div');
-        const active = i === trackIndex;
-        row.style.cssText = [
-          'display:flex;align-items:center;gap:8px;padding:6px 8px;cursor:pointer;',
-          "font-family:'Space Mono',monospace;font-size:0.58rem;letter-spacing:0.06em;",
-          'color:' + (active ? 'var(--green)' : 'var(--muted)') + ';',
-          'border-left:2px solid ' + (active ? 'var(--green)' : 'transparent') + ';',
-          'transition:all 0.15s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'
-        ].join('');
-        row.textContent = (active ? '▶ ' : '') + t.title + ' — ' + t.artist;
-        row.addEventListener('click', () => { trackIndex = i; loadTrack(); });
-        row.addEventListener('mouseenter', () => { if (i!==trackIndex) row.style.color='var(--white)'; });
-        row.addEventListener('mouseleave', () => { if (i!==trackIndex) row.style.color='var(--muted)'; });
-        mpPlaylistEl.appendChild(row);
-      });
-    }
+function fmtTime(s) {
+  if (isNaN(s)||!isFinite(s)) return '0:00';
+  return Math.floor(s/60) + ':' + String(Math.floor(s%60)).padStart(2,'0');
+}
 
-    function loadTrack(autoplay = true) {
-      const t = playlist[trackIndex];
+function renderPlaylist() {
+  mpPlaylistEl.innerHTML = '';
+  playlist.forEach((t, i) => {
+    const row = document.createElement('div');
+    const active = i === trackIndex;
+    row.style.cssText = [
+      'display:flex;align-items:center;gap:8px;padding:6px 8px;cursor:pointer;',
+      "font-family:'Space Mono',monospace;font-size:0.58rem;letter-spacing:0.06em;",
+      'color:' + (active ? 'var(--green)' : 'var(--muted)') + ';',
+      'border-left:2px solid ' + (active ? 'var(--green)' : 'transparent') + ';',
+      'transition:all 0.15s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'
+    ].join('');
+    row.textContent = (active ? '▶ ' : '') + t.title + ' — ' + t.artist;
+    row.addEventListener('click', () => { trackIndex = i; loadTrack(); });
+    row.addEventListener('mouseenter', () => { if (i!==trackIndex) row.style.color='var(--white)'; });
+    row.addEventListener('mouseleave', () => { if (i!==trackIndex) row.style.color='var(--muted)'; });
+    mpPlaylistEl.appendChild(row);
+  });
+}
 
-      // Audio
-      mpAudio.src = t.audioSrc;
-      mpAudio.load();
-      if (autoplay) mpAudio.play().catch(() => {});
+function loadTrack(autoplay = true) {
+  const t = playlist[trackIndex];
 
-      // Info visual
-      mpTrackName.textContent    = t.title;
-      mpTrackArtist.textContent  = t.artist;
-      mpPillLbl.textContent      = t.title;
+  // Audio
+  mpAudio.src = t.audioSrc;
+  mpAudio.load();
+  if (autoplay) mpAudio.play().catch(() => {});
 
-      // Portada personalizada (no sobreescribir con YouTube)
-      // if (mpCover) {
-      //   mpCover.src = 'https://i.ytimg.com/vi/' + t.ytId + '/mqdefault.jpg';
-      // }
-      if (mpYtLink) {
-        mpYtLink.href = 'https://music.youtube.com/watch?v=' + t.ytId;
-      }
+  // Info visual
+  mpTrackName.textContent    = t.title;
+  mpTrackArtist.textContent  = t.artist;
+  mpPillLbl.textContent      = t.title;
 
-      renderPlaylist();
-    }
+  // Portada personalizada (no sobreescribir con YouTube)
+  // if (mpCover) {
+  //   mpCover.src = 'https://i.ytimg.com/vi/' + t.ytId + '/mqdefault.jpg';
+  // }
+  if (mpYtLink) {
+    mpYtLink.href = 'https://music.youtube.com/watch?v=' + t.ytId;
+  }
 
-    // Toggle panel
-    mpPill.addEventListener('click', () => {
-      panelOpen = !panelOpen;
-      mpPanel.classList.toggle('open', panelOpen);
-      mpPlayer.classList.toggle('open', panelOpen);
-    });
+  renderPlaylist();
+}
 
-    // Play / Pause
-    mpPlayBtn.addEventListener('click', () => {
-      if (mpAudio.paused) mpAudio.play().catch(()=>{});
-      else mpAudio.pause();
-    });
+// Toggle panel
+mpPill.addEventListener('click', () => {
+  panelOpen = !panelOpen;
+  mpPanel.classList.toggle('open', panelOpen);
+  mpPlayer.classList.toggle('open', panelOpen);
+});
 
-    mpAudio.addEventListener('play', () => {
-      mpPlayer.classList.add('playing');
-      mpPlayIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
-    });
-    mpAudio.addEventListener('pause', () => {
-      mpPlayer.classList.remove('playing');
-      mpPlayIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
-    });
+// Play / Pause
+mpPlayBtn.addEventListener('click', () => {
+  if (mpAudio.paused) mpAudio.play().catch(()=>{});
+  else mpAudio.pause();
+});
 
-    // Progress
-    mpAudio.addEventListener('timeupdate', () => {
-      if (!mpAudio.duration) return;
-      mpFill.style.width = (mpAudio.currentTime / mpAudio.duration * 100) + '%';
-      mpCurrent.textContent  = fmtTime(mpAudio.currentTime);
-      mpDuration.textContent = fmtTime(mpAudio.duration);
-    });
-    mpBar.addEventListener('click', e => {
-      if (!mpAudio.duration) return;
-      const r = mpBar.getBoundingClientRect();
-      mpAudio.currentTime = ((e.clientX - r.left) / r.width) * mpAudio.duration;
-    });
+mpAudio.addEventListener('play', () => {
+  mpPlayer.classList.add('playing');
+  mpPlayIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+});
+mpAudio.addEventListener('pause', () => {
+  mpPlayer.classList.remove('playing');
+  mpPlayIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+});
 
-    // Volume
-    mpAudio.volume = 0.8;
-    mpVolume.addEventListener('input', () => { mpAudio.volume = mpVolume.value; });
+// Progress
+mpAudio.addEventListener('timeupdate', () => {
+  if (!mpAudio.duration) return;
+  mpFill.style.width = (mpAudio.currentTime / mpAudio.duration * 100) + '%';
+  mpCurrent.textContent  = fmtTime(mpAudio.currentTime);
+  mpDuration.textContent = fmtTime(mpAudio.duration);
+});
+mpBar.addEventListener('click', e => {
+  if (!mpAudio.duration) return;
+  const r = mpBar.getBoundingClientRect();
+  mpAudio.currentTime = ((e.clientX - r.left) / r.width) * mpAudio.duration;
+});
 
-    // Loop
-    mpLoop.addEventListener('click', () => {
-      isLooping = !isLooping;
-      mpAudio.loop      = isLooping;
-      mpLoop.style.opacity = isLooping ? '1' : '0.4';
-      mpLoop.style.color   = isLooping ? 'var(--green)' : '';
-    });
+// Volume
+mpAudio.volume = 0.8;
+mpVolume.addEventListener('input', () => { mpAudio.volume = mpVolume.value; });
 
-    // Shuffle (re-mezcla)
-    mpShuffleBtn.addEventListener('click', () => {
-      isShuffle = !isShuffle;
-      mpShuffleBtn.style.opacity = isShuffle ? '1' : '0.4';
-      mpShuffleBtn.style.color   = isShuffle ? 'var(--green)' : '';
-      if (isShuffle) {
-        const current = playlist[trackIndex];
-        const mixed = shuffle(playlist);
-        playlist.splice(0, playlist.length, ...mixed);
-        trackIndex = playlist.findIndex(t => t === current);
-        renderPlaylist();
-      }
-    });
+// Loop
+mpLoop.addEventListener('click', () => {
+  isLooping = !isLooping;
+  mpAudio.loop      = isLooping;
+  mpLoop.style.opacity = isLooping ? '1' : '0.4';
+  mpLoop.style.color   = isLooping ? 'var(--green)' : '';
+});
 
-    // Prev / Next
-    mpPrev.addEventListener('click', () => {
-      trackIndex = (trackIndex - 1 + playlist.length) % playlist.length;
-      loadTrack();
-    });
-    function nextTrack() {
-      trackIndex = (trackIndex + 1) % playlist.length;
-      loadTrack();
-    }
-    mpNext.addEventListener('click', nextTrack);
-    mpAudio.addEventListener('ended', () => { if (!isLooping) nextTrack(); });
+// Shuffle (re-mezcla)
+mpShuffleBtn.addEventListener('click', () => {
+  isShuffle = !isShuffle;
+  mpShuffleBtn.style.opacity = isShuffle ? '1' : '0.4';
+  mpShuffleBtn.style.color   = isShuffle ? 'var(--green)' : '';
+  if (isShuffle) {
+    const current = playlist[trackIndex];
+    const mixed = shuffle(playlist);
+    playlist.splice(0, playlist.length, ...mixed);
+    trackIndex = playlist.findIndex(t => t === current);
+    renderPlaylist();
+  }
+});
 
-    // Iniciar sin autoplay (el navegador lo bloquea sin interacción)
-    loadTrack(false);
-  </script>
+// Prev / Next
+mpPrev.addEventListener('click', () => {
+  trackIndex = (trackIndex - 1 + playlist.length) % playlist.length;
+  loadTrack();
+});
+function nextTrack() {
+  trackIndex = (trackIndex + 1) % playlist.length;
+  loadTrack();
+}
+mpNext.addEventListener('click', nextTrack);
+mpAudio.addEventListener('ended', () => { if (!isLooping) nextTrack(); });
+
+// Iniciar sin autoplay (el navegador lo bloquea sin interacción)
+loadTrack(false);
