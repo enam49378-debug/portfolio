@@ -191,32 +191,35 @@ mpAudio.addEventListener('ended', () => { if (!isLooping) nextTrack(); });
 trackIndex = Math.floor(Math.random() * playlist.length);
 loadTrack(false);
 
-// Trigger autoplay con primera interacción del usuario
-let autoplayTriggered = false;
+// Forzar autoplay: silenciado primero, luego volumen normal
+mpAudio.muted = true;
+mpAudio.volume = 0.8;
 
-function triggerAutoplay() {
-  if (autoplayTriggered) return;
-  autoplayTriggered = true;
-  
-  mpAudio.volume = 0;
-  mpAudio.play().catch(() => {});
-  
-  let vol = 0;
-  const fadeIn = setInterval(() => {
-    vol += 0.02;
-    mpAudio.volume = Math.min(vol, 0.8);
-    if (vol >= 0.8) clearInterval(fadeIn);
-  }, 100);
-  
-  // Remover listeners después de usarlos
-  document.removeEventListener('click', triggerAutoplay);
-  document.removeEventListener('scroll', triggerAutoplay);
-  document.removeEventListener('mousemove', triggerAutoplay);
-  document.removeEventListener('touchstart', triggerAutoplay);
-}
+setTimeout(() => {
+  mpAudio.play().catch(err => {
+    console.log('Autoplay bloqueado, esperando interacción:', err);
+  }).then(() => {
+    // Fade-in desde muted
+    let isMuted = true;
+    const unmuteInterval = setInterval(() => {
+      mpAudio.muted = false;
+      clearInterval(unmuteInterval);
+    }, 500);
+  });
+}, 500);
 
-// Listeners para primera interacción
-document.addEventListener('click', triggerAutoplay, { once: true });
-document.addEventListener('scroll', triggerAutoplay, { once: true });
-document.addEventListener('mousemove', triggerAutoplay, { once: true });
-document.addEventListener('touchstart', triggerAutoplay, { once: true });
+// Si falla el autoplay, unmute con primera interacción
+document.addEventListener('click', () => {
+  mpAudio.muted = false;
+  if (mpAudio.paused) mpAudio.play().catch(() => {});
+}, { once: true });
+
+document.addEventListener('scroll', () => {
+  mpAudio.muted = false;
+  if (mpAudio.paused) mpAudio.play().catch(() => {});
+}, { once: true });
+
+document.addEventListener('touchstart', () => {
+  mpAudio.muted = false;
+  if (mpAudio.paused) mpAudio.play().catch(() => {});
+}, { once: true });
