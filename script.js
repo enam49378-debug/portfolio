@@ -81,7 +81,7 @@ function updateCharFrame() {
 
   const sectionStart = rect.top;
   const sectionEnd = rect.bottom;
-  const activeRange = winH * 1.5;
+  const activeRange = winH * 0.8; // Más rápido: de 1.5 a 0.8
 
   const progress = Math.max(0, Math.min(1,
     (winH - sectionStart) / (activeRange)
