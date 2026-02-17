@@ -269,15 +269,15 @@ section {
 }
 .character-scroll-stage {
   position: relative;
-  width: 360px;
-  height: 440px;
+  width: 420px;
+  height: 520px;
   display: flex;
   align-items: flex-end;
   justify-content: center;
 }
 .character-big {
-  width: 340px;
-  height: 420px;
+  width: 400px;
+  height: 500px;
   object-fit: contain;
   object-position: top;
   image-rendering: pixelated;
@@ -296,15 +296,15 @@ section {
   bottom: -20px;
   left: 50%;
   transform: translateX(-50%);
-  width: 220px;
-  height: 36px;
+  width: 260px;
+  height: 42px;
   background: radial-gradient(ellipse, rgba(111,207,74,0.22) 0%, transparent 70%);
   border-radius: 50%;
   transition: all 0.6s ease;
 }
 .character-big.looking-at-you + .char-glow,
 .looking-at-you ~ .char-glow {
-  width: 280px;
+  width: 330px;
   background: radial-gradient(ellipse, rgba(111,207,74,0.4) 0%, transparent 70%);
 }
 
