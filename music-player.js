@@ -187,5 +187,19 @@ function nextTrack() {
 mpNext.addEventListener('click', nextTrack);
 mpAudio.addEventListener('ended', () => { if (!isLooping) nextTrack(); });
 
-// Iniciar sin autoplay (el navegador lo bloquea sin interacción)
+// Iniciar con canción aleatoria y fade-in
+trackIndex = Math.floor(Math.random() * playlist.length);
 loadTrack(false);
+
+// Fade-in suave al cargar la página
+setTimeout(() => {
+  mpAudio.volume = 0;
+  mpAudio.play().catch(() => {});
+  
+  let vol = 0;
+  const fadeIn = setInterval(() => {
+    vol += 0.02;
+    mpAudio.volume = Math.min(vol, 0.8);
+    if (vol >= 0.8) clearInterval(fadeIn);
+  }, 100);
+}, 800); // Espera 800ms antes de empezar a sonar
