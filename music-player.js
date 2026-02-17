@@ -187,12 +187,17 @@ function nextTrack() {
 mpNext.addEventListener('click', nextTrack);
 mpAudio.addEventListener('ended', () => { if (!isLooping) nextTrack(); });
 
-// Iniciar con canción aleatoria y fade-in
+// Iniciar con canción aleatoria
 trackIndex = Math.floor(Math.random() * playlist.length);
 loadTrack(false);
 
-// Fade-in suave al cargar la página
-setTimeout(() => {
+// Trigger autoplay con primera interacción del usuario
+let autoplayTriggered = false;
+
+function triggerAutoplay() {
+  if (autoplayTriggered) return;
+  autoplayTriggered = true;
+  
   mpAudio.volume = 0;
   mpAudio.play().catch(() => {});
   
@@ -202,4 +207,16 @@ setTimeout(() => {
     mpAudio.volume = Math.min(vol, 0.8);
     if (vol >= 0.8) clearInterval(fadeIn);
   }, 100);
-}, 800); // Espera 800ms antes de empezar a sonar
+  
+  // Remover listeners después de usarlos
+  document.removeEventListener('click', triggerAutoplay);
+  document.removeEventListener('scroll', triggerAutoplay);
+  document.removeEventListener('mousemove', triggerAutoplay);
+  document.removeEventListener('touchstart', triggerAutoplay);
+}
+
+// Listeners para primera interacción
+document.addEventListener('click', triggerAutoplay, { once: true });
+document.addEventListener('scroll', triggerAutoplay, { once: true });
+document.addEventListener('mousemove', triggerAutoplay, { once: true });
+document.addEventListener('touchstart', triggerAutoplay, { once: true });
