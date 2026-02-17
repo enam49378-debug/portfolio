@@ -385,11 +385,27 @@
 
   </div>
 
-  <audio id="mpAudio" preload="auto"></audio>
+  <!-- MODAL DE MÚSICA -->
+  <div id="musicModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:10000;display:flex;align-items:center;justify-content:center;">
+    <div style="background:var(--surface);border:1px solid rgba(111,207,74,0.3);padding:32px;border-radius:8px;text-align:center;max-width:320px;animation:modalFadeIn 0.3s ease;">
+      <div style="font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--green);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:16px;">♪ Música</div>
+      <h3 style="font-size:1.2rem;margin-bottom:20px;color:var(--white);">¿Activar música?</h3>
+      <div style="display:flex;gap:12px;justify-content:center;">
+        <button id="musicYes" style="background:var(--green);color:var(--bg);border:none;padding:10px 20px;cursor:pointer;font-family:'Space Mono',monospace;font-size:0.8rem;font-weight:bold;letter-spacing:0.1em;text-transform:uppercase;transition:all 0.2s;">Sí</button>
+        <button id="musicNo" style="background:transparent;color:var(--white);border:1px solid var(--muted);padding:10px 20px;cursor:pointer;font-family:'Space Mono',monospace;font-size:0.8rem;font-weight:bold;letter-spacing:0.1em;text-transform:uppercase;transition:all 0.2s;">No</button>
+      </div>
+    </div>
+  </div>
 
-  <!-- Scripts -->
+  <style>
+    @keyframes modalFadeIn {
+      from { opacity:0;transform:scale(0.9); }
+      to { opacity:1;transform:scale(1); }
+    }
+  </style>
   <script src="script.js"></script>
   <script src="music-player.js"></script>
+  <script src="editor.js"></script>
 
 </body>
 </html>
