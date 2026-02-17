@@ -43,19 +43,24 @@
       </div>
     </div>
 
+    <!-- Floating pixel blocks decoration -->
     <div class="blocks-deco" aria-hidden="true">
+      <!-- Row 1 -->
       <div class="block block-air"></div>
       <div class="block block-grass"></div>
       <div class="block block-grass"></div>
       <div class="block block-air"></div>
+      <!-- Row 2 -->
       <div class="block block-grass"></div>
       <div class="block block-dirt"></div>
       <div class="block block-dirt"></div>
       <div class="block block-grass"></div>
+      <!-- Row 3 -->
       <div class="block block-stone"></div>
       <div class="block block-stone"></div>
       <div class="block block-dirt"></div>
       <div class="block block-stone"></div>
+      <!-- Row 4 -->
       <div class="block block-dark"></div>
       <div class="block block-stone"></div>
       <div class="block block-dark"></div>
@@ -73,15 +78,17 @@
         <p>Me dedico a hacer animaciones de Minecraft — todo creado dentro del juego mismo, usando mods para dar vida a personajes, cámaras y escenas épicas.</p>
         <p style="color:var(--muted);font-size:0.9rem;">Este portafolio irá creciendo con el tiempo. ¡Hay mucho más por venir!</p>
       </div>
+      <!-- BIG CHARACTER with scroll rotation -->
       <div class="character-scroll-wrap fade-in">
         <div class="character-scroll-stage">
-          <img id="scrollChar" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" alt="character"/>
+          <img id="scrollChar" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" alt="character" style="width:260px;height:320px;object-fit:contain;"/>
           <div class="char-glow"></div>
         </div>
       </div>
     </div>
 
-    <div class="about-stats fade-in" style="margin-top:80px;">
+    <!-- STATS -->
+    <div class="about-stats fade-in">
       <div class="stat-card">
         <span class="stat-num">5+</span>
         <span class="stat-label">Años creando</span>
@@ -101,15 +108,16 @@
     </div>
   </section>
 
-  <!-- WORK -->
+  <!-- WORK / SHOWREEL -->
   <section id="work">
     <div class="section-label fade-in">// Portfolio</div>
     <h2 class="section-title fade-in">Mis animaciones</h2>
     <div class="work-grid">
 
+      <!-- Card 1 -->
       <div class="work-card fade-in">
         <div class="work-thumb">
-          <svg width="100%" height="100%" viewBox="0 0 480 270" xmlns="http://www.w3.org/2000/svg">
+          <svg width="100%" height="100%" viewBox="0 0 480 270" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated">
             <rect width="480" height="270" fill="#1a1a2e"/>
             <rect x="0" y="180" width="480" height="90" fill="#0f3460"/>
             <circle cx="240" cy="80" r="60" fill="#eeba30" opacity="0.8"/>
@@ -121,34 +129,62 @@
         <div class="work-info">
           <div class="work-tag">Animación · Minecraft</div>
           <h3 class="work-title">Noche en el bosque</h3>
-          <p class="work-desc">Una escena nocturna cinematográfica con iluminación de luna y mobs animados.</p>
+          <p class="work-desc">Una escena nocturna cinematográfica con iluminación de luna y mobs animados. Creada 100% in-game.</p>
           <a href="#" class="work-link">Ver animación →</a>
         </div>
       </div>
 
+      <!-- Card 2 -->
       <div class="work-card fade-in">
         <div class="work-thumb">
-          <svg width="100%" height="100%" viewBox="0 0 480 270" xmlns="http://www.w3.org/2000/svg">
+          <svg width="100%" height="100%" viewBox="0 0 480 270" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated">
+            <!-- Sky -->
             <rect width="480" height="270" fill="#87CEEB"/>
-            <rect x="0" y="200" width="480" height="70" fill="#8B6340"/>
+            <!-- Clouds -->
+            <rect x="60" y="40" width="80" height="24" fill="#fff" opacity="0.9"/>
+            <rect x="44" y="48" width="112" height="16" fill="#fff" opacity="0.9"/>
+            <rect x="280" y="60" width="60" height="20" fill="#fff" opacity="0.8"/>
+            <!-- Sun -->
+            <rect x="380" y="20" width="40" height="40" fill="#FFD700"/>
+            <!-- Ground -->
+            <rect x="0" y="200" width="480" height="8" fill="#6fcf4a"/>
+            <rect x="0" y="208" width="480" height="62" fill="#8B6340"/>
+            <!-- Castle -->
             <rect x="160" y="100" width="160" height="100" fill="#888"/>
+            <rect x="160" y="80" width="40" height="40" fill="#888"/>
+            <rect x="280" y="80" width="40" height="40" fill="#888"/>
+            <rect x="200" y="60" width="80" height="60" fill="#999"/>
+            <!-- Tower tops -->
+            <rect x="164" y="68" width="8" height="16" fill="#666"/>
+            <rect x="176" y="68" width="8" height="16" fill="#666"/>
+            <rect x="188" y="68" width="8" height="16" fill="#666"/>
+            <rect x="284" y="68" width="8" height="16" fill="#666"/>
+            <rect x="296" y="68" width="8" height="16" fill="#666"/>
+            <rect x="308" y="68" width="8" height="16" fill="#666"/>
+            <!-- Door -->
+            <rect x="224" y="160" width="32" height="40" fill="#5a3e28"/>
+            <!-- Windows -->
+            <rect x="176" y="128" width="24" height="24" fill="#87CEEB"/>
+            <rect x="280" y="128" width="24" height="24" fill="#87CEEB"/>
           </svg>
           <div class="play-btn"></div>
         </div>
         <div class="work-info">
           <div class="work-tag">Animación · Machinima</div>
           <h3 class="work-title">El castillo</h3>
-          <p class="work-desc">Recorrido cinematográfico por un castillo medieval. Cámaras en movimiento.</p>
+          <p class="work-desc">Recorrido cinematográfico por un castillo medieval. Cámaras en movimiento y efectos de luz natural.</p>
           <a href="#" class="work-link">Ver animación →</a>
         </div>
       </div>
 
+      <!-- Card 3 - ADD YOURS -->
       <div class="work-card fade-in" style="border: 1px dashed rgba(111,207,74,0.2); display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:320px; padding: 40px; text-align:center; background: var(--bg);">
         <div style="width:40px;height:40px;border:2px dashed var(--green-dim);display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
-          <span style="color:var(--green-dim);font-size:1.5rem;">+</span>
+          <span style="color:var(--green-dim);font-size:1.5rem;line-height:1;">+</span>
         </div>
         <div class="work-tag">Próximamente</div>
         <h3 class="work-title" style="color:var(--muted)">Tu próxima animación</h3>
+        <p class="work-desc">Aquí irá tu siguiente proyecto. ¡Sigue creando!</p>
       </div>
 
     </div>
@@ -157,10 +193,11 @@
   <!-- SKILLS -->
   <section id="skills">
     <div class="section-label fade-in">// Herramientas</div>
-    <h2 class="section-title fade-in">Con qué trabajo</h2>
+    <h2 class="section-title fade-in">Con qué<br>trabajo</h2>
     <div class="skills-grid">
 
       <div class="skill-item fade-in">
+        <!-- Pixel icon: camera -->
         <div class="skill-icon">
           <div class="pxl" style="background:transparent"></div>
           <div class="pxl" style="background:#6fcf4a"></div>
@@ -173,22 +210,55 @@
           <div class="pxl" style="background:#6fcf4a"></div>
         </div>
         <div class="skill-name">Camera Mods</div>
-        <div class="skill-desc">Control de cámara fluido para tomas cinematográficas.</div>
+        <div class="skill-desc">Control de cámara fluido para tomas cinematográficas dentro del juego.</div>
       </div>
 
       <div class="skill-item fade-in">
+        <div class="skill-icon">
+          <div class="pxl" style="background:#6fcf4a"></div>
+          <div class="pxl" style="background:#6fcf4a"></div>
+          <div class="pxl" style="background:#6fcf4a"></div>
+          <div class="pxl" style="background:#6fcf4a"></div>
+          <div class="pxl" style="background:transparent"></div>
+          <div class="pxl" style="background:#6fcf4a"></div>
+          <div class="pxl" style="background:#6fcf4a"></div>
+          <div class="pxl" style="background:#6fcf4a"></div>
+          <div class="pxl" style="background:#6fcf4a"></div>
+        </div>
         <div class="skill-name">Character Animation</div>
-        <div class="skill-desc">Animación de personajes y mobs con mods especializados.</div>
+        <div class="skill-desc">Animación de personajes y mobs con mods especializados para poses y movimiento.</div>
       </div>
 
       <div class="skill-item fade-in">
+        <div class="skill-icon">
+          <div class="pxl" style="background:transparent"></div>
+          <div class="pxl" style="background:#FFD700"></div>
+          <div class="pxl" style="background:transparent"></div>
+          <div class="pxl" style="background:#FFD700"></div>
+          <div class="pxl" style="background:#FFD700"></div>
+          <div class="pxl" style="background:#FFD700"></div>
+          <div class="pxl" style="background:transparent"></div>
+          <div class="pxl" style="background:#FFD700"></div>
+          <div class="pxl" style="background:transparent"></div>
+        </div>
         <div class="skill-name">Lighting & Effects</div>
-        <div class="skill-desc">Iluminación realista y efectos visuales para cinematografía.</div>
+        <div class="skill-desc">Iluminación realista y efectos visuales para cinematografía dentro del juego.</div>
       </div>
 
       <div class="skill-item fade-in">
+        <div class="skill-icon">
+          <div class="pxl" style="background:#8B6340"></div>
+          <div class="pxl" style="background:#8B6340"></div>
+          <div class="pxl" style="background:#8B6340"></div>
+          <div class="pxl" style="background:transparent"></div>
+          <div class="pxl" style="background:#8B6340"></div>
+          <div class="pxl" style="background:#8B6340"></div>
+          <div class="pxl" style="background:#8B6340"></div>
+          <div class="pxl" style="background:#8B6340"></div>
+          <div class="pxl" style="background:transparent"></div>
+        </div>
         <div class="skill-name">World Building</div>
-        <div class="skill-desc">Construcción de mundos detallados y escenarios cinematográficos.</div>
+        <div class="skill-desc">Construcción de mundos detallados y escenarios para animaciones cinematográficas.</div>
       </div>
 
     </div>
@@ -198,9 +268,9 @@
   <section id="contact">
     <div class="contact-inner">
       <div class="section-label fade-in">// Contacto</div>
-      <h2 class="section-title fade-in">¿Trabajamos juntos?</h2>
+      <h2 class="section-title fade-in">¿Trabajamos<br>juntos?</h2>
       <p class="fade-in" style="color:var(--stone);line-height:1.7;margin-bottom:8px;">
-        ¿Quieres una animación personalizada? Escríbeme.
+        ¿Quieres una animación personalizada, tienes un proyecto o solo quieres charlar de Minecraft? Escríbeme.
       </p>
       <div class="contact-links">
         <a href="https://youtube.com/@JesulutoXD" class="contact-link fade-in" target="_blank">
@@ -228,20 +298,29 @@
     <span class="footer-copy" style="color:var(--green-dim)">Made block by block.</span>
   </footer>
 
-  <!-- MUSIC PLAYER -->
+  <!-- ═══════════════════════════════════════════
+       MUSIC PLAYER
+  ═══════════════════════════════════════════ -->
   <div id="music-player">
+
+    <!-- Panel expandido -->
     <div class="mp-panel" id="mpPanel">
+
+      <!-- Cabecera: arte + info de pista -->
       <div class="mp-panel-header">
-        <div class="mp-album-art" id="mpAlbumArt">
-          <img id="mpCover" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" alt="cover">
+        <div class="mp-album-art" id="mpAlbumArt" style="width:80px;height:80px;background:var(--surface2);border:1px solid rgba(111,207,74,0.2);overflow:hidden;flex-shrink:0;border-radius:4px;">
+          <img id="mpCover" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" alt="cover" style="width:100%;height:100%;object-fit:cover;display:block;">
         </div>
         <div class="mp-track-info">
           <div class="mp-track-name" id="mpTrackName">MmmM</div>
           <div class="mp-track-artist" id="mpTrackArtist">Milo J &amp; Paula Prieto</div>
-          <a id="mpYtLink" href="https://music.youtube.com/watch?v=8Z_Vz9lLDK0" target="_blank">▶ ver en YouTube</a>
+          <a id="mpYtLink" href="https://music.youtube.com/watch?v=8Z_Vz9lLDK0" target="_blank" style="font-family:'Space Mono',monospace;font-size:0.52rem;color:var(--green-dim);letter-spacing:0.08em;text-decoration:none;text-transform:uppercase;">
+            ▶ ver en YouTube
+          </a>
         </div>
       </div>
 
+      <!-- Progress bar -->
       <div class="mp-progress-wrap" id="mpProgressWrap">
         <div class="mp-progress" id="mpProgressBar">
           <div class="mp-progress-fill" id="mpProgressFill"></div>
@@ -252,6 +331,7 @@
         </div>
       </div>
 
+      <!-- Controles -->
       <div class="mp-controls" id="mpControls">
         <button class="mp-ctrl" id="mpPrev" title="Anterior">
           <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
@@ -260,16 +340,17 @@
           <svg viewBox="0 0 24 24" id="mpPlayIcon"><path d="M8 5v14l11-7z"/></svg>
         </button>
         <button class="mp-ctrl" id="mpNext" title="Siguiente">
-          <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zm2.5-6 5.5 3.9V8.1z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zm2.5-6 5.5 3.9V8.1z"/><path d="M16 6h2v12h-2z"/></svg>
         </button>
         <button class="mp-ctrl" id="mpShuffle" title="Shuffle" style="opacity:1;color:var(--green);">
-          <svg viewBox="0 0 24 24"><path d="M10.59 9.17 5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M10.59 9.17 5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
         </button>
         <button class="mp-ctrl" id="mpLoop" title="Repetir" style="opacity:0.4">
           <svg viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
         </button>
       </div>
 
+      <!-- Volumen -->
       <div class="mp-volume-row">
         <div class="mp-vol-icon">
           <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
@@ -277,18 +358,25 @@
         <input type="range" class="mp-volume" id="mpVolume" min="0" max="1" step="0.01" value="0.8">
       </div>
 
-      <div id="mpPlaylist"></div>
+      <!-- Mini playlist -->
+      <div id="mpPlaylist" style="display:flex;flex-direction:column;gap:2px;max-height:110px;overflow-y:auto;"></div>
+
     </div>
 
+    <!-- Pill (siempre visible) -->
     <div class="mp-pill" id="mpPill">
-      <div class="mp-eq"><span></span><span></span><span></span><span></span></div>
+      <div class="mp-eq">
+        <span></span><span></span><span></span><span></span>
+      </div>
       <span class="mp-pill-label" id="mpPillLabel">♪ MmmM</span>
       <span class="mp-pill-arrow" id="mpPillArrow">▲</span>
     </div>
+
   </div>
 
   <audio id="mpAudio" preload="auto"></audio>
 
+  <!-- Scripts -->
   <script src="script.js"></script>
   <script src="music-player.js"></script>
 
