@@ -308,6 +308,44 @@ section {
   background: radial-gradient(ellipse, rgba(111,207,74,0.4) 0%, transparent 70%);
 }
 
+.char-touch-hint {
+  position: absolute;
+  bottom: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.char-touch-hint.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hint-text {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--green);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  animation: hintBounce 1.5s ease-in-out infinite;
+}
+
+.hint-cursor {
+  font-size: 1.2rem;
+  animation: hintBounce 1.5s ease-in-out infinite;
+}
+
+@keyframes hintBounce {
+  0%, 100% { transform: translateY(0); opacity: 0.6; }
+  50% { transform: translateY(-8px); opacity: 1; }
+}
+
 .about-text p {
   color: var(--stone);
   line-height: 1.8;
