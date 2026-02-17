@@ -7,7 +7,7 @@ const PLAYLIST_RAW = [
     title:    'MmmM',
     artist:   'Milo J & Paula Prieto',
     ytId:     '8Z_Vz9lLDK0',
-    audioSrc: 'Imagenes/Musica/Milo_J__Paula_Prieto_-_MmmM__Instrumental_.mp3'
+    audioSrc: 'Musica/Milo_J__Paula_Prieto_-_MmmM__Instrumental_.mp3'
   }
   // ← más canciones aquí
 ];
