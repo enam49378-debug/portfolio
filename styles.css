@@ -269,15 +269,15 @@ section {
 }
 .character-scroll-stage {
   position: relative;
-  width: 280px;
-  height: 340px;
+  width: 360px;
+  height: 440px;
   display: flex;
   align-items: flex-end;
   justify-content: center;
 }
 .character-big {
-  width: 260px;
-  height: 320px;
+  width: 340px;
+  height: 420px;
   object-fit: contain;
   object-position: top;
   image-rendering: pixelated;
@@ -296,15 +296,15 @@ section {
   bottom: -20px;
   left: 50%;
   transform: translateX(-50%);
-  width: 160px;
-  height: 28px;
+  width: 220px;
+  height: 36px;
   background: radial-gradient(ellipse, rgba(111,207,74,0.22) 0%, transparent 70%);
   border-radius: 50%;
   transition: all 0.6s ease;
 }
 .character-big.looking-at-you + .char-glow,
 .looking-at-you ~ .char-glow {
-  width: 220px;
+  width: 280px;
   background: radial-gradient(ellipse, rgba(111,207,74,0.4) 0%, transparent 70%);
 }
 
@@ -658,8 +658,8 @@ footer {
   .blocks-deco { display: none; }
   section { padding: 72px 24px; }
   .about-grid { grid-template-columns: 1fr; gap: 48px; }
-  .character-scroll-stage { width: 200px; height: 250px; }
-  .character-big { width: 190px; height: 240px; }
+  .character-scroll-stage { width: 250px; height: 310px; }
+  .character-big { width: 230px; height: 290px; }
   footer { padding: 24px; flex-direction: column; gap: 12px; }
   .upload-box { padding: 36px 24px; }
 }
