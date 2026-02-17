@@ -310,7 +310,7 @@ section {
 
 .char-touch-hint {
   position: absolute;
-  bottom: -60px;
+  top: -50px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -327,23 +327,14 @@ section {
   pointer-events: none;
 }
 
-.hint-text {
-  font-family: 'Space Mono', monospace;
-  font-size: 0.65rem;
-  color: var(--green);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  animation: hintBounce 1.5s ease-in-out infinite;
-}
-
 .hint-cursor {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   animation: hintBounce 1.5s ease-in-out infinite;
 }
 
 @keyframes hintBounce {
   0%, 100% { transform: translateY(0); opacity: 0.6; }
-  50% { transform: translateY(-8px); opacity: 1; }
+  50% { transform: translateY(8px); opacity: 1; }
 }
 
 .about-text p {
