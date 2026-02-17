@@ -1,5 +1,4 @@
-<style>
-    :root {
+:root {
       --bg: #0d0f0e;
       --surface: #141714;
       --surface2: #1a1e1a;
@@ -854,4 +853,3 @@
       #music-player { right:12px; bottom:12px; }
       .mp-panel { width:calc(100vw - 24px); right:0; }
     }
-  </style>
