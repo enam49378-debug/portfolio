@@ -190,36 +190,3 @@ mpAudio.addEventListener('ended', () => { if (!isLooping) nextTrack(); });
 // Iniciar con canción aleatoria
 trackIndex = Math.floor(Math.random() * playlist.length);
 loadTrack(false);
-
-// Forzar autoplay: silenciado primero, luego volumen normal
-mpAudio.muted = true;
-mpAudio.volume = 0.8;
-
-setTimeout(() => {
-  mpAudio.play().catch(err => {
-    console.log('Autoplay bloqueado, esperando interacción:', err);
-  }).then(() => {
-    // Fade-in desde muted
-    let isMuted = true;
-    const unmuteInterval = setInterval(() => {
-      mpAudio.muted = false;
-      clearInterval(unmuteInterval);
-    }, 500);
-  });
-}, 500);
-
-// Si falla el autoplay, unmute con primera interacción
-document.addEventListener('click', () => {
-  mpAudio.muted = false;
-  if (mpAudio.paused) mpAudio.play().catch(() => {});
-}, { once: true });
-
-document.addEventListener('scroll', () => {
-  mpAudio.muted = false;
-  if (mpAudio.paused) mpAudio.play().catch(() => {});
-}, { once: true });
-
-document.addEventListener('touchstart', () => {
-  mpAudio.muted = false;
-  if (mpAudio.paused) mpAudio.play().catch(() => {});
-}, { once: true });
