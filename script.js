@@ -70,7 +70,6 @@ const TOTAL_FRAMES = FRAMES.length;
 let currentFrame = 0;
 let isAnimating = false;
 let resetTimeout = null;
-let direction = 1; // 1 = adelante, -1 = atrás
 
 // Precarga frames
 FRAMES.forEach((src, i) => {
@@ -91,26 +90,23 @@ function animateFrames() {
   isAnimating = true;
   touchHint.classList.add('hidden');
   
-  // Limpia reset anterior si existe
+  // Limpia reset anterior
   if (resetTimeout) clearTimeout(resetTimeout);
   
-  let progress = 0;
-  const animationSpeed = 0.15; // 15% por frame
+  let currentIdx = currentFrame;
   
   function advance() {
-    progress += animationSpeed;
-    const frameIdx = Math.floor(progress * TOTAL_FRAMES);
+    currentIdx++;
     
-    if (frameIdx < TOTAL_FRAMES) {
-      updateCharFrame(frameIdx);
-      requestAnimationFrame(advance);
+    if (currentIdx < TOTAL_FRAMES) {
+      updateCharFrame(currentIdx);
+      setTimeout(advance, 200); // 200ms entre frames
     } else {
-      // Animación llegó al frame 5, ahora espera y vuelve atrás
+      // Llegó al frame 5, espera 2 segundos y vuelve
       isAnimating = false;
-      
       resetTimeout = setTimeout(() => {
         reverseAnimation();
-      }, 2000); // Espera 2 segundos antes de volver
+      }, 2000);
     }
   }
   
@@ -121,34 +117,45 @@ function reverseAnimation() {
   if (isAnimating) return;
   
   isAnimating = true;
-  
-  let progress = 1;
-  const animationSpeed = 0.15;
+  let currentIdx = TOTAL_FRAMES - 1;
   
   function reverse() {
-    progress -= animationSpeed;
-    const frameIdx = Math.floor(progress * TOTAL_FRAMES);
+    currentIdx--;
     
-    if (frameIdx >= 0) {
-      updateCharFrame(frameIdx);
-      requestAnimationFrame(reverse);
+    if (currentIdx >= 0) {
+      updateCharFrame(currentIdx);
+      setTimeout(reverse, 200);
     } else {
-      // Volvió al frame 1
+      // Volvió al frame 0
       updateCharFrame(0);
       isAnimating = false;
       touchHint.classList.remove('hidden');
+      
+      // Schedule auto-reset aleatorio entre 60-120 segundos (1-2 minutos)
+      const randomDelay = Math.random() * (120000 - 60000) + 60000;
+      resetTimeout = setTimeout(() => {
+        if (!isAnimating) {
+          animateFrames();
+        }
+      }, randomDelay);
     }
   }
   
   reverse();
 }
 
-// Event listeners para click/touch
-char.addEventListener('click', animateFrames);
-char.addEventListener('touchstart', (e) => {
-  e.preventDefault();
-  animateFrames();
-});
+// Event listeners - touch y click
+if (char) {
+  char.addEventListener('click', (e) => {
+    e.preventDefault();
+    animateFrames();
+  });
+  
+  char.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    animateFrames();
+  });
+}
 
 // ═══════════════════════════════════════════
 // NAV ACTIVE HIGHLIGHT
