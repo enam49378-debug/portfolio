@@ -52,11 +52,11 @@ const observer = new IntersectionObserver(entries => {
 document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
 // ═══════════════════════════════════════════
-// CHARACTER SPRITE SCROLL ANIMATION
+// CHARACTER SPRITE INTERACTIVO (TOQUE)
 // ═══════════════════════════════════════════
 
 const char = document.getElementById('scrollChar');
-const aboutSection = document.getElementById('about');
+const touchHint = document.getElementById('touchHint');
 
 const FRAMES = [
   'Imagenes/Frame/1.png',
@@ -68,42 +68,87 @@ const FRAMES = [
 
 const TOTAL_FRAMES = FRAMES.length;
 let currentFrame = 0;
+let isAnimating = false;
+let resetTimeout = null;
+let direction = 1; // 1 = adelante, -1 = atrás
 
+// Precarga frames
 FRAMES.forEach((src, i) => {
   const img = new Image();
   img.src = src;
 });
 
-function updateCharFrame() {
-  if (!char || !aboutSection) return;
-  const rect = aboutSection.getBoundingClientRect();
-  const winH = window.innerHeight;
-
-  const sectionStart = rect.top;
-  const sectionEnd = rect.bottom;
-  const activeRange = winH * 0.5; // Más rápido: de 0.8 a 0.5
-
-  const progress = Math.max(0, Math.min(1,
-    (winH - sectionStart) / (activeRange)
-  ));
-
-  const frameIdx = Math.floor(progress * TOTAL_FRAMES) % TOTAL_FRAMES;
-
-  if (frameIdx !== currentFrame) {
+function updateCharFrame(frameIdx) {
+  if (frameIdx >= 0 && frameIdx < TOTAL_FRAMES) {
     currentFrame = frameIdx;
     char.src = FRAMES[currentFrame];
   }
-
-  const isVisible = sectionStart < winH * 0.8 && sectionEnd > winH * 0.1;
-  if (isVisible) {
-    char.classList.add('looking-at-you');
-  } else {
-    char.classList.remove('looking-at-you');
-  }
 }
 
-window.addEventListener('scroll', updateCharFrame, { passive: true });
-updateCharFrame();
+function animateFrames() {
+  if (isAnimating) return;
+  
+  isAnimating = true;
+  touchHint.classList.add('hidden');
+  
+  // Limpia reset anterior si existe
+  if (resetTimeout) clearTimeout(resetTimeout);
+  
+  let progress = 0;
+  const animationSpeed = 0.15; // 15% por frame
+  
+  function advance() {
+    progress += animationSpeed;
+    const frameIdx = Math.floor(progress * TOTAL_FRAMES);
+    
+    if (frameIdx < TOTAL_FRAMES) {
+      updateCharFrame(frameIdx);
+      requestAnimationFrame(advance);
+    } else {
+      // Animación llegó al frame 5, ahora espera y vuelve atrás
+      isAnimating = false;
+      
+      resetTimeout = setTimeout(() => {
+        reverseAnimation();
+      }, 2000); // Espera 2 segundos antes de volver
+    }
+  }
+  
+  advance();
+}
+
+function reverseAnimation() {
+  if (isAnimating) return;
+  
+  isAnimating = true;
+  
+  let progress = 1;
+  const animationSpeed = 0.15;
+  
+  function reverse() {
+    progress -= animationSpeed;
+    const frameIdx = Math.floor(progress * TOTAL_FRAMES);
+    
+    if (frameIdx >= 0) {
+      updateCharFrame(frameIdx);
+      requestAnimationFrame(reverse);
+    } else {
+      // Volvió al frame 1
+      updateCharFrame(0);
+      isAnimating = false;
+      touchHint.classList.remove('hidden');
+    }
+  }
+  
+  reverse();
+}
+
+// Event listeners para click/touch
+char.addEventListener('click', animateFrames);
+char.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  animateFrames();
+});
 
 // ═══════════════════════════════════════════
 // NAV ACTIVE HIGHLIGHT
