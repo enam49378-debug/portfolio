@@ -289,9 +289,11 @@ section {
 /* CHARACTER SCROLL */
 .character-scroll-wrap {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
+  gap: 0;
 }
 .character-scroll-stage {
   position: relative;
@@ -612,6 +614,60 @@ section {
   font-size: 0.9rem;
   margin-bottom: 28px;
   line-height: 1.6;
+}
+
+/* SKIN SELECTOR */
+.skin-selector {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.skin-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 8px;
+  border: 2px solid rgba(111,207,74,0.15);
+  border-radius: 6px;
+  background: rgba(20,23,20,0.6);
+  transition: border-color 0.2s, background 0.2s, transform 0.15s;
+  user-select: none;
+}
+
+.skin-option:hover {
+  border-color: rgba(111,207,74,0.5);
+  background: rgba(111,207,74,0.06);
+  transform: translateY(-2px);
+}
+
+.skin-option.active {
+  border-color: var(--green);
+  background: rgba(111,207,74,0.1);
+  box-shadow: 0 0 12px rgba(111,207,74,0.2);
+}
+
+.skin-option img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.skin-option span {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color 0.2s;
+}
+
+.skin-option.active span {
+  color: var(--green);
 }
 
 /* CONTACT */
