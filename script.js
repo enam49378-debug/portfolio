@@ -58,21 +58,32 @@ document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 const char = document.getElementById('scrollChar');
 const touchHint = document.getElementById('touchHint');
 
-const FRAMES = [
-  'Imagenes/Frame/1.png',
-  'Imagenes/Frame/2.png',
-  'Imagenes/Frame/3.png',
-  'Imagenes/Frame/4.png',
-  'Imagenes/Frame/5.png'
-];
+const SKINS = {
+  normal: [
+    'Imagenes/Frame/1.png',
+    'Imagenes/Frame/2.png',
+    'Imagenes/Frame/3.png',
+    'Imagenes/Frame/4.png',
+    'Imagenes/Frame/5.png'
+  ],
+  meid: [
+    'Imagenes/Frame/Meid/1.png',
+    'Imagenes/Frame/Meid/2.png',
+    'Imagenes/Frame/Meid/3.png',
+    'Imagenes/Frame/Meid/4.png',
+    'Imagenes/Frame/Meid/5.png'
+  ]
+};
 
-const TOTAL_FRAMES = FRAMES.length;
+let activeSkin = 'normal';
+let FRAMES = SKINS[activeSkin];
+const TOTAL_FRAMES = 5;
 let currentFrame = 0;
 let isAnimating = false;
 let resetTimeout = null;
 
-// Precarga frames
-FRAMES.forEach((src, i) => {
+// Precarga todas las skins
+Object.values(SKINS).flat().forEach(src => {
   const img = new Image();
   img.src = src;
 });
@@ -86,76 +97,82 @@ function updateCharFrame(frameIdx) {
 
 function animateFrames() {
   if (isAnimating) return;
-  
   isAnimating = true;
   touchHint.classList.add('hidden');
-  
-  // Limpia reset anterior
   if (resetTimeout) clearTimeout(resetTimeout);
-  
   let currentIdx = currentFrame;
-  
   function advance() {
     currentIdx++;
-    
     if (currentIdx < TOTAL_FRAMES) {
       updateCharFrame(currentIdx);
-      setTimeout(advance, 200); // 200ms entre frames
+      setTimeout(advance, 200);
     } else {
-      // Llegó al frame 5, espera 2 segundos y vuelve
       isAnimating = false;
-      resetTimeout = setTimeout(() => {
-        reverseAnimation();
-      }, 2000);
+      resetTimeout = setTimeout(() => { reverseAnimation(); }, 2000);
     }
   }
-  
   advance();
 }
 
 function reverseAnimation() {
   if (isAnimating) return;
-  
   isAnimating = true;
   let currentIdx = TOTAL_FRAMES - 1;
-  
   function reverse() {
     currentIdx--;
-    
     if (currentIdx >= 0) {
       updateCharFrame(currentIdx);
       setTimeout(reverse, 200);
     } else {
-      // Volvió al frame 0
       updateCharFrame(0);
       isAnimating = false;
       touchHint.classList.remove('hidden');
-      
-      // Schedule auto-reset aleatorio entre 60-120 segundos (1-2 minutos)
       const randomDelay = Math.random() * (120000 - 60000) + 60000;
       resetTimeout = setTimeout(() => {
-        if (!isAnimating) {
-          animateFrames();
-        }
+        if (!isAnimating) animateFrames();
       }, randomDelay);
     }
   }
-  
   reverse();
 }
 
-// Event listeners - touch y click
 if (char) {
-  char.addEventListener('click', (e) => {
-    e.preventDefault();
-    animateFrames();
-  });
-  
-  char.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    animateFrames();
-  });
+  char.addEventListener('click', (e) => { e.preventDefault(); animateFrames(); });
+  char.addEventListener('touchstart', (e) => { e.preventDefault(); animateFrames(); });
 }
+
+// ═══════════════════════════════════════════
+// SELECTOR DE SKINS
+// ═══════════════════════════════════════════
+
+document.querySelectorAll('.skin-option').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const skin = btn.dataset.skin;
+    if (skin === activeSkin) return;
+
+    // Actualizar activo visualmente
+    document.querySelectorAll('.skin-option').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    // Cancelar animación en curso
+    if (resetTimeout) clearTimeout(resetTimeout);
+    isAnimating = false;
+
+    // Cambiar skin y volver a frame 0
+    activeSkin = skin;
+    FRAMES = SKINS[activeSkin];
+    currentFrame = 0;
+
+    // Fade out → cambiar → fade in
+    char.style.transition = 'opacity 0.2s ease';
+    char.style.opacity = '0';
+    setTimeout(() => {
+      char.src = FRAMES[0];
+      char.style.opacity = '1';
+      touchHint.classList.remove('hidden');
+    }, 200);
+  });
+});
 
 // ═══════════════════════════════════════════
 // NAV ACTIVE HIGHLIGHT
