@@ -1396,3 +1396,40 @@ html, body {
   background: rgba(111,207,74,0.15);
   border-color: var(--green);
 }
+
+/* Wallpaper hover inline — Ver video | Descargar */
+.wp-hover-inline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0,0,0,0.6);
+  padding: 10px 18px;
+  border: 1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(4px);
+}
+
+.wp-hover-lbl {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.85);
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.wp-hover-lbl:hover { color: #fff; }
+
+.wp-hover-sep {
+  color: rgba(255,255,255,0.25);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+}
+
+.wp-hover-dl {
+  color: var(--green);
+  text-decoration: none;
+}
+.wp-hover-dl:hover { color: #88e05a; }
