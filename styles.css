@@ -23,14 +23,13 @@ body {
   cursor: none;
 }
 
-/* Custom cursor */
 .cursor {
   position: fixed;
   width: 12px;
   height: 12px;
   background: var(--green);
   pointer-events: none;
-  z-index: 9999;
+  z-index: 99999;
   transform: translate(-50%, -50%);
   image-rendering: pixelated;
   transition: transform 0.1s;
@@ -41,7 +40,7 @@ body {
   height: 24px;
   border: 2px solid var(--green-dim);
   pointer-events: none;
-  z-index: 9998;
+  z-index: 99998;
   transform: translate(-50%, -50%);
   transition: all 0.15s ease;
 }
