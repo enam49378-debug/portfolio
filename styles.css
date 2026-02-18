@@ -1359,3 +1359,40 @@ html, body {
   .wp-page-content { padding: 40px 24px 72px; }
   .wp-grid { grid-template-columns: 1fr; }
 }
+
+/* Wallpaper hover - dos botones */
+.wp-hover-btns {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.wp-hover-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: white;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  padding: 8px 14px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s;
+}
+.wp-hover-btn:hover {
+  background: rgba(255,255,255,0.22);
+  border-color: rgba(255,255,255,0.5);
+}
+
+.wp-dl-btn {
+  border-color: rgba(111,207,74,0.5);
+  color: var(--green);
+}
+.wp-dl-btn:hover {
+  background: rgba(111,207,74,0.15);
+  border-color: var(--green);
+}
