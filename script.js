@@ -145,6 +145,9 @@ if (char) {
 // SELECTOR DE SKINS
 // ═══════════════════════════════════════════
 
+// Guardamos el frame de cada skin por separado
+const skinFrames = { normal: 0, meid: 0 };
+
 document.querySelectorAll('.skin-option').forEach(btn => {
   btn.addEventListener('click', () => {
     const skin = btn.dataset.skin;
@@ -158,18 +161,31 @@ document.querySelectorAll('.skin-option').forEach(btn => {
     if (resetTimeout) clearTimeout(resetTimeout);
     isAnimating = false;
 
-    // Cambiar skin y volver a frame 0
+    // Guardar el frame actual de la skin que dejamos
+    skinFrames[activeSkin] = currentFrame;
+
+    // Cambiar skin
     activeSkin = skin;
     FRAMES = SKINS[activeSkin];
-    currentFrame = 0;
 
-    // Fade out → cambiar → fade in
+    // Recuperar el frame donde estaba esta skin (o 0 si nunca se usó)
+    const savedFrame = skinFrames[activeSkin];
+
+    // Fade out → cambiar → fade in en el frame guardado
     char.style.transition = 'opacity 0.2s ease';
     char.style.opacity = '0';
     setTimeout(() => {
-      char.src = FRAMES[0];
+      currentFrame = savedFrame;
+      char.src = FRAMES[currentFrame];
       char.style.opacity = '1';
-      touchHint.classList.remove('hidden');
+      // Si no estamos en frame 0, no mostrar el hint
+      if (currentFrame === 0) {
+        touchHint.classList.remove('hidden');
+      } else {
+        touchHint.classList.add('hidden');
+        // Programar la animación de vuelta igual que cuando termina animateFrames
+        resetTimeout = setTimeout(() => { reverseAnimation(); }, 2000);
+      }
     }, 200);
   });
 });
