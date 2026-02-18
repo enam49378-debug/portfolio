@@ -188,40 +188,54 @@ nav {
   transform: translate(-2px, -2px);
 }
 
-/* Floating block decoration */
-.blocks-deco {
+/* Chibi flotando en hero */
+.chibi-float-wrap {
   position: absolute;
-  right: 6vw;
+  right: 7vw;
   top: 50%;
   transform: translateY(-50%);
-  display: grid;
-  grid-template-columns: repeat(4, 56px);
-  grid-template-rows: repeat(4, 56px);
-  gap: 4px;
-  opacity: 0.55;
-  animation: float 6s ease-in-out infinite;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
 }
-.block {
-  width: 56px;
-  height: 56px;
+
+.chibi-float {
+  width: 280px;
   image-rendering: pixelated;
+  filter: drop-shadow(0 0 28px rgba(111,207,74,0.25));
+  animation: chibiFly 5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  will-change: transform;
 }
-.block-grass {
-  background: linear-gradient(180deg, var(--green) 30%, var(--dirt) 30%);
-  box-shadow: inset -4px -4px 0 rgba(0,0,0,0.3), inset 4px 4px 0 rgba(255,255,255,0.1);
+
+.chibi-shadow {
+  width: 120px;
+  height: 18px;
+  background: radial-gradient(ellipse, rgba(111,207,74,0.18) 0%, transparent 70%);
+  border-radius: 50%;
+  margin-top: 8px;
+  animation: chibyShadow 5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  will-change: transform, opacity;
 }
-.block-stone {
-  background: var(--stone);
-  box-shadow: inset -4px -4px 0 rgba(0,0,0,0.25), inset 4px 4px 0 rgba(255,255,255,0.12);
+
+@keyframes chibiFly {
+  0%   { transform: translateY(0px) rotate(-1deg); }
+  25%  { transform: translateY(-22px) rotate(1.5deg); }
+  50%  { transform: translateY(-38px) rotate(-0.5deg); }
+  75%  { transform: translateY(-18px) rotate(1deg); }
+  100% { transform: translateY(0px) rotate(-1deg); }
 }
-.block-dirt {
-  background: var(--dirt);
-  box-shadow: inset -4px -4px 0 rgba(0,0,0,0.3), inset 4px 4px 0 rgba(255,255,255,0.08);
+
+@keyframes chibyShadow {
+  0%   { transform: scaleX(1);    opacity: 0.7; }
+  25%  { transform: scaleX(0.82); opacity: 0.45; }
+  50%  { transform: scaleX(0.65); opacity: 0.25; }
+  75%  { transform: scaleX(0.85); opacity: 0.5; }
+  100% { transform: scaleX(1);    opacity: 0.7; }
 }
-.block-air { background: transparent; }
-.block-dark {
-  background: #2a2a2a;
-  box-shadow: inset -4px -4px 0 rgba(0,0,0,0.5), inset 4px 4px 0 rgba(255,255,255,0.05);
+
+@media (max-width: 768px) {
+  .chibi-float-wrap { display: none; }
 }
 
 /* SECTION SHARED */
@@ -659,10 +673,6 @@ footer {
   from { opacity: 0; transform: translateY(32px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-@keyframes float {
-  0%, 100% { transform: translateY(-50%) translateX(0); }
-  50%       { transform: translateY(calc(-50% - 16px)) translateX(-8px); }
-}
 
 .fade-in {
   opacity: 0;
@@ -684,7 +694,6 @@ footer {
   nav { padding: 18px 24px; }
   .nav-links { display: none; }
   .hero { padding: 0 24px; min-height: 100vh; }
-  .blocks-deco { display: none; }
   section { padding: 72px 24px; }
   .about-grid { grid-template-columns: 1fr; gap: 48px; }
   .character-scroll-stage { width: 250px; height: 310px; }
