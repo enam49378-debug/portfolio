@@ -187,6 +187,19 @@ function nextTrack() {
 mpNext.addEventListener('click', nextTrack);
 mpAudio.addEventListener('ended', () => { if (!isLooping) nextTrack(); });
 
-// Iniciar con canción aleatoria
+// Iniciar con canción aleatoria y autoplay
 trackIndex = Math.floor(Math.random() * playlist.length);
-loadTrack(false);
+loadTrack(true);
+
+// Fallback: si el navegador bloquea el autoplay, reproducir al primer interacción
+function startOnInteraction() {
+  if (mpAudio.paused) {
+    mpAudio.play().catch(() => {});
+  }
+  document.removeEventListener('click', startOnInteraction);
+  document.removeEventListener('touchstart', startOnInteraction);
+  document.removeEventListener('keydown', startOnInteraction);
+}
+document.addEventListener('click', startOnInteraction);
+document.addEventListener('touchstart', startOnInteraction);
+document.addEventListener('keydown', startOnInteraction);
