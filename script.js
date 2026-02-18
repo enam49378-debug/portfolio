@@ -182,19 +182,22 @@ window.addEventListener('scroll', () => {
 const chibiHero = document.getElementById('chibiHero');
 
 if (chibiHero) {
-  let squishTimeout = null;
+  chibiHero.style.cursor = 'pointer';
+  chibiHero.style.transformOrigin = 'bottom center';
+  let squishAnim = null;
 
   function doSquish() {
-    // Resetea primero para que pueda volver a triggerear
-    chibiHero.classList.remove('squish');
-    // Fuerza reflow para reiniciar la animación
-    void chibiHero.offsetWidth;
-    chibiHero.classList.add('squish');
+    if (squishAnim) squishAnim.cancel();
 
-    clearTimeout(squishTimeout);
-    squishTimeout = setTimeout(() => {
-      chibiHero.classList.remove('squish');
-    }, 580);
+    squishAnim = chibiHero.animate([
+      { transform: 'scaleX(1)    scaleY(1)',    easing: 'cubic-bezier(0.2,0,0.4,1)' },
+      { transform: 'scaleX(1.45) scaleY(0.6)',  easing: 'cubic-bezier(0.2,0,0.4,1)', offset: 0.15 },
+      { transform: 'scaleX(0.75) scaleY(1.35)', easing: 'cubic-bezier(0.2,0,0.4,1)', offset: 0.35 },
+      { transform: 'scaleX(1.18) scaleY(0.85)', easing: 'cubic-bezier(0.2,0,0.4,1)', offset: 0.52 },
+      { transform: 'scaleX(0.92) scaleY(1.1)',  easing: 'cubic-bezier(0.2,0,0.4,1)', offset: 0.68 },
+      { transform: 'scaleX(1.05) scaleY(0.96)', easing: 'cubic-bezier(0.2,0,0.4,1)', offset: 0.82 },
+      { transform: 'scaleX(1)    scaleY(1)' }
+    ], { duration: 600, fill: 'none' });
   }
 
   chibiHero.addEventListener('click', doSquish);
