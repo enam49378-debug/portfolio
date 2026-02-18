@@ -207,6 +207,7 @@ nav {
   will-change: transform;
   cursor: pointer;
   transform-origin: bottom center;
+  pointer-events: auto;
 }
 
 .chibi-shadow {
