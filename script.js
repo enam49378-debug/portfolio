@@ -223,3 +223,36 @@ if (chibiHero) {
     doSquish();
   });
 }
+
+// ═══════════════════════════════════════════
+// PAGE BOOK — SLIDE WALLPAPERS
+// ═══════════════════════════════════════════
+
+const pageMain      = document.getElementById('pageMain');
+const pageWallpapers = document.getElementById('pageWallpapers');
+const navWallpapers  = document.getElementById('navWallpapers');
+const wpBack         = document.getElementById('wpBack');
+
+function openWallpapers(e) {
+  if (e) e.preventDefault();
+  pageMain.classList.add('slide-out');
+  pageWallpapers.classList.add('slide-in');
+  pageWallpapers.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeWallpapers() {
+  pageMain.classList.remove('slide-out');
+  pageWallpapers.classList.remove('slide-in');
+  document.body.style.overflow = '';
+}
+
+if (navWallpapers) navWallpapers.addEventListener('click', openWallpapers);
+if (wpBack) wpBack.addEventListener('click', closeWallpapers);
+
+// Cerrar con tecla Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && pageWallpapers.classList.contains('slide-in')) {
+    closeWallpapers();
+  }
+});
