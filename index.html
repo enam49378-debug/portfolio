@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<div class="page-main" id="pageMain">
 
   <!-- Custom cursor -->
   <div class="cursor" id="cursor" style="left:1140px;top:544px;width:12px;height:12px;"></div>
@@ -20,9 +21,8 @@
     <ul class="nav-links">
       <li><a href="#about">Sobre mí</a></li>
       <li><a href="#work">Animaciones</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#wallpapers">Wallpapers</a></li>
       <li><a href="#contact">Contacto</a></li>
+      <li><a href="#" id="navWallpapers" class="nav-wp-link">Wallpapers ↗</a></li>
     </ul>
   </nav>
 
@@ -176,161 +176,66 @@
     </div>
   </section>
 
-  <!-- SKILLS -->
-  <section id="skills">
-    <div class="section-label fade-in">// Herramientas</div>
-    <h2 class="section-title fade-in">Con qué<br>trabajo</h2>
-    <div class="skills-grid">
-
-      <div class="skill-item fade-in">
-        <!-- Pixel icon: camera -->
-        <div class="skill-icon">
-          <div class="pxl" style="background:transparent"></div>
-          <div class="pxl" style="background:#6fcf4a"></div>
-          <div class="pxl" style="background:transparent"></div>
-          <div class="pxl" style="background:#6fcf4a"></div>
-          <div class="pxl" style="background:#6fcf4a"></div>
-          <div class="pxl" style="background:#6fcf4a"></div>
-          <div class="pxl" style="background:#6fcf4a"></div>
-          <div class="pxl" style="background:#4a9632"></div>
-          <div class="pxl" style="background:#6fcf4a"></div>
-        </div>
-        <div class="skill-name">Camera Mods</div>
-        <div class="skill-desc">Control de cámara fluido para tomas cinematográficas dentro del juego.</div>
-      </div>
-
-      <div class="skill-item fade-in">
-        <div class="skill-icon">
-          <div class="pxl" style="background:#6fcf4a"></div>
-          <div class="pxl" style="background:#6fcf4a"></div>
-          <div class="pxl" style="background:#6fcf4a"></div>
-          <div class="pxl" style="background:#6fcf4a"></div>
-          <div class="pxl" style="background:transparent"></div>
-          <div class="pxl" style="background:#6fcf4a"></div>
-          <div class="pxl" style="background:#6fcf4a"></div>
-          <div class="pxl" style="background:#6fcf4a"></div>
-          <div class="pxl" style="background:#6fcf4a"></div>
-        </div>
-        <div class="skill-name">Character Animation</div>
-        <div class="skill-desc">Animación de personajes y mobs con mods especializados para poses y movimiento.</div>
-      </div>
-
-      <div class="skill-item fade-in">
-        <div class="skill-icon">
-          <div class="pxl" style="background:transparent"></div>
-          <div class="pxl" style="background:#FFD700"></div>
-          <div class="pxl" style="background:transparent"></div>
-          <div class="pxl" style="background:#FFD700"></div>
-          <div class="pxl" style="background:#FFD700"></div>
-          <div class="pxl" style="background:#FFD700"></div>
-          <div class="pxl" style="background:transparent"></div>
-          <div class="pxl" style="background:#FFD700"></div>
-          <div class="pxl" style="background:transparent"></div>
-        </div>
-        <div class="skill-name">Lighting & Effects</div>
-        <div class="skill-desc">Iluminación realista y efectos visuales para cinematografía dentro del juego.</div>
-      </div>
-
-      <div class="skill-item fade-in">
-        <div class="skill-icon">
-          <div class="pxl" style="background:#8B6340"></div>
-          <div class="pxl" style="background:#8B6340"></div>
-          <div class="pxl" style="background:#8B6340"></div>
-          <div class="pxl" style="background:transparent"></div>
-          <div class="pxl" style="background:#8B6340"></div>
-          <div class="pxl" style="background:#8B6340"></div>
-          <div class="pxl" style="background:#8B6340"></div>
-          <div class="pxl" style="background:#8B6340"></div>
-          <div class="pxl" style="background:transparent"></div>
-        </div>
-        <div class="skill-name">World Building</div>
-        <div class="skill-desc">Construcción de mundos detallados y escenarios para animaciones cinematográficas.</div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="contact-inner">
-      <div class="section-label fade-in">// Contacto</div>
-      <h2 class="section-title fade-in">¿Trabajamos<br>juntos?</h2>
-      <p class="fade-in" style="color:var(--stone);line-height:1.7;margin-bottom:8px;">
-        ¿Quieres una animación personalizada, tienes un proyecto o solo quieres charlar de Minecraft? Escríbeme.
-      </p>
-      <div class="contact-links">
-        <a href="https://www.youtube.com/@jesuluto" class="contact-link fade-in" target="_blank">
-          <span class="contact-link-label">YouTube</span>
-          <span class="contact-link-value">@jesuluto</span>
-          <span class="contact-link-arrow">→</span>
-        </a>
-        <a href="https://www.tiktok.com/@jesulutoxd" class="contact-link fade-in" target="_blank">
-          <span class="contact-link-label">TikTok</span>
-          <span class="contact-link-value">@jesulutoxd</span>
-          <span class="contact-link-arrow">→</span>
-        </a>
-        <a href="https://ko-fi.com/jesulutoxd" class="contact-link fade-in" target="_blank">
-          <span class="contact-link-label">Ko-fi</span>
-          <span class="contact-link-value">jesulutoxd</span>
-          <span class="contact-link-arrow">→</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- WALLPAPERS -->
-  <section id="wallpapers" class="wallpapers-section">
-    <div class="wp-overlay"></div>
-    <div class="wp-content">
-      <div class="section-label fade-in" style="color:rgba(255,255,255,0.6);">// Wallpapers</div>
-      <h2 class="section-title fade-in" style="color:#fff;">Fondos de<br>mis videos</h2>
-      <p class="fade-in" style="color:rgba(255,255,255,0.55);margin-bottom:48px;font-size:1rem;line-height:1.7;max-width:480px;">Capturas cinematográficas sacadas directamente de mis animaciones. Úsalos libremente.</p>
-      <div class="wp-grid">
-
-        <a class="wp-card fade-in" href="https://youtu.be/JMNzyCkveL8" target="_blank" rel="noopener">
-          <div class="wp-thumb">
-            <img src="https://img.youtube.com/vi/JMNzyCkveL8/maxresdefault.jpg" alt="Wallpaper 1" onerror="this.src='https://img.youtube.com/vi/JMNzyCkveL8/hqdefault.jpg'">
-            <div class="wp-hover">
-              <svg viewBox="0 0 24 24" width="28" height="28" fill="white"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5z"/></svg>
-              <span>Ver video</span>
-            </div>
-          </div>
-          <div class="wp-info">
-            <span class="wp-num">001</span>
-            <span class="wp-title">Escena cinematográfica</span>
-          </div>
-        </a>
-
-        <!-- Próximo wallpaper -->
-        <div class="wp-card wp-coming fade-in">
-          <div class="wp-thumb wp-thumb-empty">
-            <span>Próximamente</span>
-          </div>
-          <div class="wp-info">
-            <span class="wp-num">002</span>
-            <span class="wp-title" style="opacity:0.3;">???</span>
-          </div>
-        </div>
-
-        <div class="wp-card wp-coming fade-in">
-          <div class="wp-thumb wp-thumb-empty">
-            <span>Próximamente</span>
-          </div>
-          <div class="wp-info">
-            <span class="wp-num">003</span>
-            <span class="wp-title" style="opacity:0.3;">???</span>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
   <!-- FOOTER -->
   <footer>
     <span class="footer-copy">© 2025 JesulutoXD — Minecraft Animator</span>
     <span class="footer-copy" style="color:var(--green-dim)">Made block by block.</span>
   </footer>
+
+</div><!-- /page-main -->
+
+<!-- ═══════════════════════ PAGE: WALLPAPERS ═══════════════════════ -->
+<div class="page-book" id="pageWallpapers">
+
+  <nav class="wp-nav">
+    <button class="wp-back" id="wpBack">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+      Volver
+    </button>
+    <div class="nav-logo" style="color:var(--green);font-family:'Space Mono',monospace;font-size:1rem;">Jesuluto<span style="color:var(--muted)">XD</span></div>
+    <span style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--muted);letter-spacing:0.15em;text-transform:uppercase;">// Wallpapers</span>
+  </nav>
+
+  <div class="wp-page-content">
+    <div class="wp-header">
+      <h2 class="wp-big-title">Fondos de<br><span style="color:var(--green)">mis videos</span></h2>
+      <p class="wp-desc">Capturas cinematográficas sacadas directamente de mis animaciones. Úsalas libremente.</p>
+    </div>
+
+    <div class="wp-grid">
+
+      <a class="wp-card" href="https://youtu.be/JMNzyCkveL8" target="_blank" rel="noopener">
+        <div class="wp-thumb">
+          <img src="https://img.youtube.com/vi/JMNzyCkveL8/maxresdefault.jpg" alt="Wallpaper 1" onerror="this.src='https://img.youtube.com/vi/JMNzyCkveL8/hqdefault.jpg'">
+          <div class="wp-hover">
+            <svg viewBox="0 0 24 24" width="26" height="26" fill="white"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5z"/></svg>
+            <span>Ver video</span>
+          </div>
+        </div>
+        <div class="wp-info">
+          <span class="wp-num">001</span>
+          <span class="wp-title">Escena cinematográfica</span>
+        </div>
+      </a>
+
+      <div class="wp-card wp-coming">
+        <div class="wp-thumb wp-thumb-empty"><span>Próximamente</span></div>
+        <div class="wp-info"><span class="wp-num">002</span><span class="wp-title" style="opacity:0.3;">???</span></div>
+      </div>
+
+      <div class="wp-card wp-coming">
+        <div class="wp-thumb wp-thumb-empty"><span>Próximamente</span></div>
+        <div class="wp-info"><span class="wp-num">003</span><span class="wp-title" style="opacity:0.3;">???</span></div>
+      </div>
+
+      <div class="wp-card wp-coming">
+        <div class="wp-thumb wp-thumb-empty"><span>Próximamente</span></div>
+        <div class="wp-info"><span class="wp-num">004</span><span class="wp-title" style="opacity:0.3;">???</span></div>
+      </div>
+
+    </div>
+  </div>
+</div><!-- /page-wallpapers -->
 
   <!-- ═══════════════════════════════════════════
        MUSIC PLAYER
