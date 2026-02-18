@@ -218,9 +218,14 @@ if (chibiHero) {
   chibiHero.style.cursor = 'pointer';
   chibiHero.style.transformOrigin = 'bottom center';
   let squishAnim = null;
+  let resumeTimeout = null;
 
   function doSquish() {
     if (squishAnim) squishAnim.cancel();
+    if (resumeTimeout) clearTimeout(resumeTimeout);
+
+    // Congelar la animación de vuelo justo donde está
+    chibiHero.style.animationPlayState = 'paused';
 
     squishAnim = chibiHero.animate([
       { transform: 'scaleX(1)    scaleY(1)',    easing: 'cubic-bezier(0.2,0,0.4,1)' },
@@ -231,6 +236,14 @@ if (chibiHero) {
       { transform: 'scaleX(1.05) scaleY(0.96)', easing: 'cubic-bezier(0.2,0,0.4,1)', offset: 0.82 },
       { transform: 'scaleX(1)    scaleY(1)' }
     ], { duration: 600, fill: 'none' });
+
+    // Cuando termina el squish, reanudar el vuelo suavemente
+    squishAnim.onfinish = () => {
+      // Pequeña pausa antes de retomar para que no salte
+      resumeTimeout = setTimeout(() => {
+        chibiHero.style.animationPlayState = 'running';
+      }, 80);
+    };
   }
 
   chibiHero.addEventListener('click', doSquish);
