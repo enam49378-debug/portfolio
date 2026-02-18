@@ -174,3 +174,32 @@ window.addEventListener('scroll', () => {
       ? 'var(--green)' : '';
   });
 });
+
+// ═══════════════════════════════════════════
+// CHIBI HERO — SQUISH AL TOCAR
+// ═══════════════════════════════════════════
+
+const chibiHero = document.getElementById('chibiHero');
+
+if (chibiHero) {
+  let squishTimeout = null;
+
+  function doSquish() {
+    // Resetea primero para que pueda volver a triggerear
+    chibiHero.classList.remove('squish');
+    // Fuerza reflow para reiniciar la animación
+    void chibiHero.offsetWidth;
+    chibiHero.classList.add('squish');
+
+    clearTimeout(squishTimeout);
+    squishTimeout = setTimeout(() => {
+      chibiHero.classList.remove('squish');
+    }, 580);
+  }
+
+  chibiHero.addEventListener('click', doSquish);
+  chibiHero.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    doSquish();
+  });
+}
