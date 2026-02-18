@@ -119,6 +119,18 @@ mpPill.addEventListener('click', () => {
   panelOpen = !panelOpen;
   mpPanel.classList.toggle('open', panelOpen);
   mpPlayer.classList.toggle('open', panelOpen);
+
+  // En mobile: mover el panel al body para que el fixed funcione bien
+  if (window.innerWidth <= 768) {
+    if (panelOpen) {
+      document.body.appendChild(mpPanel);
+      mpPanel.style.zIndex = '9999';
+    } else {
+      if (!mpPlayer.contains(mpPanel)) {
+        mpPlayer.insertBefore(mpPanel, mpPill);
+      }
+    }
+  }
 });
 
 // Play / Pause
