@@ -652,6 +652,7 @@ if (playBtn && battleOverlay && gameContainer && gameIframe) {
 
   playBtn.addEventListener('click', function (e) {
     e.preventDefault();
+    e.stopPropagation();
     if (battleOverlay.classList.contains('active')) return;
 
     btReset();
