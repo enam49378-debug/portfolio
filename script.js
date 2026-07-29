@@ -746,6 +746,7 @@ if (playBtn && battleOverlay && gameContainer && gameIframe) {
         gameLoaded = true;
       }
       gameContainer.style.display = 'flex';
+      gameContainer.scrollTop = 0;
       // NO restaurar scroll aquí — el juego sigue abierto
     }, 6700);
   });
