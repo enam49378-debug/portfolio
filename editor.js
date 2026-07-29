@@ -190,6 +190,7 @@ const EDITABLE = [
   { id: 'touchHint',       label: '🔽 Hint triángulo',   props: ['left','top','width','height'] },
   { id: 'music-player',    label: '🎵 Reproductor',      props: ['left','top','width'] },
   { id: 'chibiHeroShadow', label: '🌑 Sombra chibi',     props: ['width'] },
+  { id: 'gameContainer',   label: '🎮 Contenedor juego', props: ['top','left','width','height'] },
 ];
 
 // ── Activar/desactivar con E / Esc ──
