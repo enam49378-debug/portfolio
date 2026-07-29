@@ -2268,9 +2268,13 @@ html, body {
   transform: translate(-50%,-50%) scale(0.4);
   transition: opacity .4s ease-out, transform .4s ease-out;
   pointer-events: none;
-  font-size: 48px;
-  line-height: 1;
-  text-shadow: 0 0 20px rgba(255,0,0,0.6);
+  width: 48px;
+  height: 48px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 8px rgba(255,0,0,0.8));
 }
 .battle-heart.visible {
   opacity: 1;

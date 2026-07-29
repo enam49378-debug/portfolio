@@ -582,6 +582,24 @@ const gameCloseBtn = document.getElementById('gameCloseBtn');
 
 var btAudioCtx = null;
 
+// Generar sprite del corazón pixel art (mismo que el juego)
+function createHeartSprite(size, color) {
+  var c = document.createElement('canvas');
+  var ps = Math.max(1, Math.floor(size / 7));
+  c.width = 7 * ps;
+  c.height = 6 * ps;
+  var x = c.getContext('2d');
+  x.fillStyle = color || '#ff0000';
+  var pts = [[1,0],[2,0],[4,0],[5,0],[0,1],[1,1],[2,1],[3,1],[4,1],[5,1],[6,1],[0,2],[1,2],[2,2],[3,2],[4,2],[5,2],[6,2],[1,3],[2,3],[3,3],[4,3],[5,3],[2,4],[3,4],[4,4],[3,5]];
+  for (var i = 0; i < pts.length; i++) {
+    x.fillRect(pts[i][0] * ps, pts[i][1] * ps, ps, ps);
+  }
+  return c.toDataURL();
+}
+
+// Pre-generar el corazón
+var btHeartSprite = createHeartSprite(48, '#ff0000');
+
 function btGetCtx() {
   try {
     if (!btAudioCtx) btAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -649,6 +667,9 @@ function btReset() {
 
 if (playBtn && battleOverlay && gameContainer && gameIframe) {
   var gameLoaded = false;
+
+  // Asignar sprite de corazón pixel art
+  battleHeart.style.backgroundImage = 'url(' + btHeartSprite + ')';
 
   playBtn.addEventListener('click', function (e) {
     e.preventDefault();
