@@ -664,18 +664,19 @@ if (playBtn && battleOverlay && gameContainer && gameIframe) {
     var vpCX = window.innerWidth / 2;
     var vpCY = window.innerHeight / 2;
 
-    // Scroll suave a la sección de juegos (ANTES de bloquear)
+    // Bloquear scroll y fijar posición al inicio de juegos
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
     var gameSec = document.getElementById('games');
     if (gameSec) {
       var secTop = gameSec.getBoundingClientRect().top + window.scrollY - 60;
-      window.scrollTo({ top: secTop, behavior: 'smooth' });
+      document.documentElement.scrollTop = secTop;
+      document.body.scrollTop = secTop;
     }
 
     battleOverlay.style.display = 'flex';
     void battleOverlay.offsetWidth;
     battleOverlay.classList.add('active');
-    document.documentElement.style.overflow = 'hidden';
-    document.body.style.overflow = 'hidden';
 
     // Colocar corazón en la posición del botón
     battleHeart.style.transition = 'none';
@@ -757,6 +758,7 @@ if (playBtn && battleOverlay && gameContainer && gameIframe) {
     gameCloseBtn.addEventListener('click', function () {
       gameContainer.style.display = 'none';
       document.documentElement.style.overflow = '';
+      document.documentElement.style.scrollBehavior = '';
       document.body.style.overflow = '';
     });
   }
@@ -766,6 +768,7 @@ if (playBtn && battleOverlay && gameContainer && gameIframe) {
     if (e.key === 'Escape' && gameContainer.style.display === 'flex') {
       gameContainer.style.display = 'none';
       document.documentElement.style.overflow = '';
+      document.documentElement.style.scrollBehavior = '';
       document.body.style.overflow = '';
     }
   });
