@@ -664,12 +664,11 @@ if (playBtn && battleOverlay && gameContainer && gameIframe) {
     var vpCX = window.innerWidth / 2;
     var vpCY = window.innerHeight / 2;
 
-    // Subir altiro al inicio de juegos (scrollTop directo, sin animación)
+    // Subir altiro al inicio de juegos (sin smooth en CSS ya es instantáneo)
     var gameSec = document.getElementById('games');
     if (gameSec) {
       var secTop = gameSec.getBoundingClientRect().top + window.scrollY - 60;
-      document.documentElement.scrollTop = secTop;
-      document.body.scrollTop = secTop;
+      window.scrollTo({ top: secTop });
     }
 
     // Bloquear scroll después de haber subido
