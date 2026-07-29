@@ -664,17 +664,15 @@ if (playBtn && battleOverlay && gameContainer && gameIframe) {
     var vpCX = window.innerWidth / 2;
     var vpCY = window.innerHeight / 2;
 
-    // Forzar scroll instantáneo al inicio de juegos
-    document.documentElement.style.scrollBehavior = 'auto';
-    void document.documentElement.offsetHeight;
+    // Subir altiro al inicio de juegos (scrollTop directo, sin animación)
     var gameSec = document.getElementById('games');
     if (gameSec) {
       var secTop = gameSec.getBoundingClientRect().top + window.scrollY - 60;
-      window.scrollTo({ top: secTop });
-      void document.documentElement.offsetHeight;
+      document.documentElement.scrollTop = secTop;
+      document.body.scrollTop = secTop;
     }
 
-    // Bloquear scroll DESPUÉS de haber subido
+    // Bloquear scroll después de haber subido
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
 
