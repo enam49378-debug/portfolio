@@ -2370,6 +2370,19 @@ html, body {
   background: #000;
 }
 
+/* VERSION BADGE */
+.version-badge {
+  position: fixed;
+  right: 12px;
+  bottom: 12px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 1px;
+  pointer-events: none;
+  z-index: 1;
+}
+
 @media (max-width: 768px) {
   .battle-text-line { font-size: 0.8rem; letter-spacing: 2px; }
   .battle-text-name { font-size: 1.2rem; letter-spacing: 4px; }

@@ -664,12 +664,11 @@ if (playBtn && battleOverlay && gameContainer && gameIframe) {
     var vpCX = window.innerWidth / 2;
     var vpCY = window.innerHeight / 2;
 
-    // Scroll suave para centrar la sección de juegos (ANTES de bloquear)
+    // Scroll suave a la sección de juegos (ANTES de bloquear)
     var gameSec = document.getElementById('games');
     if (gameSec) {
-      var secRect = gameSec.getBoundingClientRect();
-      var targetY = window.scrollY + secRect.top + secRect.height / 2 - vpCY;
-      window.scrollTo({ top: targetY, behavior: 'smooth' });
+      var secTop = gameSec.getBoundingClientRect().top + window.scrollY - 60;
+      window.scrollTo({ top: secTop, behavior: 'smooth' });
     }
 
     battleOverlay.style.display = 'flex';
