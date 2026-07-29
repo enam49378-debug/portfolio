@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Batalla — JesulutoXD</title>
+  <style>
+    @font-face {
+      font-family: 'Determination';
+      src: url('https://fonts.cdnfonts.com/css/determination-mono');
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      background: #000;
+      width: 100%; height: 100%;
+      overflow: hidden;
+      font-family: 'Courier New', monospace;
+    }
+
+    #gameCanvas {
+      display: block;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+
+    #titleScreen {
+      position: fixed; inset: 0;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      z-index: 100;
+      font-family: 'Courier New', monospace;
+    }
+    .t-label {
+      color: #888;
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+    }
+    .t-title {
+      color: #fff;
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+    }
+    .t-enemy {
+      color: #f5c842;
+      font-size: clamp(1rem, 3vw, 1.4rem);
+      letter-spacing: 0.1em;
+    }
+    .t-press {
+      color: #fff;
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      animation: blink 1s step-end infinite;
+      margin-top: 12px;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    #endScreen {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.95);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      z-index: 200;
+      font-family: 'Courier New', monospace;
+    }
+    #endScreen.show { display: flex; }
+    .end-t { font-size: clamp(2rem,5vw,3rem); font-weight:700; letter-spacing:0.1em; }
+    .end-t.win { color: #6fcf4a; }
+    .end-t.lose { color: #ff4444; }
+    .end-sub { color: #888; font-size: 0.75rem; letter-spacing: 0.15em; }
+    .end-btn {
+      margin-top: 12px;
+      background: none;
+      border: 2px solid #fff;
+      color: #fff;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      padding: 10px 30px;
+      cursor: pointer;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .end-btn:hover { background: #fff; color: #000; }
+
+    #backBtn {
+      position: fixed; top: 14px; left: 14px;
+      background: none; border: 1px solid #444;
+      color: #666; font-family: 'Courier New', monospace;
+      font-size: 0.65rem; padding: 5px 12px; cursor: pointer;
+      letter-spacing: 0.1em; z-index: 300;
+      transition: all 0.15s;
+    }
+    #backBtn:hover { border-color: #fff; color: #fff; }
+  </style>
+</head>
+<body>
+
+<button id="backBtn" onclick="window.location.href='index.html'">← VOLVER</button>
+
+<div id="titleScreen">
+  <div class="t-label">// JesulutoXD · Minijuego</div>
+  <div class="t-title">★ UNDERTALE ★</div>
+  <div class="t-enemy">Enfréntate a <span style="color:#f5c842">Flowey</span></div>
+  <div class="t-press">PRESIONA ESPACIO / TOCA LA PANTALLA</div>
+</div>
+
+<canvas id="gameCanvas"></canvas>
+
+<div id="endScreen">
+  <div class="end-t" id="endTitle">GAME OVER</div>
+  <div class="end-sub" id="endSub">...</div>
+  <button class="end-btn" id="endBtn">INTENTAR DE NUEVO</button>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════
+//  UNDERTALE BATTLE — JesulutoXD
+//  Estilo fiel al juego original
+// ═══════════════════════════════════════════════════
+
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const titleScreen = document.getElementById('titleScreen');
+const endScreen = document.getElementById('endScreen');
+const endTitle = document.getElementById('endTitle');
+const endSub = document.getElementById('endSub');
+const endBtn = document.getElementById('endBtn');
+
+let W, H;
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', () => { resize(); if(G) G.resize(); });
+
+// ── PALETTE ──
+const BLACK   = '#000000';
+const WHITE   = '#ffffff';
+const RED     = '#ff0000';
+const ORANGE  = '#d44a00';
+const YELLOW  = '#f5c842';
+const GREEN   = '#6fcf4a';
+const BLUE    = '#42a5f5';
+const DKRED   = '#8b0000';
+const GRAY    = '#888888';
+
+// ── UNDERTALE FONT (pixel-perfect via canvas) ──
+function utFont(size) { return `bold ${size}px 'Courier New', monospace`; }
+
+// ══════════════════════════════════════
+//  PIXEL DRAWING HELPERS
+// ══════════════════════════════════════
+
+// Draw Flowey sprite — pixel art faithful to game
+function drawFlowey(cx, cy, scale, face) {
+  const p = (x,y,w,h,c) => {
+    ctx.fillStyle = c;
+    ctx.fillRect(cx + x*scale, cy + y*scale, w*scale, h*scale);
+  };
+
+  // Stem
+  p(-1, 12, 2, 18, '#3a7a10');
+
+  // Leaves
+  p(-8, 16, 7, 3, '#3a7a10');
+  p(-8, 17, 4, 5, '#3a7a10');
+  p(2,  20, 6, 3, '#3a7a10');
+  p(5,  20, 3, 5, '#3a7a10');
+
+  // Petals (6 — faithfully positioned)
+  const petalColor = face === 'evil' ? '#ffee00' : face === 'hurt' ? '#ffaa44' : '#ffee44';
+  // top
+  p(-3,-14, 6,10, petalColor);
+  // bottom
+  p(-3, 12, 6,10, petalColor); // hidden by stem area, skip for flower top
+  // top-left
+  p(-12,-8, 9,7, petalColor);
+  // top-right
+  p( 4,-8, 9,7, petalColor);
+  // bottom-left
+  p(-11, 4, 9,7, petalColor);
+  // bottom-right
+  p( 3, 4, 9,7, petalColor);
+
+  // Center circle
+  p(-8,-8, 16,16, '#ffee44');
+
+  // Face
+  if (face === 'evil') {
+    // evil eyes — angled blocks
+    p(-6,-5, 3,3, BLACK);
+    p( 3,-5, 3,3, BLACK);
+    // evil brows
+    p(-7,-8, 3,2, BLACK);
+    p( 4,-8, 3,2, BLACK);
+    // evil mouth (wide grin)
+    p(-5, 4, 10,2, BLACK);
+    p(-6, 3, 2,2, BLACK);
+    p( 4, 3, 2,2, BLACK);
+  } else if (face === 'hurt') {
+    p(-5,-4, 3,2, BLACK);
+    p( 2,-4, 3,2, BLACK);
+    // sad mouth
+    p(-3, 5, 6,2, BLACK);
+    p(-4, 4, 2,2, BLACK);
+    p( 3, 4, 2,2, BLACK);
+  } else if (face === 'happy') {
+    // ^ eyes
+    p(-6,-5, 2,3, BLACK); p(-5,-6, 2,2, BLACK); p(-4,-5, 2,3, BLACK);
+    p( 2,-5, 2,3, BLACK); p( 3,-6, 2,2, BLACK); p( 4,-5, 2,3, BLACK);
+    // smile
+    p(-4, 3, 8,2, BLACK);
+    p(-5, 2, 2,2, BLACK); p( 3, 2, 2,2, BLACK);
+  } else {
+    // neutral dots
+    p(-5,-3, 3,3, BLACK);
+    p( 2,-3, 3,3, BLACK);
+    // neutral mouth
+    p(-3, 4, 6,2, BLACK);
+  }
+}
+
+// Draw pixel heart
+function drawHeart(x, y, s, color) {
+  ctx.fillStyle = color;
+  // Undertale heart shape
+  const pts = [
+    [1,0],[2,0],[4,0],[5,0],
+    [0,1],[1,1],[2,1],[3,1],[4,1],[5,1],[6,1],
+    [0,2],[1,2],[2,2],[3,2],[4,2],[5,2],[6,2],
+    [1,3],[2,3],[3,3],[4,3],[5,3],
+    [2,4],[3,4],[4,4],
+    [3,5],
+  ];
+  for(const [px,py] of pts) {
+    ctx.fillRect(x + px*s, y + py*s, s, s);
+  }
+}
+
+// Draw pixel bullet (circular)
+function drawBullet(x,y,r,color) {
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(x,y,r,0,Math.PI*2);
+  ctx.fill();
+}
+
+// Undertale-style speech bubble
+function drawSpeechBubble(x, y, w, h, text) {
+  // White box with black border
+  ctx.fillStyle = WHITE;
+  ctx.fillRect(x, y, w, h);
+  ctx.strokeStyle = '#888';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(x, y, w, h);
+
+  // Text
+  ctx.fillStyle = BLACK;
+  ctx.font = `14px 'Courier New', monospace`;
+  ctx.textAlign = 'left';
+
+  // Wrap text
+  const padding = 12;
+  const maxW = w - padding*2;
+  const words = text.split(' ');
+  let line = '';
+  let ty = y + padding + 12;
+  for(const word of words) {
+    const test = line ? line + ' ' + word : word;
+    if(ctx.measureText(test).width > maxW && line) {
+      ctx.fillText(line, x + padding, ty);
+      line = word; ty += 18;
+    } else line = test;
+  }
+  if(line) ctx.fillText(line, x + padding, ty);
+}
+
+// ══════════════════════════════════════
+//  GAME CLASS
+// ══════════════════════════════════════
+let G = null;
+let running = false;
+
+class Game {
+  constructor() {
+    this.resize();
+    this.reset();
+    this.setupInput();
+  }
+
+  reset() {
+    this.playerHP   = 92;
+    this.playerMaxHP= 92;
+    this.playerLV   = 19;
+    this.playerKR   = 1;  // karma (poison)
+    this.enemyHP    = 100;
+    this.enemyMaxHP = 100;
+
+    this.phase = 'dialog';       // dialog | menu | defend | result
+    this.menuSel = 0;            // 0=FIGHT 1=ACT 2=ITEM 3=MERCY
+    this.turn = 0;
+    this.items = 1;
+
+    // Dialog
+    this.dialogs = [
+      "heh. ya estás aquí...",
+      "no te esfuerces tanto.",
+      "igual no vas a ganar.",
+      "¿de verdad sigues intentándolo?",
+      "...",
+    ];
+    this.currentDialog = '';
+    this.dialogTarget = this.dialogs[0];
+    this.dialogIdx = 0;
+    this.dialogTimer = 0;
+
+    // Defend
+    this.heart = { x: 0, y: 0 };
+    this.heartInvuln = 0;
+    this.bullets = [];
+    this.defendTimer = 0;
+    this.defendDuration = 220;
+    this.attackPattern = 0;
+    this.warnText = '';
+    this.warnTimer = 0;
+
+    // Result
+    this.resultText = '';
+    this.resultTimer = 0;
+
+    // Visuals
+    this.flowerFace = 'neutral';
+    this.flowerFaceTimer = 0;
+    this.bob = 0;
+    this.shake = 0;
+    this.dmgFlash = 0;
+    this.hpFlash = 0;
+    this.krTimer = 0;
+    this.menuPulse = 0;
+
+    // KR poison tick
+    this.krTickTimer = 0;
+
+    this.resize();
+    this.resetHeart();
+  }
+
+  resize() {
+    this.W = W; this.H = H;
+
+    // Layout: centered, like the real game
+    const isSmall = W < 600;
+    const scale = isSmall ? 0.85 : 1;
+
+    // Battle box — real Undertale is about 265x265px centered
+    const boxW = Math.min(265, W * 0.6) * scale;
+    const boxH = Math.min(200, H * 0.35) * scale;
+
+    // Panel height (FIGHT ACT ITEM MERCY bar)
+    const panelH = isSmall ? 110 : 130;
+
+    // Vertical layout: enemy area | box | panel
+    const totalH = 220*scale + boxH + panelH + 40;
+    const startY = (H - totalH) / 2;
+
+    this.enemyZone = { y: startY, h: 200*scale };
+    this.box = {
+      x: (W - boxW) / 2,
+      y: startY + 220*scale,
+      w: boxW,
+      h: boxH,
+    };
+    this.panel = {
+      x: (W - Math.min(500*scale, W-20)) / 2,
+      y: this.box.y + boxH + 20,
+      w: Math.min(500*scale, W-20),
+      h: panelH,
+    };
+
+    // Flowey position
+    this.flowerX = W/2 - 30;
+    this.flowerY = startY + 60;
+    this.flowerScale = isSmall ? 2 : 3;
+
+    // Speech bubble
+    this.bubbleX = W/2 + 20;
+    this.bubbleY = startY + 30;
+    this.bubbleW = Math.min(220, W/2 - 20);
+    this.bubbleH = 80;
+  }
+
+  resetHeart() {
+    this.heart.x = this.box.x + this.box.w/2;
+    this.heart.y = this.box.y + this.box.h/2;
+  }
+
+  setupInput() {
+    this._keys = {};
+    this._kd = (e) => {
+      if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Space','KeyZ','KeyX','Enter'].includes(e.code)) e.preventDefault();
+      if(this._keys[e.code]) return;
+      this._keys[e.code] = true;
+      this.onKey(e.code);
+    };
+    this._ku = (e) => { delete this._keys[e.code]; };
+    document.addEventListener('keydown', this._kd);
+    document.addEventListener('keyup', this._ku);
+
+    // Touch swipe/tap for menu
+    let tStart = null;
+    this._ts = (e) => { const t=e.touches[0]; tStart={x:t.clientX,y:t.clientY}; };
+    this._te = (e) => {
+      if(!tStart) return;
+      const t=e.changedTouches[0];
+      const dx=t.clientX-tStart.x, dy=t.clientY-tStart.y;
+      const adx=Math.abs(dx), ady=Math.abs(dy);
+      if(adx<10&&ady<10) this.onKey('Space');
+      else if(adx>ady) this.onKey(dx>0?'ArrowRight':'ArrowLeft');
+      else this.onKey(dy>0?'ArrowDown':'ArrowUp');
+      tStart=null;
+    };
+    canvas.addEventListener('touchstart',this._ts,{passive:true});
+    canvas.addEventListener('touchend',this._te,{passive:true});
+
+    // Touch move for heart (defend phase)
+    let touchId=null, lastTouch=null;
+    this._tm = (e) => {
+      if(this.phase!=='defend') return;
+      for(const t of e.changedTouches) {
+        if(touchId===null) touchId=t.identifier;
+        if(t.identifier===touchId) {
+          if(lastTouch) {
+            this.heart.x += (t.clientX-lastTouch.x)*1.5;
+            this.heart.y += (t.clientY-lastTouch.y)*1.5;
+          }
+          lastTouch={x:t.clientX,y:t.clientY};
+        }
+      }
+    };
+    this._te2 = (e) => {
+      for(const t of e.changedTouches) if(t.identifier===touchId){touchId=null;lastTouch=null;}
+    };
+    canvas.addEventListener('touchmove',this._tm,{passive:true});
+    canvas.addEventListener('touchend',this._te2,{passive:true});
+  }
+
+  destroy() {
+    document.removeEventListener('keydown',this._kd);
+    document.removeEventListener('keyup',this._ku);
+  }
+
+  onKey(code) {
+    if(this.phase==='dialog') {
+      if(this.dialogIdx < this.dialogTarget.length) {
+        // skip typing
+        this.dialogIdx = this.dialogTarget.length;
+        this.currentDialog = this.dialogTarget;
+      } else if(['Space','KeyZ','Enter'].includes(code)) {
+        this.phase = 'menu';
+      }
+      return;
+    }
+    if(this.phase==='menu') {
+      if(code==='ArrowLeft') this.menuSel=(this.menuSel+3)%4;
+      if(code==='ArrowRight') this.menuSel=(this.menuSel+1)%4;
+      if(['Space','KeyZ','Enter'].includes(code)) this.confirm();
+    }
+    if(this.phase==='result') {
+      // auto
+    }
+  }
+
+  confirm() {
+    const opts=['FIGHT','ACT','ITEM','MERCY'];
+    const sel=opts[this.menuSel];
+
+    if(sel==='FIGHT') {
+      const dmg = Math.floor(Math.random()*12)+8;
+      this.enemyHP = Math.max(0, this.enemyHP-dmg);
+      this.shake=14;
+      this.flowerFace='hurt'; this.flowerFaceTimer=50;
+      this.resultText = `¡Atacas a Flowey!\nDaño: ${dmg}`;
+      if(this.enemyHP<=0){ this.resultText=`¡Golpe final! ${dmg} de daño.\n¡VICTORIA!`; this.endResult('win'); return; }
+    } else if(sel==='ACT') {
+      this.flowerFace='happy'; this.flowerFaceTimer=70;
+      this.enemyHP=Math.max(0,this.enemyHP-10);
+      this.resultText='Le hablas con amabilidad...\nFlowey duda un momento.';
+    } else if(sel==='ITEM') {
+      if(this.items>0){ this.items--;
+        const h=Math.min(20,this.playerMaxHP-this.playerHP);
+        this.playerHP+=h;
+        this.resultText=`Usas una Venda. +${h} HP`;
+      } else this.resultText='No tienes más objetos.';
+    } else if(sel==='MERCY') {
+      if(Math.random()<0.25){ this.resultText='¡Escapas con éxito!'; this.endResult('escape'); return; }
+      else this.resultText='¡No puedes huir!';
+    }
+
+    this.phase='result';
+    this.resultTimer=90;
+  }
+
+  endResult(type) {
+    this.phase='result';
+    this.resultTimer=100;
+    setTimeout(()=>{
+      if(type==='win'){ endTitle.textContent='¡DETERMINACIÓN!'; endTitle.className='end-t win'; endSub.textContent='¡Derrotaste a Flowey!'; }
+      else if(type==='escape'){ endTitle.textContent='¡ESCAPASTE!'; endTitle.className='end-t win'; endSub.textContent='Flowey te deja ir... por ahora.'; }
+      endScreen.classList.add('show');
+      running=false; this.destroy();
+    },1800);
+  }
+
+  startDefend() {
+    this.phase='defend';
+    this.bullets=[];
+    this.defendTimer=0;
+    this.attackPattern=this.turn%5;
+    this.flowerFace='evil'; this.flowerFaceTimer=999;
+    const warns=['¡Pétalos!','¡Espiral!','¡Lluvia!','¡Explosión!','¡Caos!'];
+    this.warnText=warns[this.attackPattern];
+    this.warnTimer=70;
+    this.resetHeart();
+  }
+
+  spawnBullet(f) {
+    const bx=this.box, cx=bx.x+bx.w/2, cy=bx.y+bx.h/2;
+    const ap=this.attackPattern;
+
+    if(ap===0) { // rotating petals
+      if(f%20===0) {
+        for(let i=0;i<5;i++){
+          const a=(i/5)*Math.PI*2+f*0.05;
+          const spd=2;
+          this.bullets.push({x:cx+Math.cos(a)*(bx.w/2+15),y:cy+Math.sin(a)*(bx.h/2+15),vx:-Math.cos(a)*spd,vy:-Math.sin(a)*spd,r:6,color:YELLOW,life:150,bounce:true});
+        }
+      }
+    } else if(ap===1) { // spiral
+      if(f%8===0){
+        const a=f*0.3;
+        const spd=2.5;
+        this.bullets.push({x:cx,y:cy,vx:Math.cos(a)*spd,vy:Math.sin(a)*spd,r:5,color:GREEN,life:120,bounce:true});
+        this.bullets.push({x:cx,y:cy,vx:Math.cos(a+Math.PI)*spd,vy:Math.sin(a+Math.PI)*spd,r:5,color:GREEN,life:120,bounce:true});
+      }
+    } else if(ap===2) { // rain
+      if(f%12===0){
+        const x=bx.x+Math.random()*bx.w;
+        this.bullets.push({x,y:bx.y-8,vx:(Math.random()-.5)*1.5,vy:2.5+Math.random()*1.5,r:5,color:'#ff69b4',life:180,bounce:false});
+      }
+    } else if(ap===3) { // burst
+      if(f%45===0){
+        for(let i=0;i<12;i++){
+          const a=(i/12)*Math.PI*2;
+          const spd=1.8+Math.random();
+          this.bullets.push({x:cx,y:cy,vx:Math.cos(a)*spd,vy:Math.sin(a)*spd,r:7,color:RED,life:150,bounce:true});
+        }
+      }
+    } else { // chaos mix
+      if(f%15===0){
+        const a=Math.random()*Math.PI*2, spd=1.5+Math.random()*2;
+        this.bullets.push({x:bx.x+(Math.random()>0.5?0:bx.w),y:bx.y+Math.random()*bx.h,vx:Math.cos(a)*spd,vy:Math.sin(a)*spd,r:6,color:ORANGE,life:140,bounce:true});
+      }
+    }
+  }
+
+  update() {
+    this.bob+=0.05;
+    this.menuPulse+=0.08;
+    if(this.shake>0) this.shake--;
+    if(this.heartInvuln>0) this.heartInvuln--;
+    if(this.dmgFlash>0) this.dmgFlash--;
+    if(this.hpFlash>0) this.hpFlash--;
+    if(this.flowerFaceTimer>0){this.flowerFaceTimer--; if(this.flowerFaceTimer===0)this.flowerFace='neutral';}
+
+    // KR poison damage over time
+    if(this.playerKR>0 && this.phase!=='dead') {
+      this.krTickTimer++;
+      if(this.krTickTimer>=120){
+        this.krTickTimer=0;
+        this.playerHP=Math.max(1,this.playerHP-1);
+        this.hpFlash=15;
+      }
+    }
+
+    // Dialog typing
+    if(this.phase==='dialog') {
+      this.dialogTimer++;
+      if(this.dialogTimer%3===0 && this.dialogIdx<this.dialogTarget.length){
+        this.dialogIdx++;
+        this.currentDialog=this.dialogTarget.substring(0,this.dialogIdx);
+      }
+    }
+
+    // Result → enemy turn
+    if(this.phase==='result') {
+      this.resultTimer--;
+      if(this.resultTimer<=0) {
+        this.turn++;
+        const di=Math.min(this.turn,this.dialogs.length-1);
+        this.dialogTarget=this.dialogs[di];
+        this.dialogIdx=0; this.currentDialog=''; this.dialogTimer=0;
+        this.phase='dialog';
+        this._pendingDefend=true;
+      }
+    }
+
+    if(this.phase==='dialog'&&this._pendingDefend) {
+      if(this.dialogIdx>=this.dialogTarget.length){
+        this._pendingDefend=false;
+        this.startDefend();
+      }
+    }
+
+    // Defend phase
+    if(this.phase==='defend') {
+      this.defendTimer++;
+      if(this.warnTimer>0){this.warnTimer--;return;}
+
+      // Move heart with keys
+      const spd=3.8;
+      if(this._keys['ArrowLeft'])  this.heart.x-=spd;
+      if(this._keys['ArrowRight']) this.heart.x+=spd;
+      if(this._keys['ArrowUp'])    this.heart.y-=spd;
+      if(this._keys['ArrowDown'])  this.heart.y+=spd;
+
+      // Clamp
+      const hs=8, b=this.box;
+      this.heart.x=Math.max(b.x+hs,Math.min(b.x+b.w-hs,this.heart.x));
+      this.heart.y=Math.max(b.y+hs,Math.min(b.y+b.h-hs,this.heart.y));
+
+      this.spawnBullet(this.defendTimer);
+
+      // Update bullets
+      this.bullets=this.bullets.filter(bul=>{
+        bul.x+=bul.vx; bul.y+=bul.vy; bul.life--;
+        if(bul.bounce){
+          if(bul.x-bul.r<b.x||bul.x+bul.r>b.x+b.w) bul.vx*=-1;
+          if(bul.y-bul.r<b.y||bul.y+bul.r>b.y+b.h) bul.vy*=-1;
+        } else {
+          if(bul.x<b.x-10||bul.x>b.x+b.w+10||bul.y<b.y-10||bul.y>b.y+b.h+10) bul.life=0;
+        }
+        // Hit heart
+        if(this.heartInvuln===0){
+          const dx=bul.x-this.heart.x, dy=bul.y-this.heart.y;
+          if(dx*dx+dy*dy<(bul.r+6)*(bul.r+6)){
+            this.playerHP=Math.max(0,this.playerHP-1);
+            this.heartInvuln=25; this.dmgFlash=8; this.shake=6;
+            this.hpFlash=10;
+            bul.life=0;
+            if(this.playerHP<=0){
+              this.playerHP=0;
+              this.phase='dead';
+              endTitle.textContent='GAME OVER';
+              endTitle.className='end-t lose';
+              endSub.textContent='Flowey sonríe. ¿Lo intentas de nuevo?';
+              endScreen.classList.add('show');
+              running=false; this.destroy();
+            }
+          }
+        }
+        return bul.life>0;
+      });
+
+      if(this.defendTimer>=this.defendDuration){
+        this.phase='menu';
+        this.bullets=[];
+        this.flowerFace='neutral'; this.flowerFaceTimer=0;
+        // Advance dialog
+        const di=Math.min(this.turn,this.dialogs.length-1);
+        this.dialogTarget=this.dialogs[di];
+        this.dialogIdx=this.dialogTarget.length;
+        this.currentDialog=this.dialogTarget;
+      }
+    }
+  }
+
+  draw() {
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle=BLACK;
+    ctx.fillRect(0,0,W,H);
+
+    // Shake offset
+    const sx=this.shake>0?(Math.random()-.5)*6:0;
+    const sy=this.shake>0?(Math.random()-.5)*4:0;
+    ctx.save(); ctx.translate(sx,sy);
+
+    this.drawEnemy();
+    this.drawBattleBox();
+    this.drawBullets();
+    this.drawHeart();
+    this.drawPanel();
+
+    // Warning text
+    if(this.warnTimer>0) {
+      const alpha=Math.min(1,this.warnTimer/20);
+      ctx.globalAlpha=alpha;
+      ctx.font=utFont(16);
+      ctx.fillStyle=YELLOW;
+      ctx.textAlign='center';
+      ctx.fillText(this.warnText, W/2, this.box.y-16);
+      ctx.globalAlpha=1;
+    }
+
+    ctx.restore();
+  }
+
+  drawEnemy() {
+    const bob=Math.sin(this.bob)*4;
+    // Flowey
+    drawFlowey(this.flowerX, this.flowerY+bob, this.flowerScale, this.flowerFace);
+
+    // HP bar (thin, above)
+    const bw=100, bh=6;
+    const bx=this.flowerX+8-bw/2, by=this.flowerY-22;
+    ctx.fillStyle='#333';
+    ctx.fillRect(bx,by,bw,bh);
+    const pct=Math.max(0,this.enemyHP/this.enemyMaxHP);
+    ctx.fillStyle=pct>0.5?GREEN:pct>0.25?YELLOW:RED;
+    ctx.fillRect(bx,by,bw*pct,bh);
+    ctx.strokeStyle='#555'; ctx.lineWidth=1;
+    ctx.strokeRect(bx,by,bw,bh);
+
+    // Name
+    ctx.font=utFont(13);
+    ctx.fillStyle=WHITE;
+    ctx.textAlign='center';
+    ctx.fillText('Flowey el Flor', this.flowerX+8, by-4);
+
+    // Speech bubble
+    if(this.currentDialog && (this.phase==='dialog'||this.phase==='menu'||this.phase==='result')) {
+      drawSpeechBubble(this.bubbleX, this.bubbleY, this.bubbleW, this.bubbleH, this.currentDialog);
+      // Blinking cursor if dialog done
+      if(this.dialogIdx>=this.dialogTarget.length && this.phase==='dialog') {
+        const blink=Math.floor(Date.now()/500)%2;
+        if(blink) {
+          ctx.fillStyle=BLACK;
+          ctx.font=`12px 'Courier New'`;
+          ctx.textAlign='left';
+          ctx.fillText('▼', this.bubbleX+this.bubbleW-20, this.bubbleY+this.bubbleH-12);
+        }
+      }
+    }
+  }
+
+  drawBattleBox() {
+    const b=this.box;
+    if(this.phase==='defend'||this.phase==='dialog') {
+      // White border box — real undertale style
+      ctx.strokeStyle=WHITE;
+      ctx.lineWidth=4;
+      ctx.strokeRect(b.x,b.y,b.w,b.h);
+      ctx.fillStyle=BLACK;
+      ctx.fillRect(b.x+4,b.y+4,b.w-8,b.h-8);
+    }
+  }
+
+  drawBullets() {
+    if(this.phase!=='defend') return;
+    for(const bul of this.bullets) {
+      drawBullet(bul.x,bul.y,bul.r,bul.color);
+    }
+  }
+
+  drawHeart() {
+    if(this.phase!=='defend') return;
+    const alpha=this.heartInvuln>0?(Math.floor(this.heartInvuln/4)%2===0?0.25:1):1;
+    ctx.globalAlpha=alpha;
+    const hs=7;
+    drawHeart(this.heart.x-hs*3, this.heart.y-hs*3, hs/2, RED);
+    ctx.globalAlpha=1;
+  }
+
+  drawPanel() {
+    const p=this.panel;
+
+    // HP / name bar — top of panel
+    // "CHARA  LV 19  HP [=====] KR 01/42"
+    // Undertale dark orange background for this bar
+    const barY=p.y;
+    ctx.fillStyle='#1a0a00';
+    ctx.fillRect(p.x, barY, p.w, 36);
+    ctx.strokeStyle='#333'; ctx.lineWidth=1;
+    ctx.strokeRect(p.x, barY, p.w, 36);
+
+    ctx.font=utFont(11);
+    ctx.textAlign='left';
+
+    // Name & LV
+    ctx.fillStyle=WHITE;
+    ctx.fillText('CHARA', p.x+12, barY+14);
+    ctx.fillStyle=WHITE;
+    ctx.fillText(`LV ${this.playerLV}`, p.x+80, barY+14);
+
+    // HP text
+    ctx.fillStyle=WHITE;
+    ctx.fillText('HP', p.x+140, barY+14);
+
+    // HP bar
+    const hbX=p.x+165, hbY=barY+6, hbW=110, hbH=14;
+    ctx.fillStyle='#500';
+    ctx.fillRect(hbX,hbY,hbW,hbH);
+    const hpPct=Math.max(0,this.playerHP/this.playerMaxHP);
+    const hpCol=this.hpFlash>0?'#ff8888':(hpPct>0.5?YELLOW:RED);
+    ctx.fillStyle=hpCol;
+    ctx.fillRect(hbX,hbY,hbW*hpPct,hbH);
+    ctx.strokeStyle='#888'; ctx.lineWidth=1;
+    ctx.strokeRect(hbX,hbY,hbW,hbH);
+
+    // HP numbers
+    ctx.fillStyle=WHITE;
+    ctx.font=utFont(10);
+    ctx.fillText(`${this.playerHP}/${this.playerMaxHP}`, hbX+hbW+8, barY+15);
+
+    // KR
+    ctx.fillStyle=ORANGE;
+    ctx.font=utFont(10);
+    ctx.fillText(`KR ${String(this.playerKR).padStart(2,'0')} / ${String(this.playerMaxHP).padStart(2,'0')}`, p.x+p.w-110, barY+15);
+
+    // ─── CONTENT AREA ───
+    const contentY=barY+36;
+    const contentH=p.h-36;
+
+    if(this.phase==='menu') {
+      this.drawMenuButtons(p.x, contentY, p.w, contentH);
+    } else if(this.phase==='dialog') {
+      // Show "enemy turn" hint
+      ctx.font=utFont(11);
+      ctx.fillStyle=GRAY;
+      ctx.textAlign='center';
+      ctx.fillText('[ Presiona Z / Espacio ]', p.x+p.w/2, contentY+contentH/2+4);
+    } else if(this.phase==='defend') {
+      ctx.font=utFont(11);
+      ctx.fillStyle=RED;
+      ctx.textAlign='center';
+      const rem=Math.max(0,Math.ceil((this.defendDuration-this.defendTimer)/60));
+      ctx.fillText(rem>0?`¡ESQUIVA! ${rem}s`:'¡ESQUIVA!', p.x+p.w/2, contentY+contentH/2+4);
+    } else if(this.phase==='result') {
+      ctx.font=utFont(11);
+      ctx.fillStyle=WHITE;
+      ctx.textAlign='center';
+      const lines=this.resultText.split('\n');
+      lines.forEach((l,i)=>ctx.fillText(l, p.x+p.w/2, contentY+contentH/2-8+i*18));
+    }
+  }
+
+  drawMenuButtons(px, py, pw, ph) {
+    // 4 buttons — FIGHT ACT ITEM MERCY — orange style like real Undertale
+    const labels=[
+      {t:'✕ FIGHT',c:'#d44a00'},
+      {t:'⚬ ACT',  c:'#d44a00'},
+      {t:'⚙ ITEM', c:'#d44a00'},
+      {t:'✕ MERCY',c:'#d44a00'},
+    ];
+    // Real Undertale: all 4 in one row
+    const btnW=(pw-60)/4;
+    const btnH=Math.min(40,ph-20);
+    const gap=8;
+    const totalBtnsW=btnW*4+gap*3;
+    const startX=px+(pw-totalBtnsW)/2;
+    const btnY=py+(ph-btnH)/2;
+
+    for(let i=0;i<4;i++){
+      const bx=startX+i*(btnW+gap);
+      const sel=this.menuSel===i;
+
+      // Border + fill
+      ctx.strokeStyle=sel?WHITE:ORANGE;
+      ctx.lineWidth=sel?3:2;
+      ctx.fillStyle=sel?ORANGE:BLACK;
+      ctx.fillRect(bx,btnY,btnW,btnH);
+      ctx.strokeRect(bx,btnY,btnW,btnH);
+
+      ctx.font=utFont(sel?12:11);
+      ctx.fillStyle=sel?WHITE:ORANGE;
+      ctx.textAlign='center';
+      ctx.fillText(labels[i].t, bx+btnW/2, btnY+btnH/2+4);
+    }
+
+    // Selection cursor (★ or ♥)
+    const selBx=startX+this.menuSel*(btnW+gap);
+    const pulse=Math.sin(this.menuPulse)*2;
+    ctx.font=utFont(10);
+    ctx.fillStyle=WHITE;
+    ctx.textAlign='center';
+    ctx.fillText('▶', selBx-10+pulse, btnY+btnH/2+4);
+
+    // Items remaining
+    ctx.font=utFont(9);
+    ctx.fillStyle=GRAY;
+    ctx.textAlign='right';
+    ctx.fillText(`Vendas: ${this.items}`, px+pw-8, btnY+btnH+14);
+  }
+}
+
+// ══════════════════════════════════════
+//  LOOP
+// ══════════════════════════════════════
+function loop() {
+  if(!running||!G) return;
+  G.update();
+  G.draw();
+  requestAnimationFrame(loop);
+}
+
+function startGame() {
+  titleScreen.style.display='none';
+  endScreen.classList.remove('show');
+  G=new Game();
+  running=true;
+  requestAnimationFrame(loop);
+}
+
+endBtn.addEventListener('click', startGame);
+document.addEventListener('keydown', e => { if(!running && e.code==='Space') startGame(); });
+titleScreen.addEventListener('click', ()=>{ if(!running) startGame(); });
+titleScreen.addEventListener('touchstart', ()=>{ if(!running) startGame(); },{passive:true});
+</script>
+</body>
+</html>
