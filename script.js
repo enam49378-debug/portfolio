@@ -664,13 +664,19 @@ if (playBtn && battleOverlay && gameContainer && gameIframe) {
     var vpCX = window.innerWidth / 2;
     var vpCY = window.innerHeight / 2;
 
+    // Scroll suave para centrar la sección de juegos (ANTES de bloquear)
+    var gameSec = document.getElementById('games');
+    if (gameSec) {
+      var secRect = gameSec.getBoundingClientRect();
+      var targetY = window.scrollY + secRect.top + secRect.height / 2 - vpCY;
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
+    }
+
     battleOverlay.style.display = 'flex';
     void battleOverlay.offsetWidth;
     battleOverlay.classList.add('active');
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
 
     // Colocar corazón en la posición del botón
     battleHeart.style.transition = 'none';
@@ -686,14 +692,6 @@ if (playBtn && battleOverlay && gameContainer && gameIframe) {
     battleHeart.style.left = vpCX + 'px';
     battleHeart.style.transform = 'translate(-50%,-50%) scale(1)';
     battleZoomer.classList.add('zoomed');
-
-    // Scroll suave para centrar la sección de juegos
-    var gameSec = document.getElementById('games');
-    if (gameSec) {
-      var secRect = gameSec.getBoundingClientRect();
-      var targetY = window.scrollY + secRect.top + secRect.height / 2 - vpCY;
-      window.scrollTo({ top: targetY, behavior: 'smooth' });
-    }
 
     // Texto "un monstruo aparece" (tras la animación de movimiento)
     setTimeout(function () { battleText.classList.add('visible'); }, 1100);
@@ -761,8 +759,6 @@ if (playBtn && battleOverlay && gameContainer && gameIframe) {
       gameContainer.style.display = 'none';
       document.documentElement.style.overflow = '';
       document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
     });
   }
 
@@ -772,8 +768,6 @@ if (playBtn && battleOverlay && gameContainer && gameIframe) {
       gameContainer.style.display = 'none';
       document.documentElement.style.overflow = '';
       document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
     }
   });
 }
