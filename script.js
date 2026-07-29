@@ -667,9 +667,11 @@ if (playBtn && battleOverlay && gameContainer && gameIframe) {
     // Subir al inicio de la página (el corazón aparece donde está el botón)
     window.scrollTo({ top: 0 });
 
-    // Bloquear scroll después de haber subido
-    document.documentElement.style.overflow = 'hidden';
-    document.body.style.overflow = 'hidden';
+    // Bloquear scroll: forzar html y body a viewport fijo
+    document.documentElement.style.setProperty('overflow', 'hidden', 'important');
+    document.documentElement.style.setProperty('height', '100%', 'important');
+    document.body.style.setProperty('overflow', 'hidden', 'important');
+    document.body.style.setProperty('height', '100%', 'important');
 
     battleOverlay.style.display = 'flex';
     void battleOverlay.offsetWidth;
@@ -758,8 +760,10 @@ if (playBtn && battleOverlay && gameContainer && gameIframe) {
     gameCloseBtn.addEventListener('click', function () {
       gameContainer.style.display = 'none';
       document.documentElement.style.overflow = '';
-      document.documentElement.style.scrollBehavior = '';
+      document.documentElement.style.height = '';
       document.body.style.overflow = '';
+      document.body.style.height = '';
+      document.documentElement.scrollBehavior = '';
       document.documentElement.classList.remove('game-active');
     });
   }
@@ -769,8 +773,10 @@ if (playBtn && battleOverlay && gameContainer && gameIframe) {
     if (e.key === 'Escape' && gameContainer.style.display === 'flex') {
       gameContainer.style.display = 'none';
       document.documentElement.style.overflow = '';
-      document.documentElement.style.scrollBehavior = '';
+      document.documentElement.style.height = '';
       document.body.style.overflow = '';
+      document.body.style.height = '';
+      document.documentElement.scrollBehavior = '';
       document.documentElement.classList.remove('game-active');
     }
   });
