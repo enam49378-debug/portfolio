@@ -746,7 +746,9 @@ if (playBtn && battleOverlay && gameContainer && gameIframe) {
         gameLoaded = true;
       }
       gameContainer.style.display = 'flex';
-      gameContainer.scrollTop = 0;
+      gameContainer.style.top = '0px';
+      gameContainer.style.left = '0px';
+      document.documentElement.classList.add('game-active');
       // NO restaurar scroll aquí — el juego sigue abierto
     }, 6700);
   });
@@ -758,6 +760,7 @@ if (playBtn && battleOverlay && gameContainer && gameIframe) {
       document.documentElement.style.overflow = '';
       document.documentElement.style.scrollBehavior = '';
       document.body.style.overflow = '';
+      document.documentElement.classList.remove('game-active');
     });
   }
 
@@ -768,6 +771,7 @@ if (playBtn && battleOverlay && gameContainer && gameIframe) {
       document.documentElement.style.overflow = '';
       document.documentElement.style.scrollBehavior = '';
       document.body.style.overflow = '';
+      document.documentElement.classList.remove('game-active');
     }
   });
 }

@@ -2386,6 +2386,16 @@ html, body {
   z-index: 1;
 }
 
+/* Cuando el juego está activo: ocultar scrollbar a la fuerza */
+html.game-active {
+  overflow: hidden !important;
+  scrollbar-width: none;
+}
+html.game-active::-webkit-scrollbar {
+  display: none;
+  width: 0;
+}
+
 @media (max-width: 768px) {
   .battle-text-line { font-size: 0.8rem; letter-spacing: 2px; }
   .battle-text-name { font-size: 1.2rem; letter-spacing: 4px; }
