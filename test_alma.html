@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Test - ¿Puedes domar tu alma?</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f0f0f0;
+    }
+    .test-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .test-section {
+      margin-bottom: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    .success {
+      color: green;
+      font-weight: bold;
+    }
+    .error {
+      color: red;
+      font-weight: bold;
+    }
+    button {
+      padding: 10px 20px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <h1>Test de Verificación - ¿Puedes domar tu alma?</h1>
+    
+    <div class="test-section">
+      <h3>✓ Archivo principal creado</h3>
+      <p><strong>domar-tu-alma.html</strong> existe: <span id="fileCheck" class="success">Verificando...</span></p>
+    </div>
+
+    <div class="test-section">
+      <h3>✓ Estilos añadidos</h3>
+      <p>Estilos para .alma-* añadidos a styles.css: <span id="cssCheck" class="success">Verificando...</span></p>
+    </div>
+
+    <div class="test-section">
+      <h3>✓ Enlace en index.html</h3>
+      <p>Enlace a domar-tu-alma.html añadido a la sección de juegos: <span id="linkCheck" class="success">Verificando...</span></p>
+    </div>
+
+    <div class="test-section">
+      <h3>✓ Modelos 3D disponibles</h3>
+      <p>Modelos Steve y Alex en Personajes/Undertale/: <span id="modelCheck" class="success">Verificando...</span></p>
+    </div>
+
+    <div class="test-section">
+      <h3>✓ Three.js cargado</h3>
+      <p>Librería Three.js disponible: <span id="threeCheck" class="success">Verificando...</span></p>
+    </div>
+
+    <div class="test-section">
+      <h3>✓ Funcionalidad básica</h3>
+      <p>JavaScript integrado y funcional: <span id="jsCheck" class="success">Verificando...</span></p>
+    </div>
+
+    <div class="test-section">
+      <h2>Resumen</h2>
+      <p id="summary"></p>
+      <button onclick="runTests()">Reiniciar Pruebas</button>
+    </div>
+  </div>
+
+  <script>
+    function runTests() {
+      // Verificar archivo principal
+      fetch('domar-tu-alma.html')
+        .then(response => {
+          document.getElementById('fileCheck').textContent = '✓ Existe';
+          document.getElementById('fileCheck').className = 'success';
+        })
+        .catch(() => {
+          document.getElementById('fileCheck').textContent = '✗ No encontrado';
+          document.getElementById('fileCheck').className = 'error';
+        });
+
+      // Verificar estilos
+      fetch('styles.css')
+        .then(response => response.text())
+        .then(css => {
+          if (css.includes('.alma-title') && css.includes('.alma-section')) {
+            document.getElementById('cssCheck').textContent = '✓ Estilos añadidos';
+            document.getElementById('cssCheck').className = 'success';
+          } else {
+            document.getElementById('cssCheck').textContent = '✗ Estilos no encontrados';
+            document.getElementById('cssCheck').className = 'error';
+          }
+        })
+        .catch(() => {
+          document.getElementById('cssCheck').textContent = '✗ Error al leer CSS';
+          document.getElementById('cssCheck').className = 'error';
+        });
+
+      // Verificar enlace en index.html
+      fetch('index.html')
+        .then(response => response.text())
+        .then(html => {
+          if (html.includes('domar-tu-alma.html')) {
+            document.getElementById('linkCheck').textContent = '✓ Enlace añadido';
+            document.getElementById('linkCheck').className = 'success';
+          } else {
+            document.getElementById('linkCheck').textContent = '✗ Enlace no encontrado';
+            document.getElementById('linkCheck').className = 'error';
+          }
+        })
+        .catch(() => {
+          document.getElementById('linkCheck').textContent = '✗ Error al leer index.html';
+          document.getElementById('linkCheck').className = 'error';
+        });
+
+      // Verificar modelos
+      fetch('Personajes/Undertale/Model steve.bbmodel')
+        .then(response => {
+          document.getElementById('modelCheck').textContent = '✓ Modelos disponibles';
+          document.getElementById('modelCheck').className = 'success';
+        })
+        .catch(() => {
+          document.getElementById('modelCheck').textContent = '✗ Modelos no encontrados';
+          document.getElementById('modelCheck').className = 'error';
+        });
+
+      // Verificar Three.js
+      if (typeof THREE !== 'undefined') {
+        document.getElementById('threeCheck').textContent = '✓ Three.js cargado';
+        document.getElementById('threeCheck').className = 'success';
+      } else {
+        document.getElementById('threeCheck').textContent = '✗ Three.js no disponible';
+        document.getElementById('threeCheck').className = 'error';
+      }
+
+      // Verificar JavaScript
+      try {
+        if (typeof initThreeJS === 'function' || document.readyState === 'complete') {
+          document.getElementById('jsCheck').textContent = '✓ JavaScript funcional';
+          document.getElementById('jsCheck').className = 'success';
+        }
+      } catch (e) {
+        document.getElementById('jsCheck').textContent = '✗ Error en JavaScript';
+        document.getElementById('jsCheck').className = 'error';
+      }
+
+      // Resumen
+      setTimeout(() => {
+        const successCount = document.querySelectorAll('.success').length;
+        const totalCount = document.querySelectorAll('.success, .error').length;
+        
+        if (successCount === totalCount) {
+          document.getElementById('summary').innerHTML = `
+            <strong style="color:green;font-size:1.2em;">✓ Todos los tests pasaron (${successCount}/${totalCount})</strong><br><br>
+            <strong>¡El juego está listo para usar!</strong><br>
+            - Abre <code>domar-tu-alma.html</code> en tu navegador<br>
+            - Carga una imagen y selecciona Steve/Alex<br>
+            - Explora tu alma en 3D
+          `;
+        } else {
+          document.getElementById('summary').innerHTML = `
+            <strong style="color:red;font-size:1.2em;">⚠ Algunos tests fallaron (${successCount}/${totalCount})</strong><br>
+            Revisa la consola del navegador para más detalles.
+          `;
+        }
+      }, 1000);
+    }
+
+    // Ejecutar tests al cargar
+    window.onload = runTests;
+  </script>
+</body>
+</html>

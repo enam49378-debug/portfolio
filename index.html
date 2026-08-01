@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JesulutoXD — Animator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="Imagenes/icon.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Custom cursor — fuera de page-main para que no se mueva con el slide -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-trail" id="cursorTrail"></div>
+
+<div class="page-main" id="pageMain">
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">Jesuluto<span>XD</span></div>
+    <ul class="nav-links">
+      <li><a href="#about">Sobre mí</a></li>
+      <li><a href="#work">Animaciones</a></li>
+      <li><a href="#contact">Contacto</a></li>
+      <li><a href="#games" class="nav-games-link">Juegos ↗</a></li>
+      <li><a href="#" id="navWallpapers" class="nav-wp-link">Wallpapers ↗</a></li>
+    </ul>
+    <button class="nav-hamburger" id="navHamburger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- MOBILE NAV DRAWER -->
+  <div class="nav-drawer" id="navDrawer">
+    <a href="#about" class="nav-drawer-link">Sobre mí</a>
+    <a href="#work" class="nav-drawer-link">Animaciones</a>
+    <a href="#contact" class="nav-drawer-link">Contacto</a>
+    <a href="#games" class="nav-drawer-link" style="color:var(--yellow)">Juegos ↗</a>
+    <a href="#" id="navWallpapersMobile" class="nav-drawer-link" style="color:var(--green)">Wallpapers ↗</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <h1>
+        <span class="dim">Hola,</span><br>
+        soy <span class="accent">Jesuluto</span><span class="dim">XD</span>
+      </h1>
+      <div class="hero-cta">
+        <a href="https://www.youtube.com/@jesuluto" class="btn btn-primary" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle;margin-right:6px;"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          YouTube
+        </a>
+        <a href="https://www.tiktok.com/@jesulutoxd" class="btn btn-outline" target="_blank" rel="noopener">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle;margin-right:6px;"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.77a4.85 4.85 0 0 1-1-.08z"/></svg>
+          TikTok
+        </a>
+        <a href="https://ko-fi.com/jesulutoxd" class="btn btn-kofi" target="_blank" rel="noopener">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle;margin-right:6px;"><path d="M23.881 8.948c-.773-4.085-4.859-4.593-4.859-4.593H.723c-.604 0-.679.798-.679.798s-.082 7.324-.022 11.822c.164 2.424 2.586 2.672 2.586 2.672s8.267-.023 11.966-.049c2.438-.426 2.683-2.566 2.658-3.734 4.352.24 7.422-2.831 6.649-6.916zm-11.062 3.511c-1.246 1.453-4.011 3.976-4.011 3.976s-.121.119-.31.023c-.076-.057-.108-.09-.108-.09-.443-.441-3.368-3.049-4.034-3.954-.709-.965-1.041-2.7-.091-3.71.951-1.01 3.005-1.086 4.363.407 0 0 1.565-1.494 3.595-.464 1.871.966 1.843 2.845.596 3.812zm7.31 0c-.213.27-.487.41-.8.41-1.078 0-1.954-1.04-1.954-2.325 0-1.285.876-2.325 1.955-2.325 1.078 0 1.954 1.04 1.954 2.325 0 .633-.2 1.205-.524 1.64l-.631-.555z"/></svg>
+          Ko-fi
+        </a>
+      </div>
+    </div>
+
+    <!-- Chibi flotando -->
+    <div class="chibi-float-wrap">
+      <div class="chibi-fly-wrap">
+        <img src="Imagenes/Frame/Jesuluto Chibi/Chibi.png" class="chibi-float" id="chibiHero" alt="Jesuluto Chibi">
+      </div>
+      <div class="chibi-shadow" id="chibiHeroShadow"></div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-grid">
+      <div class="about-text fade-in">
+        <div class="section-label">// Sobre mí</div>
+        <h2 class="section-title">Animator dentro<br>del juego</h2>
+        <p>¡Hola! Soy <strong style="color:var(--green)">Jesús</strong>, mejor conocido como <strong style="color:var(--green)">JesulutoXD</strong> :3</p>
+        <p>Me dedico a hacer animaciones de Minecraft — con <strong style="color:var(--green)">BBS MOD</strong>. He estado creando durante <strong style="color:var(--green)">2 años</strong> y publicando principalmente en <strong style="color:var(--green)">TikTok</strong> y YouTube. Aunque mi plataforma más activa es <strong style="color:var(--green)">TikTok</strong>.</p>
+      </div>
+      <!-- BIG CHARACTER with skin selector -->
+      <div class="character-scroll-wrap fade-in">
+        <div class="character-scroll-stage">
+          <img id="scrollChar" src="Imagenes/Frame/1.png" alt="character" style="position:absolute;left:-148px;top:-75px;width:718px;height:596px;object-fit:contain;cursor:pointer;"/>
+          <div class="char-glow"></div>
+          <div class="char-touch-hint" id="touchHint" style="left:307px;top:39px;width:33px;height:33px;">
+            <span class="hint-cursor">🔽</span>
+          </div>
+        </div>
+
+        <!-- Selector de skins -->
+        <div class="skin-selector">
+          <div class="skin-option active" id="skin-normal" data-skin="normal" title="Normal">
+            <img src="Imagenes/Frame/Selector de skins/Normal/Normal.png" alt="Normal">
+            <span>Normal</span>
+          </div>
+          <div class="skin-option" id="skin-meid" data-skin="meid" title="Meid">
+            <img src="Imagenes/Frame/Selector de skins/Meid/Meid.png" alt="Meid">
+            <span>Meid</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="about-stats fade-in">
+      <div class="stat-card">
+        <span class="stat-num">2</span>
+        <span class="stat-label">Años creando</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">148+</span>
+        <span class="stat-label">Animaciones</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">100K+</span>
+        <span class="stat-label">Vistas</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK / SHOWREEL -->
+  <section id="work">
+    <div class="section-label fade-in">// Portfolio</div>
+    <h2 class="section-title fade-in">Mis animaciones</h2>
+    <div class="work-grid">
+
+      <!-- Card 1 - MmmM Milo J -->
+      <div class="work-card fade-in">
+        <a class="work-thumb yt-thumb" href="https://www.youtube.com/watch?v=xfeZ78o4UWc" target="_blank" rel="noopener">
+          <img src="https://img.youtube.com/vi/xfeZ78o4UWc/maxresdefault.jpg" alt="MmmM Milo J | Minecraft" onerror="this.src='https://img.youtube.com/vi/xfeZ78o4UWc/hqdefault.jpg'">
+          <div class="yt-play-btn">
+            <svg viewBox="0 0 68 48" xmlns="http://www.w3.org/2000/svg">
+              <path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55C3.97 2.33 2.27 4.81 1.48 7.74 0 13.05 0 24 0 24s0 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C68 34.95 68 24 68 24s0-10.95-1.48-16.26z" fill="#FF0000"/>
+              <path d="M45 24 27 14v20" fill="#fff"/>
+            </svg>
+          </div>
+          <div class="yt-badge">
+            <svg viewBox="0 0 90 20" xmlns="http://www.w3.org/2000/svg" width="56" height="13">
+              <path d="M27.9727 3.12324C27.6435 1.89323 26.6768 0.926623 25.4468 0.597366C23.2197 2.24288e-07 14.285 0 14.285 0C14.285 0 5.35042 2.24288e-07 3.12323 0.597366C1.89323 0.926623 0.926623 1.89323 0.597366 3.12324C2.24288e-07 5.35042 0 10 0 10C0 10 2.24288e-07 14.6496 0.597366 16.8768C0.926623 18.1068 1.89323 19.0734 3.12323 19.4026C5.35042 20 14.285 20 14.285 20C14.285 20 23.2197 20 25.4468 19.4026C26.6768 19.0734 27.6435 18.1068 27.9727 16.8768C28.5701 14.6496 28.5701 10 28.5701 10C28.5701 10 28.5677 5.35042 27.9727 3.12324Z" fill="#FF0000"/>
+              <path d="M11.4253 14.2854L18.8477 10.0004L11.4253 5.71533V14.2854Z" fill="white"/>
+              <text x="32" y="14" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white">YouTube</text>
+            </svg>
+          </div>
+        </a>
+        <div class="work-info">
+          <div class="work-tag">Animación · Minecraft · Historia</div>
+          <h3 class="work-title">MmmM Milo J | Minecraft</h3>
+          <p class="work-desc">Buenas gente. Este video se conecta con mi video de A1RE, donde vimos a un chico que perdió a su novia y cayó en una depresión profunda. Este video es la continuación de esa historia...</p>
+          <a href="https://www.youtube.com/watch?v=xfeZ78o4UWc" class="work-link" target="_blank" rel="noopener">Ver en YouTube →</a>
+        </div>
+      </div>
+
+      <!-- Card 2 - A1RE Milo J -->
+      <div class="work-card fade-in">
+        <a class="work-thumb yt-thumb" href="https://www.youtube.com/watch?v=X1Ck3ApC9uc" target="_blank" rel="noopener">
+          <img src="https://img.youtube.com/vi/X1Ck3ApC9uc/maxresdefault.jpg" alt="A1RE Milo J | Minecraft" onerror="this.src='https://img.youtube.com/vi/X1Ck3ApC9uc/hqdefault.jpg'">
+          <div class="yt-play-btn">
+            <svg viewBox="0 0 68 48" xmlns="http://www.w3.org/2000/svg">
+              <path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55C3.97 2.33 2.27 4.81 1.48 7.74 0 13.05 0 24 0 24s0 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C68 34.95 68 24 68 24s0-10.95-1.48-16.26z" fill="#FF0000"/>
+              <path d="M45 24 27 14v20" fill="#fff"/>
+            </svg>
+          </div>
+          <div class="yt-badge">
+            <svg viewBox="0 0 90 20" xmlns="http://www.w3.org/2000/svg" width="56" height="13">
+              <path d="M27.9727 3.12324C27.6435 1.89323 26.6768 0.926623 25.4468 0.597366C23.2197 2.24288e-07 14.285 0 14.285 0C14.285 0 5.35042 2.24288e-07 3.12323 0.597366C1.89323 0.926623 0.926623 1.89323 0.597366 3.12324C2.24288e-07 5.35042 0 10 0 10C0 10 2.24288e-07 14.6496 0.597366 16.8768C0.926623 18.1068 1.89323 19.0734 3.12323 19.4026C5.35042 20 14.285 20 14.285 20C14.285 20 23.2197 20 25.4468 19.4026C26.6768 19.0734 27.6435 18.1068 27.9727 16.8768C28.5701 14.6496 28.5701 10 28.5701 10C28.5701 10 28.5677 5.35042 27.9727 3.12324Z" fill="#FF0000"/>
+              <path d="M11.4253 14.2854L18.8477 10.0004L11.4253 5.71533V14.2854Z" fill="white"/>
+              <text x="32" y="14" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="white">YouTube</text>
+            </svg>
+          </div>
+        </a>
+        <div class="work-info">
+          <div class="work-tag">Animación · Minecraft · Historia</div>
+          <h3 class="work-title">A1RE Milo J | Minecraft</h3>
+          <p class="work-desc">La historia que dio inicio a todo. Un chico que pierde a su novia y cae en una depresión profunda — el origen del universo de MmmM.</p>
+          <a href="https://www.youtube.com/watch?v=X1Ck3ApC9uc" class="work-link" target="_blank" rel="noopener">Ver en YouTube →</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- GAMES -->
+  <section id="games">
+    <div class="section-label fade-in">// Minijuegos</div>
+    <h2 class="section-title fade-in">Juegos <span style="color:var(--green)">personalizados</span></h2>
+    <p class="section-desc fade-in" style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--muted);margin-bottom:32px;letter-spacing:0.05em;">Juegos hechos a mano inspirados en mis animaciones favoritas.</p>
+
+    <div class="games-grid">
+
+      <!-- Card — Undertale Battle -->
+      <div class="game-card fade-in">
+        <div class="game-thumb">
+          <div class="game-pixel-art">
+            <!-- Flower pixel preview SVG -->
+            <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" width="80" height="80" style="image-rendering:pixelated">
+              <!-- Stem -->
+              <rect x="37" y="48" width="6" height="20" fill="#5a8a2a"/>
+              <!-- Leaves -->
+              <rect x="26" y="54" width="11" height="5" fill="#4a7a1a"/>
+              <rect x="43" y="60" width="10" height="5" fill="#4a7a1a"/>
+              <!-- Petals -->
+              <ellipse cx="40" cy="20" rx="6" ry="10" fill="#ffe566"/>
+              <ellipse cx="40" cy="60" rx="6" ry="10" fill="#ffe566"/>
+              <ellipse cx="20" cy="40" rx="10" ry="6" fill="#ffe566"/>
+              <ellipse cx="60" cy="40" rx="10" ry="6" fill="#ffe566"/>
+              <ellipse cx="26" cy="26" rx="7" ry="10" fill="#ffe566" transform="rotate(-45 26 26)"/>
+              <ellipse cx="54" cy="26" rx="7" ry="10" fill="#ffe566" transform="rotate(45 54 26)"/>
+              <!-- Face -->
+              <circle cx="40" cy="40" r="13" fill="#ffe566"/>
+              <rect x="34" y="36" width="4" height="4" fill="#000"/>
+              <rect x="42" y="36" width="4" height="4" fill="#000"/>
+              <path d="M35 46 Q40 51 45 46" stroke="#000" stroke-width="1.5" fill="none"/>
+            </svg>
+          </div>
+          <div class="game-badge">EN VIVO</div>
+        </div>
+        <div class="game-info">
+          <div class="game-tag">Undertale · Batalla · Pixel Art</div>
+          <h3 class="game-title">Batalla con Flowey</h3>
+          <p class="game-desc">Enfréntate a Flowey en una batalla estilo Undertale. Esquiva sus ataques, usa tu DETERMINACIÓN y sobrevive.</p>
+          <div class="game-meta">
+            <span class="game-controls">⌨ Flechas + Z · 📱 Desliza</span>
+          </div>
+          <button class="game-play-btn" type="button">▶ JUGAR AHORA</button>
+        </div>
+      </div>
+
+      <!-- Coming soon -->
+      <div class="game-card game-coming fade-in">
+        <div class="game-thumb game-thumb-empty">
+          <span>???</span>
+        </div>
+        <div class="game-info">
+          <div class="game-tag">Próximamente</div>
+          <h3 class="game-title" style="opacity:0.3">Juego 002</h3>
+          <p class="game-desc" style="opacity:0.3">Un nuevo juego está en camino...</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- GAME CONTAINER (oculto, se muestra tras la transición) -->
+  <div class="game-container" id="gameContainer" style="display:none">
+    <div class="game-container-header">
+      <span class="game-container-title">⚔ Batalla con Flowey</span>
+      <button class="game-container-close" id="gameCloseBtn">✕ Cerrar</button>
+    </div>
+    <iframe class="game-container-iframe" id="gameIframe" src="about:blank" sandbox="allow-scripts"></iframe>
+  </div>
+
+  <!-- TRANSITION OVERLAY — corazón sobre la página misma -->
+  <div class="battle-overlay" id="battleOverlay" style="display:none">
+    <div class="battle-zoomer" id="battleZoomer">
+      <div class="battle-dim"></div>
+    </div>
+    <div class="battle-viewport" id="battleViewport">
+      <div class="battle-heart" id="battleHeartEl"></div>
+      <div class="battle-encounter-text">un monstruo aparece</div>
+      <div class="battle-flash" id="battleFlash"></div>
+      <div class="battle-bar-top" id="battleBarTop"></div>
+      <div class="battle-bar-bottom" id="battleBarBottom"></div>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-inner fade-in">
+      <div class="section-label">// Contacto</div>
+      <h2 class="section-title">Encuéntrame<br>en las redes</h2>
+      <div class="contact-links">
+        <div class="contact-links-social">
+          <a href="https://www.youtube.com/@jesuluto" class="contact-link" target="_blank" rel="noopener">
+            <span class="contact-link-label">YouTube</span>
+            <span class="contact-link-value">@jesuluto</span>
+            <span class="contact-link-arrow">→</span>
+          </a>
+          <a href="https://www.tiktok.com/@jesulutoxd" class="contact-link" target="_blank" rel="noopener">
+            <span class="contact-link-label">TikTok</span>
+            <span class="contact-link-value">@jesulutoxd</span>
+            <span class="contact-link-arrow">→</span>
+          </a>
+          <a href="https://ko-fi.com/jesulutoxd" class="contact-link" target="_blank" rel="noopener">
+            <span class="contact-link-label">Ko-fi</span>
+            <span class="contact-link-value">jesulutoxd</span>
+            <span class="contact-link-arrow">→</span>
+          </a>
+        </div>
+
+        <!-- DISCORD -->
+        <div class="contact-link contact-link-discord" id="discordPresence">
+          <img class="discord-avatar" id="discordAvatar" src="" alt="" />
+          <div class="discord-presence-info">
+            <div class="discord-username-row">
+              <span class="discord-username">@jesuluto.xd</span>
+              <span class="discord-status-dot" id="discordStatusDot"></span>
+            </div>
+            <span class="discord-status-text" id="discordStatusText">Cargando...</span>
+            <div class="discord-activity" id="discordActivityBlock" style="display:none">
+              <img class="discord-activity-icon" id="discordActivityIcon" src="" alt="" />
+              <div class="discord-activity-details">
+                <span class="discord-activity-name" id="discordActivityName"></span>
+                <span class="discord-activity-state" id="discordActivityState"></span>
+              </div>
+            </div>
+          </div>
+          <span class="contact-link-arrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M22,24.016c-0.548-0.195-2.034-0.607-2.034-0.607C18.303,19.9,16.58,17.88,16.58,17.88c1.687-0.905,3.039-2.255,3.039-2.255c-3.948,0.713-6.812,1.222-9.619,1.222c-2.813,0-5.679-0.509-9.627-1.222c0,0,1.352,1.35,3.031,2.255c0,0-1.722,2.02-3.386,5.529c0,0-1.486,0.412-2.034,0.607C-2.414,21.5,2.808,14.641,2.808,14.641c-0.687-1.219-1.844-3.974-1.844-3.974c0-5.094,3.196-6.426,3.196-6.426c0-0.238-0.029-0.5-0.079-0.781C1.866,3.249,0,3.836,0,3.836s0.441-0.098,1.144-0.23c0.073-0.011,0.148-0.023,0.224-0.036c1.385-0.226,4.219-0.491,4.219-0.491c2.752-1.674,5.87-1.662,5.87-1.662c1.144,0.024,2.284,0.199,2.284,0.199c0,0,0.242-0.024,0.627-0.048c2.173-0.137,5.131-0.081,7.838,0.944c0,0,2.834,0.265,4.219,0.491c0.076,0.013,0.151,0.025,0.224,0.036c0.703,0.132,1.144,0.23,1.144,0.23s-1.866-0.587-4.077-0.635c-0.051,0.281-0.079,0.543-0.079,0.781c0,0,3.196,1.332,3.196,6.426c0,0-1.157,2.755-1.844,3.974C26.414,14.641,31,21.5,22,24.016z"/></svg>
+          </span>
+          <div class="discord-dropdown" id="discordDropdown">
+            <div class="discord-dropdown-section">
+              <div class="discord-dropdown-section-title">Unirse al servidor</div>
+              <a href="https://discord.com/invite/EukzhU89Zr" target="_blank" rel="noopener" class="discord-dropdown-link">
+                <svg width="14" height="14" viewBox="0 0 127.14 96.36" fill="currentColor"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83A72.37,72.37,0,0,0,45.64,0a105.89,105.89,0,0,0-26.11,8.09Q2.46,31.73,0,54.91a113.75,113.75,0,0,0,33.38,17.15a70.72,70.72,0,0,0,7.11-11.55a68.67,68.67,0,0,1-11.2-5.34a75.65,75.65,0,0,0,2.34-1.82A79.18,79.18,0,0,0,63.54,70.51a79,79,0,0,0,31.9-17.08a62.83,62.83,0,0,0,2.38,1.82A68.68,68.68,0,0,1,86.65,60.5a70.21,70.21,0,0,0,7.11,11.55a113.62,113.62,0,0,0,33.38-17.15C125,34.25,118.12,17.78,107.7,8.07ZM42.56,47.21c-3.5,0-6.36-3.21-6.36-7.14s2.82-7.17,6.36-7.17s6.36,3.22,6.36,7.17S46.06,47.21,42.56,47.21Zm42,0c-3.5,0-6.36-3.21-6.36-7.14s2.82-7.17,6.36-7.17s6.36,3.22,6.36,7.17S88.06,47.21,84.59,47.21Z"/></svg>
+                Discord.gg/EukzhU89Zr
+              </a>
+            </div>
+            <div class="discord-dropdown-section" id="discordDropdownActivity">
+              <div class="discord-dropdown-section-title">Actividad actual</div>
+              <a href="#" target="_blank" rel="noopener" class="discord-dropdown-link" id="discordDropdownActivityLink">
+                <span class="discord-dropdown-activity-icon-wrap" id="discordDropdownActivityIconWrap" style="display:none">
+                  <img class="discord-dropdown-activity-img" id="discordDropdownActivityImg" src="" alt="" />
+                </span>
+                <span class="discord-dropdown-activity-text" id="discordDropdownActivityText">Ninguna</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VISITOR COUNTER -->
+      <div class="visit-counter" id="visitCounter" title="Total de veces que se ha cargado la página">
+        <span class="visit-counter-label">// Visitante n.º</span>
+        <span class="visit-counter-num" id="visitCountNum">------</span>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /page-main -->
+
+<!-- ═══════════════════════ PAGE: WALLPAPERS ═══════════════════════ -->
+<div class="page-book" id="pageWallpapers">
+
+  <nav class="wp-nav">
+    <button class="wp-back" id="wpBack">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+      Volver
+    </button>
+    <div class="nav-logo" style="color:var(--green);font-family:'Space Mono',monospace;font-size:1rem;">Jesuluto<span style="color:var(--muted)">XD</span></div>
+    <span style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--muted);letter-spacing:0.15em;text-transform:uppercase;">// Wallpapers</span>
+  </nav>
+
+  <div class="wp-page-content">
+    <div class="wp-header">
+      <h2 class="wp-big-title">Fondos de<br><span style="color:var(--green)">mis videos</span></h2>
+      <p class="wp-desc">Capturas cinematográficas sacadas directamente de mis animaciones. Úsalas libremente.</p>
+    </div>
+
+    <div class="wp-grid">
+
+      <a class="wp-card" href="https://youtu.be/JMNzyCkveL8" target="_blank" rel="noopener">
+        <div class="wp-thumb">
+          <img src="https://img.youtube.com/vi/JMNzyCkveL8/maxresdefault.jpg" alt="Wallpaper 1" onerror="this.src='https://img.youtube.com/vi/JMNzyCkveL8/hqdefault.jpg'">
+          <div class="wp-hover">
+            <div class="wp-hover-inline">
+              <span class="wp-hover-lbl">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                Ver video
+              </span>
+              <span class="wp-hover-sep">|</span>
+              <a class="wp-hover-lbl wp-hover-dl" href="https://drive.google.com/uc?export=download&id=1ZmuHwtasWCUBJOE4bNP5nSBkxgBX4RRN" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M5 20h14v-2H5v2zm7-18v10.17l-3.59-3.58L7 10l5 5 5-5-1.41-1.41L13 12.17V2h-2z"/></svg>
+                Descargar
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="wp-info">
+          <span class="wp-num">001</span>
+          <span class="wp-title">Escena cinematográfica</span>
+        </div>
+      </a>
+
+      <div class="wp-card wp-coming">
+        <div class="wp-thumb wp-thumb-empty"><span>Próximamente</span></div>
+        <div class="wp-info"><span class="wp-num">002</span><span class="wp-title" style="opacity:0.3;">???</span></div>
+      </div>
+
+      <div class="wp-card wp-coming">
+        <div class="wp-thumb wp-thumb-empty"><span>Próximamente</span></div>
+        <div class="wp-info"><span class="wp-num">003</span><span class="wp-title" style="opacity:0.3;">???</span></div>
+      </div>
+
+      <div class="wp-card wp-coming">
+        <div class="wp-thumb wp-thumb-empty"><span>Próximamente</span></div>
+        <div class="wp-info"><span class="wp-num">004</span><span class="wp-title" style="opacity:0.3;">???</span></div>
+      </div>
+
+    </div>
+  </div>
+</div><!-- /page-wallpapers -->
+
+  <!-- ═══════════════════════════════════════════
+       MUSIC PLAYER
+  ═══════════════════════════════════════════ -->
+  <div id="music-player">
+
+    <!-- Panel expandido -->
+    <div class="mp-panel" id="mpPanel">
+
+      <!-- Cabecera: arte + info de pista -->
+      <div class="mp-panel-header">
+        <div class="mp-album-art" id="mpAlbumArt" style="width:80px;height:80px;background:var(--surface2);border:1px solid rgba(111,207,74,0.2);overflow:hidden;flex-shrink:0;border-radius:4px;">
+          <img id="mpCover" src="Imagenes/Musica/La vida era mas corta.png" alt="cover" style="width:100%;height:100%;object-fit:cover;display:block;">
+        </div>
+        <div class="mp-track-info">
+          <div class="mp-track-name" id="mpTrackName">MmmM</div>
+          <div class="mp-track-artist" id="mpTrackArtist">Milo J &amp; Paula Prieto</div>
+          <div class="mp-track-links">
+            <a id="mpYtLink" href="https://music.youtube.com/watch?v=8Z_Vz9lLDK0" target="_blank" title="Ver en YouTube" style="display:inline-flex;align-items:center;gap:4px;font-family:'Space Mono',monospace;font-size:0.52rem;color:var(--green-dim);letter-spacing:0.08em;text-decoration:none;text-transform:uppercase;margin-right:12px;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+              Youtube
+            </a>
+            <a id="mpSpotifyLink" href="https://open.spotify.com/intl-es/track/6gRT9V6RZGky3jrqPIggr5?si=e6b1b36ab2da4c14" target="_blank" title="Ver en Spotify" style="display:inline-flex;align-items:center;gap:4px;font-family:'Space Mono',monospace;font-size:0.52rem;color:#1DB954;letter-spacing:0.08em;text-decoration:none;text-transform:uppercase;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.371-.721.49-1.101.241-3.021-1.858-6.821-2.28-11.3-1.25-.418.1-.841-.16-.94-.58-.1-.418.16-.84.58-.94 4.9-1.12 9.101-.64 12.48 1.44.38.241.5.721.281 1.09zm1.47-3.27c-.301.46-.939.6-1.399.3-3.461-2.121-8.731-2.74-12.821-1.5-.52.16-1.06-.14-1.22-.66-.16-.52.14-1.06.66-1.22 4.68-1.42 10.48-.72 14.48 1.72.46.3.6.939.3 1.36zm.129-3.401c-4.15-2.46-11-2.69-14.96-1.49-.641.19-1.311-.17-1.5-.811-.19-.639.17-1.31.811-1.499 4.55-1.38 12.12-1.11 16.9 1.72.58.34.77 1.08.43 1.65-.34.58-1.081.77-1.681.43z"/></svg>
+              Spotify
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="mp-progress-wrap" id="mpProgressWrap">
+        <div class="mp-progress" id="mpProgressBar">
+          <div class="mp-progress-fill" id="mpProgressFill"></div>
+        </div>
+        <div class="mp-time">
+          <span id="mpCurrent">0:00</span>
+          <span id="mpDuration">0:00</span>
+        </div>
+      </div>
+
+      <!-- Controles -->
+      <div class="mp-controls" id="mpControls">
+        <button class="mp-ctrl" id="mpPrev" title="Anterior">
+          <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+        </button>
+        <button class="mp-play" id="mpPlayBtn" title="Play / Pause">
+          <svg viewBox="0 0 24 24" id="mpPlayIcon"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <button class="mp-ctrl" id="mpNext" title="Siguiente">
+          <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zm2.5-6 5.5 3.9V8.1z"/><path d="M16 6h2v12h-2z"/></svg>
+        </button>
+        <button class="mp-ctrl" id="mpShuffle" title="Shuffle" style="opacity:1;color:var(--green);">
+          <svg viewBox="0 0 24 24"><path d="M10.59 9.17 5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+        </button>
+        <button class="mp-ctrl" id="mpLoop" title="Repetir" style="opacity:0.4">
+          <svg viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
+        </button>
+      </div>
+
+      <!-- Volumen -->
+      <div class="mp-volume-row">
+        <div class="mp-vol-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+        </div>
+        <input type="range" class="mp-volume" id="mpVolume" min="0" max="1" step="0.01" value="0.8">
+      </div>
+
+      <!-- Mini playlist -->
+      <div id="mpPlaylist" style="display:flex;flex-direction:column;gap:2px;max-height:110px;overflow-y:auto;"></div>
+
+    </div>
+
+    <!-- Pill (siempre visible) -->
+    <div class="mp-pill" id="mpPill">
+      <div class="mp-eq">
+        <span></span><span></span><span></span><span></span>
+      </div>
+      <span class="mp-pill-label" id="mpPillLabel">♪ MmmM</span>
+      <span class="mp-pill-arrow" id="mpPillArrow">▲</span>
+    </div>
+
+  </div>
+
+  <audio id="mpAudio" preload="auto"></audio>
+
+  <div class="version-badge">v1.0.0</div>
+
+  <script src="protection.js"></script>
+  <script src="script.js"></script>
+  <script src="music-player.js"></script>
+  <script src="editor.js"></script>
+  <script src="discord-status.js"></script>
+  <script src="visit-counter.js"></script>
+
+</body>
+</html>
