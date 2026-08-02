@@ -734,4 +734,3 @@ if (playBtn) {
     openAlmaModal();
   });
 }
-}
