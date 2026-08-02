@@ -411,6 +411,10 @@
           // solo para esas dos o la textura queda rotada/mal encajada arriba y abajo.
           if (i === 2 || i === 3) {
             [u0, v0, u1, v1] = [u1, v1, u0, v0];
+          } else if (i === 0 || i === 1) {
+            // Las caras laterales (right/left) quedan espejadas en X si no se
+            // intercambia u: el borde de la region (seam) debe ir hacia atras.
+            [u0, u1] = [u1, u0];
           }
           uvAttr.setXY(o + 0, u0 / texW, v0 / texH);
           uvAttr.setXY(o + 1, u1 / texW, v0 / texH);
