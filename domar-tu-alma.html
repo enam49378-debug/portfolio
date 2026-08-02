@@ -5,287 +5,386 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>¿Puedes domar tu alma? — JesulutoXD</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="Imagenes/icon.png">
   <link rel="stylesheet" href="styles.css">
   <style>
-    /* Estilos específicos para la página de preguntas */
+    /* ═══════════════ ESTILO UNDERTALE ═══════════════ */
     :root {
-      --purple: #a855f7;
-      --dark-purple: #6d28d9;
-      --light-purple: #c4b5fd;
+      --ut-yellow: #ffff00;
+      --ut-white: #ffffff;
+      --ut-black: #000000;
+      --ut-red: #ff0040;
+      --ut-purple: #a855f7;
+    }
+
+    html, body {
+      background: var(--ut-black) !important;
     }
 
     .alma-container {
-      max-width: 1000px;
+      max-width: 980px;
       margin: 0 auto;
-      padding: 60px 24px;
+      padding: 48px 24px 140px;
       text-align: center;
+      background: var(--ut-black);
+      position: relative;
     }
 
-    .alma-title {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: clamp(2.5rem, 6vw, 4.5rem);
-      line-height: 1.1;
-      margin-bottom: 32px;
-      color: var(--white);
+    /* ── PANTALLA DE TÍTULO ── */
+    .ut-title-screen {
+      margin-bottom: 56px;
+      padding-top: 24px;
+      position: relative;
     }
 
-    .alma-subtitle {
-      font-family: 'Space Mono', monospace;
-      font-size: 1.1rem;
-      color: var(--muted);
-      margin-bottom: 48px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
+    .ut-soul {
+      width: 34px;
+      height: 34px;
+      background: var(--ut-red);
+      transform: rotate(-45deg);
+      position: relative;
+      margin: 0 auto 28px;
+      animation: soulFloat 2.4s ease-in-out infinite;
     }
 
-    .alma-section {
-      background: var(--surface);
-      border: 2px solid rgba(168, 85, 247, 0.3);
-      border-radius: 8px;
-      padding: 40px;
+    .ut-soul::before,
+    .ut-soul::after {
+      content: '';
+      position: absolute;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--ut-red);
+    }
+
+    .ut-soul::before { top: -17px; left: 0; }
+    .ut-soul::after  { top: 0; left: 17px; }
+
+    @keyframes soulFloat {
+      0%, 100% { transform: rotate(-45deg) translate(0, 0); }
+      50%      { transform: rotate(-45deg) translate(0, -10px); }
+    }
+
+    .ut-title {
+      font-family: 'Press Start 2P', monospace;
+      color: var(--ut-yellow);
+      font-size: clamp(1.5rem, 5vw, 2.8rem);
+      line-height: 1.6;
+      text-shadow: 4px 4px 0 rgba(255,255,255,0.15);
+      margin-bottom: 24px;
+    }
+
+    .ut-subtitle {
+      font-family: 'Press Start 2P', monospace;
+      color: var(--ut-white);
+      font-size: 0.65rem;
+      line-height: 2;
+      letter-spacing: 0.15em;
+    }
+
+    /* ── CAJAS DE MENÚ ── */
+    .ut-box {
+      background: var(--ut-black);
+      border: 2px solid var(--ut-white);
+      padding: 24px;
       margin-bottom: 40px;
       text-align: left;
+      position: relative;
     }
 
-    .alma-section h3 {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.5rem;
-      color: var(--purple);
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .alma-section p {
-      color: var(--stone);
+    .ut-section-label {
+      font-family: 'Press Start 2P', monospace;
+      color: var(--ut-yellow);
+      font-size: 0.7rem;
       line-height: 1.8;
-      margin-bottom: 16px;
-      font-size: 1rem;
-    }
-
-    .skin-upload-container {
+      margin-bottom: 18px;
       display: flex;
-      flex-direction: column;
-      gap: 24px;
       align-items: center;
-      margin-top: 32px;
+      gap: 10px;
     }
 
-    .skin-upload-box {
-      width: 200px;
-      height: 200px;
-      border: 3px dashed var(--purple);
+    .ut-section-label .soul-mini {
+      width: 14px;
+      height: 14px;
+      background: var(--ut-red);
+      transform: rotate(-45deg);
+      position: relative;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .ut-section-label .soul-mini::before,
+    .ut-section-label .soul-mini::after {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
+      background: var(--ut-red);
+    }
+
+    .ut-section-label .soul-mini::before { top: -7px; left: 0; }
+    .ut-section-label .soul-mini::after  { top: 0; left: 7px; }
+
+    .ut-text {
+      font-family: 'Press Start 2P', monospace;
+      color: var(--ut-white);
+      font-size: 0.55rem;
+      line-height: 2.1;
+      margin-bottom: 20px;
+    }
+
+    .ut-text span.ut-yellow { color: var(--ut-yellow); }
+
+    /* ── ZONA DE CARGA ── */
+    .ut-upload {
+      background: var(--ut-black);
+      border: 2px solid var(--ut-white);
+      padding: 28px 20px;
+      cursor: pointer;
       display: flex;
       flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      text-align: center;
+      transition: border-color 0.15s;
+    }
+
+    .ut-upload:hover,
+    .ut-upload.dragover {
+      border-color: var(--ut-yellow);
+    }
+
+    .ut-upload-icon {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 1.4rem;
+      color: var(--ut-yellow);
+    }
+
+    .ut-upload-label {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.6rem;
+      color: var(--ut-yellow);
+      letter-spacing: 0.1em;
+    }
+
+    .ut-upload-desc {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.45rem;
+      color: #888;
+      line-height: 1.8;
+      max-width: 340px;
+    }
+
+    .ut-preview {
+      width: 84px;
+      height: 84px;
+      border: 2px solid var(--ut-white);
+      background: var(--ut-black);
+      margin: 0 auto;
+      display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      transition: all 0.3s;
-      background: rgba(168, 85, 247, 0.05);
-      position: relative;
       overflow: hidden;
+      position: relative;
     }
 
-    .skin-upload-box:hover {
-      border-color: var(--light-purple);
-      background: rgba(168, 85, 247, 0.1);
-      transform: scale(1.05);
-    }
-
-    .skin-upload-box img {
+    .ut-preview img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      position: absolute;
-      top: 0;
-      left: 0;
+      display: block;
     }
 
-    .skin-upload-icon {
-      font-size: 3rem;
-      color: var(--purple);
-      margin-bottom: 16px;
+    .ut-preview-empty {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.5rem;
+      color: #555;
     }
 
-    .skin-upload-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.8rem;
-      color: var(--purple);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      text-align: center;
-    }
-
-    .skin-upload-desc {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--muted);
-      text-align: center;
-      max-width: 280px;
-    }
-
-    .skin-type-selector {
+    /* ── SELECTOR DE TIPO DE ALMA ── */
+    .ut-options {
       display: flex;
       justify-content: center;
-      gap: 20px;
-      margin-top: 32px;
+      gap: 24px;
+      flex-wrap: wrap;
     }
 
-    .skin-type-option {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
+    .ut-option {
+      background: var(--ut-black);
+      border: 2px solid var(--ut-white);
+      padding: 18px 30px 14px;
       cursor: pointer;
-      padding: 12px;
-      border: 2px solid transparent;
-      transition: all 0.2s;
+      text-align: center;
+      position: relative;
+      transition: border-color 0.15s, transform 0.15s;
       user-select: none;
     }
 
-    .skin-type-option:hover {
-      transform: translateY(-4px);
+    .ut-option:hover {
+      transform: translateY(-2px);
     }
 
-    .skin-type-option.active {
-      border-color: var(--purple);
-      background: rgba(168, 85, 247, 0.1);
-    }
-
-    .skin-type-option img {
-      width: 60px;
-      height: 60px;
+    .ut-option img {
+      width: 64px;
+      height: 64px;
       object-fit: contain;
       image-rendering: pixelated;
+      margin-bottom: 10px;
     }
 
-    .skin-type-option span {
-      font-family: 'Space Mono', monospace;
+    .ut-option-name {
+      font-family: 'Press Start 2P', monospace;
       font-size: 0.6rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
+      color: var(--ut-white);
+      letter-spacing: 0.08em;
     }
 
-    .skin-type-option.active span {
-      color: var(--purple);
+    .ut-option.active {
+      border-color: var(--ut-yellow);
     }
 
-    .viewport-container {
-      margin-top: 40px;
-      background: var(--surface2);
-      border: 2px solid rgba(168, 85, 247, 0.2);
-      border-radius: 8px;
-      padding: 20px;
-      min-height: 300px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+    .ut-option.active .ut-option-name {
+      color: var(--ut-yellow);
+    }
+
+    .ut-option-heart {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 16px;
+      height: 16px;
+      background: var(--ut-red);
+      transform: rotate(-45deg);
+      display: none;
+    }
+
+    .ut-option-heart::before,
+    .ut-option-heart::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--ut-red);
+    }
+
+    .ut-option-heart::before { top: -8px; left: 0; }
+    .ut-option-heart::after  { top: 0; left: 8px; }
+
+    .ut-option.active .ut-option-heart {
+      display: block;
+      animation: soulFloat 1.4s ease-in-out infinite;
+    }
+
+    /* ── VISTA PREVIA 3D ── */
+    .ut-viewport {
+      background: var(--ut-black);
+      border: 2px solid var(--ut-white);
+      padding: 12px;
+      position: relative;
     }
 
     #threeViewport {
       width: 100%;
-      height: 400px;
-      background: linear-gradient(135deg, #1a1e1a 0%, #2a2e2a 100%);
-      border-radius: 4px;
+      height: 340px;
+      background: #050505;
       position: relative;
       overflow: hidden;
     }
 
     .viewport-label {
-      font-family: 'Space Mono', monospace;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.5rem;
+      color: var(--ut-yellow);
+      text-align: center;
+      margin-top: 14px;
+      letter-spacing: 0.1em;
+      line-height: 1.8;
+    }
+
+    /* ── BOTÓN EMPEZAR ── */
+    .ut-btn {
+      display: block;
+      margin: 40px auto 0;
+      background: var(--ut-black);
+      color: var(--ut-white);
+      border: 2px solid var(--ut-white);
+      padding: 16px 40px;
+      font-family: 'Press Start 2P', monospace;
       font-size: 0.7rem;
-      color: var(--muted);
-      margin-top: 16px;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
-
-    .alma-button {
-      display: inline-block;
-      margin-top: 32px;
-      padding: 14px 32px;
-      background: var(--purple);
-      color: white;
-      text-decoration: none;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      border: none;
+      letter-spacing: 0.05em;
       cursor: pointer;
-      transition: all 0.2s;
-      border-radius: 4px;
+      transition: all 0.15s;
+      position: relative;
     }
 
-    .alma-button:hover {
-      background: var(--light-purple);
+    .ut-btn:hover {
+      color: var(--ut-yellow);
+      border-color: var(--ut-yellow);
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
     }
 
-    .alma-button:disabled {
-      background: var(--muted);
+    .ut-btn:disabled {
+      color: #555;
+      border-color: #444;
       cursor: not-allowed;
       transform: none;
     }
 
-    .preview-container {
-      display: flex;
-      gap: 20px;
-      margin-top: 32px;
-      flex-wrap: wrap;
-      justify-content: center;
+    /* ── CAJA DE DIÁLOGO (estilo Undertale) ── */
+    .ut-dialog {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%);
+      width: min(640px, 92vw);
+      min-height: 96px;
+      background: var(--ut-black);
+      border: 3px solid var(--ut-white);
+      padding: 22px 28px 30px;
+      z-index: 10000;
+      cursor: pointer;
+      box-shadow: 0 0 0 4px var(--ut-black);
     }
 
-    .skin-preview {
-      width: 80px;
-      height: 80px;
-      border: 2px solid var(--purple);
-      border-radius: 8px;
-      background: var(--surface);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
+    .ut-dialog-text {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.55rem;
+      line-height: 2.1;
+      color: var(--ut-white);
+      white-space: pre-wrap;
+      min-height: 2.2em;
     }
 
-    .skin-preview img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .ut-dialog-text .ut-red { color: var(--ut-red); }
+    .ut-dialog-text .ut-yellow { color: var(--ut-yellow); }
+    .ut-dialog-text .ut-green { color: #0f0; }
+
+    .ut-dialog-next {
+      position: absolute;
+      right: 14px;
+      bottom: 10px;
+      color: var(--ut-white);
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.6rem;
+      animation: nextBlink 0.8s step-end infinite;
+      display: none;
     }
 
-    /* Responsive */
+    @keyframes nextBlink {
+      0%, 100% { opacity: 1; }
+      50%      { opacity: 0; }
+    }
+
+    /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
-      .alma-container {
-        padding: 40px 16px;
-      }
-
-      .alma-section {
-        padding: 24px 16px;
-      }
-
-      .skin-upload-box {
-        width: 160px;
-        height: 160px;
-      }
-
-      .skin-type-selector {
-        flex-direction: column;
-        gap: 16px;
-      }
-
-      #threeViewport {
-        height: 300px;
-      }
+      .alma-container { padding: 32px 16px 160px; }
+      .ut-box { padding: 18px 14px; }
+      .ut-text { font-size: 0.5rem; }
+      #threeViewport { height: 260px; }
+      .ut-options { gap: 16px; }
     }
   </style>
 </head>
@@ -321,56 +420,70 @@
 
     <!-- ALMA CONTENT -->
     <div class="alma-container">
-      <h1 class="alma-title">¿Puedes domar tu alma?</h1>
-      <p class="alma-subtitle">Un viaje introspectivo donde explorarás tu verdadera naturaleza. Responde con honestidad y descubre qué hay dentro de ti.</p>
 
-      <div class="alma-section">
-        <h3>📋 Pregunta 1: Tu esencia</h3>
-        <p>Antes de comenzar, necesito entender quién eres. Carga una imagen que represente tu esencia o tu verdadero yo. Puede ser cualquier cosa: un dibujo, una foto, un símbolo... lo que sientas que te define.</p>
+      <!-- PANTALLA DE TÍTULO -->
+      <div class="ut-title-screen">
+        <div class="ut-soul"></div>
+        <h1 class="ut-title">¿Puedes<br>domar<br>tu alma?</h1>
+        <div class="ut-subtitle">» Un viaje introspectivo «</div>
+      </div>
 
-        <div class="skin-upload-container">
-          <div class="skin-upload-box" id="skinUploadBox">
-            <input type="file" id="skinFileInput" accept="image/*" style="display: none;">
-            <div class="skin-upload-icon">📁</div>
-            <div class="skin-upload-label">Cargar Imagen</div>
-            <div class="skin-upload-desc">Arrastra aquí o haz clic para seleccionar una imagen</div>
-          </div>
-          <div class="preview-container">
-            <div class="skin-preview" id="skinPreview">
-              <img id="skinPreviewImg" src="" alt="Vista previa de tu skin" style="display: none;">
-            </div>
-          </div>
+      <!-- SECCIÓN 1: TU ESENCIA -->
+      <div class="ut-box">
+        <div class="ut-section-label"><span class="soul-mini"></span> TU ESENCIA</div>
+        <p class="ut-text">Antes de comenzar, necesito entender <span class="ut-yellow">quién eres</span>.<br>Carga una imagen que represente tu verdadero yo.<br>Cualquier cosa: un dibujo, una foto, un símbolo...</p>
+
+        <div class="ut-upload" id="skinUploadBox">
+          <input type="file" id="skinFileInput" accept="image/*" style="display: none;">
+          <div class="ut-upload-icon">▼</div>
+          <div class="ut-upload-label">CARGAR IMAGEN</div>
+          <div class="ut-upload-desc">Arrastra aquí o haz clic para seleccionar una imagen</div>
+        </div>
+
+        <div class="ut-preview" id="skinPreview">
+          <span class="ut-preview-empty" id="skinPreviewEmpty">VACÍO</span>
+          <img id="skinPreviewImg" src="" alt="Vista previa de tu skin" style="display: none;">
         </div>
       </div>
 
-      <div class="alma-section">
-        <h3>🎨 Tipo de Skin</h3>
-        <p>Selecciona qué tipo de skin de Minecraft representa mejor tu personalidad:</p>
+      <!-- SECCIÓN 2: TIPO DE ALMA -->
+      <div class="ut-box">
+        <div class="ut-section-label"><span class="soul-mini"></span> TIPO DE ALMA</div>
+        <p class="ut-text">¿Qué forma toma tu alma dentro del juego?</p>
 
-        <div class="skin-type-selector">
-          <div class="skin-type-option active" id="steveOption">
+        <div class="ut-options">
+          <div class="ut-option active" id="steveOption">
+            <span class="ut-option-heart"></span>
             <img src="Imagenes/Frame/Selector de skins/Normal/Normal.png" alt="Steve">
-            <span>Steve</span>
+            <div class="ut-option-name">STEVE</div>
           </div>
-          <div class="skin-type-option" id="alexOption">
+          <div class="ut-option" id="alexOption">
+            <span class="ut-option-heart"></span>
             <img src="Imagenes/Frame/Selector de skins/Meid/Meid.png" alt="Alex">
-            <span>Alex</span>
+            <div class="ut-option-name">ALEX</div>
           </div>
         </div>
       </div>
 
-      <div class="alma-section">
-        <h3>🖼️ Vista Previa 3D</h3>
-        <p>Visualiza cómo se vería tu alma en un espacio tridimensional. Aquí podrás rotar y observar desde diferentes ángulos.</p>
+      <!-- SECCIÓN 3: VISTA PREVIA 3D -->
+      <div class="ut-box">
+        <div class="ut-section-label"><span class="soul-mini"></span> VISTA PREVIA</div>
+        <p class="ut-text">Observa cómo se manifiesta tu alma en el espacio. Gira la vista con el mouse.</p>
 
-        <div class="viewport-container">
+        <div class="ut-viewport">
           <div id="threeViewport"></div>
-          <div class="viewport-label">Modelo 3D de tu alma</div>
+          <div class="viewport-label">◆ MODELO 3D DE TU ALMA ◆</div>
         </div>
       </div>
 
-      <button class="alma-button" id="startButton" disabled>✨ Comenzar el Viaje</button>
+      <button class="ut-btn" id="startButton" disabled>▶ EMPEZAR EL VIAJE</button>
     </div>
+  </div>
+
+  <!-- CAJA DE DIÁLOGO -->
+  <div class="ut-dialog" id="utDialog">
+    <div class="ut-dialog-text" id="utDialogText"></div>
+    <div class="ut-dialog-next" id="utDialogNext">▼</div>
   </div>
 
   <!-- Three.js para el viewport 3D -->
@@ -379,25 +492,25 @@
   <script>
     // Lógica para la página de "¿Puedes domar tu alma?"
     document.addEventListener('DOMContentLoaded', function() {
-      // Variables globales
+      // ── Variables globales ──
       let selectedSkin = 'steve';
       let uploadedImage = null;
       let scene, camera, renderer, cube;
 
-      // Elementos DOM
+      // ── Elementos DOM ──
       const skinUploadBox = document.getElementById('skinUploadBox');
       const skinFileInput = document.getElementById('skinFileInput');
       const skinPreviewImg = document.getElementById('skinPreviewImg');
-      const skinPreview = document.getElementById('skinPreview');
+      const skinPreviewEmpty = document.getElementById('skinPreviewEmpty');
       const steveOption = document.getElementById('steveOption');
       const alexOption = document.getElementById('alexOption');
       const startButton = document.getElementById('startButton');
       const threeViewport = document.getElementById('threeViewport');
 
-      // Inicializar Three.js
+      // ── Inicializar Three.js ──
       initThreeJS();
 
-      // Evento para cargar imagen
+      // ── Carga de imagen (clic) ──
       skinUploadBox.addEventListener('click', () => {
         skinFileInput.click();
       });
@@ -410,35 +523,28 @@
             uploadedImage = event.target.result;
             skinPreviewImg.src = uploadedImage;
             skinPreviewImg.style.display = 'block';
-            
-            // Actualizar preview
+            skinPreviewEmpty.style.display = 'none';
             updatePreview();
-            
-            // Habilitar botón si todo está listo
             checkReadyState();
           };
           reader.readAsDataURL(file);
         }
       });
 
-      // Eventos para drag and drop
+      // ── Drag and drop ──
       skinUploadBox.addEventListener('dragover', (e) => {
         e.preventDefault();
-        skinUploadBox.style.borderColor = 'var(--light-purple)';
-        skinUploadBox.style.background = 'rgba(168, 85, 247, 0.15)';
+        skinUploadBox.classList.add('dragover');
       });
 
       skinUploadBox.addEventListener('dragleave', (e) => {
         e.preventDefault();
-        skinUploadBox.style.borderColor = 'var(--purple)';
-        skinUploadBox.style.background = 'rgba(168, 85, 247, 0.05)';
+        skinUploadBox.classList.remove('dragover');
       });
 
       skinUploadBox.addEventListener('drop', (e) => {
         e.preventDefault();
-        skinUploadBox.style.borderColor = 'var(--purple)';
-        skinUploadBox.style.background = 'rgba(168, 85, 247, 0.05)';
-
+        skinUploadBox.classList.remove('dragover');
         const file = e.dataTransfer.files[0];
         if (file && file.type.match('image.*')) {
           const reader = new FileReader();
@@ -446,7 +552,7 @@
             uploadedImage = event.target.result;
             skinPreviewImg.src = uploadedImage;
             skinPreviewImg.style.display = 'block';
-            
+            skinPreviewEmpty.style.display = 'none';
             updatePreview();
             checkReadyState();
           };
@@ -454,7 +560,7 @@
         }
       });
 
-      // Seleccionar tipo de skin
+      // ── Seleccionar tipo de skin ──
       steveOption.addEventListener('click', () => {
         selectedSkin = 'steve';
         steveOption.classList.add('active');
@@ -469,28 +575,24 @@
         updateModel();
       });
 
-      // Botón de inicio
+      // ── Botón de inicio ──
       startButton.addEventListener('click', () => {
         alert('¡El viaje comienza! (Esta es una demo, pronto tendrás más contenido)');
       });
 
-      // Funciones
+      // ── Three.js ──
       function initThreeJS() {
-        // Crear escena
         scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x1a1e1a);
+        scene.background = new THREE.Color(0x050505);
 
-        // Crear cámara
-        camera = new THREE.PerspectiveCamera(75, threeViewport.clientWidth / 400, 0.1, 1000);
+        camera = new THREE.PerspectiveCamera(75, threeViewport.clientWidth / 340, 0.1, 1000);
         camera.position.z = 5;
 
-        // Crear renderer
         renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(threeViewport.clientWidth, 400);
+        renderer.setSize(threeViewport.clientWidth, 340);
         renderer.setPixelRatio(window.devicePixelRatio);
         threeViewport.appendChild(renderer.domElement);
 
-        // Luces
         const ambientLight = new THREE.AmbientLight(0x404040, 1.5);
         scene.add(ambientLight);
 
@@ -498,12 +600,10 @@
         directionalLight.position.set(1, 1, 1);
         scene.add(directionalLight);
 
-        // Añadir controles de órbita
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.dampingFactor = 0.05;
 
-        // Crear cubo base (alma)
         const geometry = new THREE.BoxGeometry(2, 2, 2);
         const material = new THREE.MeshPhongMaterial({
           color: 0xa855f7,
@@ -514,10 +614,8 @@
         cube.position.y = 0.5;
         scene.add(cube);
 
-        // Añadir textura si hay imagen subida
         updateModel();
 
-        // Animación
         function animate() {
           requestAnimationFrame(animate);
           controls.update();
@@ -526,47 +624,34 @@
         }
         animate();
 
-        // Manejar resize
         window.addEventListener('resize', onWindowResize);
       }
 
       function onWindowResize() {
-        camera.aspect = threeViewport.clientWidth / 400;
+        camera.aspect = threeViewport.clientWidth / 340;
         camera.updateProjectionMatrix();
-        renderer.setSize(threeViewport.clientWidth, 400);
+        renderer.setSize(threeViewport.clientWidth, 340);
       }
 
       function updateModel() {
         if (cube) {
-          if (uploadedImage && selectedSkin === 'steve') {
-            // Aplicar textura de Steve con la imagen subida
+          if (uploadedImage) {
             const textureLoader = new THREE.TextureLoader();
             const texture = textureLoader.load(uploadedImage);
             texture.colorSpace = THREE.SRGBColorSpace;
-            
-            // Crear material con la textura
+
+            const color = selectedSkin === 'steve' ? 0xa855f7 : 0x6d28d9;
             const material = new THREE.MeshPhongMaterial({
               map: texture,
-              shininess: 30,
-              specular: 0xffffff
-            });
-            cube.material = material;
-          } else if (uploadedImage && selectedSkin === 'alex') {
-            // Aplicar textura de Alex con la imagen subida
-            const textureLoader = new THREE.TextureLoader();
-            const texture = textureLoader.load(uploadedImage);
-            texture.colorSpace = THREE.SRGBColorSpace;
-            
-            const material = new THREE.MeshPhongMaterial({
-              map: texture,
+              color: color,
               shininess: 30,
               specular: 0xffffff
             });
             cube.material = material;
           } else {
-            // Color sólido por defecto
+            const color = selectedSkin === 'steve' ? 0xa855f7 : 0x6d28d9;
             const material = new THREE.MeshPhongMaterial({
-              color: 0xa855f7,
+              color: color,
               shininess: 30,
               specular: 0xffffff
             });
@@ -576,22 +661,93 @@
       }
 
       function updatePreview() {
-        if (uploadedImage) {
-          // Aquí podrías añadir lógica para mostrar la imagen en el modelo 3D
-          // Por ahora solo actualizamos el modelo
-          updateModel();
-        }
+        if (uploadedImage) updateModel();
       }
 
       function checkReadyState() {
         if (uploadedImage) {
           startButton.disabled = false;
-          startButton.style.background = 'var(--purple)';
-          startButton.style.cursor = 'pointer';
         }
       }
 
-      // Inicializar cursor
+      // ── Caja de diálogo (typewriter estilo Undertale) ──
+      const dialog = document.getElementById('utDialog');
+      const dialogText = document.getElementById('utDialogText');
+      const dialogNext = document.getElementById('utDialogNext');
+
+      const dialogLines = [
+        '* Hola.',
+        '* Bienvenido a tu propio interior.',
+        '* Soy la voz de tu alma.',
+        '* Para domarme, primero debo ver <span class="ut-yellow">quién eres</span>.',
+        '* Carga una imagen que represente tu esencia.',
+        '* Luego elige el tipo de tu alma: <span class="ut-green">Steve</span> o <span class="ut-green">Alex</span>.',
+        '* Observa cómo se manifiesta en el espacio.',
+        '* Cuando estés listo, pulsa <span class="ut-red">EMPEZAR</span>.',
+        '* Que el viaje comience.'
+      ];
+
+      let lineIdx = 0;
+      let timer = null;
+      let finishedTyping = false;
+
+      function stripTags(html) {
+        const d = document.createElement('div');
+        d.innerHTML = html;
+        return d.textContent;
+      }
+
+      function typeLine(text) {
+        const plain = stripTags(text);
+        let i = 0;
+        finishedTyping = false;
+        dialogText.textContent = '';
+        dialogNext.style.display = 'none';
+        clearInterval(timer);
+        timer = setInterval(() => {
+          i++;
+          dialogText.textContent = plain.slice(0, i);
+          if (i >= plain.length) {
+            clearInterval(timer);
+            dialogText.innerHTML = text;
+            finishedTyping = true;
+            dialogNext.style.display = 'block';
+          }
+        }, 25);
+      }
+
+      function finishTyping() {
+        clearInterval(timer);
+        dialogText.innerHTML = dialogLines[lineIdx];
+        finishedTyping = true;
+        dialogNext.style.display = 'block';
+      }
+
+      function advanceDialog() {
+        if (!finishedTyping) { finishTyping(); return; }
+        lineIdx++;
+        if (lineIdx >= dialogLines.length) {
+          dialogText.innerHTML = '';
+          dialogNext.style.display = 'none';
+          dialog.style.display = 'none';
+          return;
+        }
+        typeLine(dialogLines[lineIdx]);
+      }
+
+      dialog.addEventListener('click', advanceDialog);
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ' || e.key === 'x' || e.key === 'X' || e.key === 'z' || e.key === 'Z') {
+          if (dialog.style.display !== 'none') {
+            e.preventDefault();
+            advanceDialog();
+          }
+        }
+      });
+
+      typeLine(dialogLines[0]);
+
+      // ── Cursor personalizado ──
       const cursor = document.getElementById('cursor');
       const trail = document.getElementById('cursorTrail');
       let tx = 0, ty = 0, cx = 0, cy = 0;
@@ -612,8 +768,7 @@
       }
       animTrail();
 
-      // Efectos hover
-      document.querySelectorAll('a, button, .alma-button, .skin-type-option, .skin-upload-box').forEach(el => {
+      document.querySelectorAll('a, button, .ut-btn, .ut-option, .ut-upload, .ut-dialog').forEach(el => {
         el.addEventListener('mouseenter', () => {
           cursor.style.transform = 'translate(-50%,-50%) scale(2)';
           trail.style.opacity = '0.5';
