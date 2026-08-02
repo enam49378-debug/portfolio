@@ -564,241 +564,173 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ═══════════════════════════════════════════
-// UNDERTALE BATTLE TRANSITION (corazón sobre página)
+// JUEGO: ¿Puedes domar tu alma? (reemplaza Undertale Battle)
 // ═══════════════════════════════════════════
 
 const playBtn = document.querySelector('.game-play-btn');
-const battleOverlay = document.getElementById('battleOverlay');
-const battleZoomer = document.getElementById('battleZoomer');
-const battleViewport = document.getElementById('battleViewport');
-const battleHeart = document.getElementById('battleHeartEl');
-const battleText = document.querySelector('.battle-encounter-text');
-const battleFlash = document.getElementById('battleFlash');
-const battleBarTop = document.getElementById('battleBarTop');
-const battleBarBottom = document.getElementById('battleBarBottom');
-const gameContainer = document.getElementById('gameContainer');
-const gameIframe = document.getElementById('gameIframe');
-const gameCloseBtn = document.getElementById('gameCloseBtn');
 
-var btAudioCtx = null;
+function openAlmaModal() {
+  const almaOverlay = document.createElement('div');
+  almaOverlay.id = 'almaOverlay';
+  almaOverlay.style.cssText = `
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85); z-index: 9999;
+    display: flex; align-items: center; justify-content: center;
+    backdrop-filter: blur(8px);
+  `;
 
-// Generar sprite del corazón pixel art (mismo que el juego)
-function createHeartSprite(size, color) {
-  var c = document.createElement('canvas');
-  var ps = Math.max(1, Math.floor(size / 7));
-  c.width = 7 * ps;
-  c.height = 6 * ps;
-  var x = c.getContext('2d');
-  x.fillStyle = color || '#ff0000';
-  var pts = [[1,0],[2,0],[4,0],[5,0],[0,1],[1,1],[2,1],[3,1],[4,1],[5,1],[6,1],[0,2],[1,2],[2,2],[3,2],[4,2],[5,2],[6,2],[1,3],[2,3],[3,3],[4,3],[5,3],[2,4],[3,4],[4,4],[3,5]];
-  for (var i = 0; i < pts.length; i++) {
-    x.fillRect(pts[i][0] * ps, pts[i][1] * ps, ps, ps);
-  }
-  return c.toDataURL();
-}
+  const almaModal = document.createElement('div');
+  almaModal.id = 'almaModal';
+  almaModal.style.cssText = `
+    position: relative; width: 90%; max-width: 800px; max-height: 90vh;
+    background: #1a1a1a; border: 4px solid #6fcf4a; border-radius: 8px;
+    overflow: hidden; box-shadow: 0 0 30px rgba(111,207,74,0.3);
+  `;
 
-// Pre-generar el corazón
-var btHeartSprite = createHeartSprite(48, '#ff0000');
+  almaModal.innerHTML = `
+    <div style="background:#0d0f0e;padding:20px;border-bottom:2px solid #6fcf4a;">
+      <h2 style="color:#6fcf4a;font-family:'Syne',sans-serif;margin:0;text-align:center;">¿Puedes domar tu alma?</h2>
+    </div>
+    <div style="padding:30px;background:#1a1a1a;">
+      <div style="text-align:center;margin-bottom:20px;">
+        <p style="color:#a855f7;font-family:'Space Mono',monospace;font-size:0.9rem;margin-bottom:10px;">Un viaje introspectivo donde explorarás tu verdadera naturaleza</p>
+        <p style="color:#888;font-size:0.8rem;margin-bottom:20px;">Carga una imagen que represente tu esencia y selecciona tu tipo</p>
+      </div>
+      <div style="background:#0d0f0e;padding:20px;border:2px dashed #a855f7;border-radius:8px;margin-bottom:20px;text-align:center;cursor:pointer;" id="almaUploadZone">
+        <input type="file" id="almaSkinUpload" accept="image/*" style="display:none;">
+        <div style="font-size:3rem;margin-bottom:10px;">📁</div>
+        <div style="color:#a855f7;font-family:'Space Mono',monospace;font-size:0.8rem;margin-bottom:10px;">CARGAR SKIN</div>
+        <div style="color:#666;font-size:0.7rem;">Arrastra aquí o haz clic para seleccionar una imagen</div>
+        <div id="almaPreview" style="margin-top:15px;display:none;"><img id="almaPreviewImg" style="max-width:100px;max-height:100px;border:2px solid #a855f7;border-radius:4px;" alt="Vista previa"></div>
+      </div>
+      <div style="display:flex;justify-content:center;gap:20px;margin-bottom:20px;">
+        <div style="text-align:center;cursor:pointer;padding:10px;border:2px solid transparent;" id="almaSteveOption"><img src="Imagenes/Frame/Selector de skins/Normal/Normal.png" style="width:50px;height:50px;image-rendering:pixelated;"><div style="color:#666;font-size:0.6rem;margin-top:5px;">Steve</div></div>
+        <div style="text-align:center;cursor:pointer;padding:10px;border:2px solid transparent;" id="almaAlexOption"><img src="Imagenes/Frame/Selector de skins/Meid/Meid.png" style="width:50px;height:50px;image-rendering:pixelated;"><div style="color:#666;font-size:0.6rem;margin-top:5px;">Alex</div></div>
+      </div>
+      <div style="background:#0d0f0e;padding:15px;border:2px solid #a855f7;border-radius:8px;margin-bottom:20px;"><div id="threeAlmaViewport" style="width:100%;height:250px;background:linear-gradient(135deg,#2a2e2a 0%,#1a1e1a 100%);border-radius:4px;"></div><div style="color:#a855f7;font-size:0.6rem;text-align:center;margin-top:10px;">Vista previa 3D de tu alma</div></div>
+      <button id="almaStartBtn" style="width:100%;padding:12px;background:#a855f7;color:white;border:none;border-radius:4px;font-family:'Space Mono',monospace;font-size:0.8rem;cursor:pointer;" disabled>✨ COMENZAR EL VIAJE</button>
+    </div>
+  `;
 
-function btGetCtx() {
-  try {
-    if (!btAudioCtx) btAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if (btAudioCtx.state === 'suspended') btAudioCtx.resume();
-    return btAudioCtx;
-  } catch (e) { return null; }
-}
+  almaOverlay.appendChild(almaModal);
+  document.body.appendChild(almaOverlay);
 
-function btBeep(freq, delay, dur) {
-  var ctx = btGetCtx();
-  if (!ctx) return;
-  try {
-    var o = ctx.createOscillator();
-    var g = ctx.createGain();
-    o.type = 'square';
-    o.frequency.value = freq;
-    g.gain.setValueAtTime(0.05, ctx.currentTime + delay);
-    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + delay + dur);
-    o.connect(g);
-    g.connect(ctx.destination);
-    o.start(ctx.currentTime + delay);
-    o.stop(ctx.currentTime + delay + dur);
-  } catch (e) {}
-}
+  initAlmaThreeJS(almaModal);
 
-function btPulseHeart() {
-  battleHeart.classList.remove('bt-pulse');
-  void battleHeart.offsetWidth;
-  battleHeart.classList.add('bt-pulse');
-}
+  let almaSkin = 'steve';
+  let almaImage = null;
 
-function btFlashBrief() {
-  battleFlash.style.transition = 'opacity .08s ease-out';
-  battleFlash.style.opacity = '0.5';
-  setTimeout(function () {
-    battleFlash.style.opacity = '0';
-  }, 120);
-}
+  const uploadBox = almaModal.querySelector('#almaSkinUpload');
+  const previewImg = almaModal.querySelector('#almaPreviewImg');
+  const previewContainer = almaModal.querySelector('#almaPreview');
+  const steveOption = almaModal.querySelector('#almaSteveOption');
+  const alexOption = almaModal.querySelector('#almaAlexOption');
+  const startBtn = almaModal.querySelector('#almaStartBtn');
+  const uploadZone = almaModal.querySelector('#almaUploadZone');
 
-function btBlink() {
-  battleOverlay.style.transition = 'opacity .05s linear';
-  battleOverlay.style.opacity = '0';
-  setTimeout(function () {
-    battleOverlay.style.opacity = '1';
-    battleOverlay.style.transition = '';
-  }, 90);
-}
+  uploadZone.addEventListener('click', () => uploadBox.click());
 
-function btReset() {
-  battleHeart.classList.remove('visible', 'bt-pulse');
-  battleHeart.style.top = '';
-  battleHeart.style.left = '';
-  battleHeart.style.transform = '';
-  battleHeart.style.transition = '';
-  battleZoomer.classList.remove('zoomed');
-  battleViewport.classList.remove('bt-shake');
-  battleZoomer.style.transition = '';
-  battleZoomer.style.transform = '';
-  battleFlash.style.opacity = '0';
-  battleFlash.style.transition = '';
-  battleBarTop.classList.remove('closed');
-  battleBarBottom.classList.remove('closed');
-  battleText.classList.remove('visible');
-}
-
-if (playBtn && battleOverlay && gameContainer && gameIframe) {
-  var gameLoaded = false;
-
-  // Asignar sprite de corazón pixel art
-  battleHeart.style.backgroundImage = 'url(' + btHeartSprite + ')';
-
-  playBtn.addEventListener('click', function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-    if (battleOverlay.classList.contains('active')) return;
-
-    btReset();
-
-    // Posición del botón en la pantalla
-    var btnRect = playBtn.getBoundingClientRect();
-    var btnCX = btnRect.left + btnRect.width / 2;
-    var btnCY = btnRect.top + btnRect.height / 2;
-    var vpCX = window.innerWidth / 2;
-    var vpCY = window.innerHeight / 2;
-
-    // Subir al inicio de la página (el corazón aparece donde está el botón)
-    window.scrollTo({ top: 0 });
-
-    // Bloquear scroll: forzar html y body a viewport fijo
-    document.documentElement.style.setProperty('overflow', 'hidden', 'important');
-    document.documentElement.style.setProperty('height', '100%', 'important');
-    document.body.style.setProperty('overflow', 'hidden', 'important');
-    document.body.style.setProperty('height', '100%', 'important');
-
-    battleOverlay.style.display = 'flex';
-    void battleOverlay.offsetWidth;
-    battleOverlay.classList.add('active');
-
-    // Colocar corazón en la posición del botón
-    battleHeart.style.transition = 'none';
-    battleHeart.style.top = btnCY + 'px';
-    battleHeart.style.left = btnCX + 'px';
-    battleHeart.style.transform = 'translate(-50%,-50%) scale(0.15)';
-    battleHeart.classList.add('visible');
-    void battleHeart.offsetWidth;
-
-    // Animar corazón al centro de la pantalla + camera zoom
-    battleHeart.style.transition = 'top 1s cubic-bezier(0.22,1,0.36,1), left 1s cubic-bezier(0.22,1,0.36,1), transform 1s cubic-bezier(0.22,1,0.36,1)';
-    battleHeart.style.top = vpCY + 'px';
-    battleHeart.style.left = vpCX + 'px';
-    battleHeart.style.transform = 'translate(-50%,-50%) scale(1)';
-    battleZoomer.classList.add('zoomed');
-
-    // Texto "un monstruo aparece" (tras la animación de movimiento)
-    setTimeout(function () { battleText.classList.add('visible'); }, 1100);
-
-    // Latidos con sonidos (shifted +1200ms respecto al original)
-    var beats = [[2200, 600], [3100, 650], [3900, 700], [4600, 780], [5200, 900]];
-    beats.forEach(function (b) {
-      btBeep(b[1], b[0] / 1000, 0.08);
-      setTimeout(function () { btPulseHeart(); btFlashBrief(); }, b[0]);
-    });
-
-    // Escala ascendente "tac tac tururun"
-    btBeep(260, 5.60, 0.05);
-    btBeep(260, 5.80, 0.05);
-    btBeep(520, 6.05, 0.09);
-    btBeep(700, 6.15, 0.09);
-    btBeep(950, 6.25, 0.12);
-
-    // Flickers
-    setTimeout(btBlink, 5600);
-    setTimeout(btBlink, 5800);
-
-    // Shake
-    setTimeout(function () { battleViewport.classList.add('bt-shake'); }, 6050);
-
-    // Flash final blanco
-    setTimeout(function () {
-      battleFlash.style.transition = 'opacity .08s';
-      battleFlash.style.opacity = '1';
-    }, 6200);
-
-    // Apagar flash + quitar zoom
-    setTimeout(function () {
-      battleFlash.style.opacity = '0';
-      battleZoomer.classList.remove('zoomed');
-      battleZoomer.style.transform = 'scale(1)';
-    }, 6310);
-
-    // Cortinas negras cierran
-    setTimeout(function () {
-      battleBarTop.classList.add('closed');
-      battleBarBottom.classList.add('closed');
-    }, 6470);
-
-    // Quitar shake
-    setTimeout(function () { battleViewport.classList.remove('bt-shake'); }, 6550);
-
-    // Ocultar overlay + cargar juego (cortinas cerradas → overlay oculto → aparece el juego)
-    setTimeout(function () {
-      battleOverlay.style.display = 'none';
-      battleOverlay.classList.remove('active');
-      btReset();
-      if (!gameLoaded) {
-        gameIframe.src = 'undertale-battle.html';
-        gameLoaded = true;
-      }
-      gameContainer.style.display = 'flex';
-      gameContainer.style.top = '0px';
-      gameContainer.style.left = '0px';
-      document.documentElement.classList.add('game-active');
-      // NO restaurar scroll aquí — el juego sigue abierto
-    }, 6700);
+  uploadBox.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file && file.type.match('image.*')) {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        almaImage = event.target.result;
+        previewImg.src = almaImage;
+        previewContainer.style.display = 'block';
+        updateAlmaModel(almaModal, almaSkin);
+        checkAlmaReady(startBtn);
+      };
+      reader.readAsDataURL(file);
+    }
   });
 
-  // Cerrar juego
-  if (gameCloseBtn) {
-    gameCloseBtn.addEventListener('click', function () {
-      gameContainer.style.display = 'none';
-      document.documentElement.style.overflow = '';
-      document.documentElement.style.height = '';
-      document.body.style.overflow = '';
-      document.body.style.height = '';
-      document.documentElement.scrollBehavior = '';
-      document.documentElement.classList.remove('game-active');
-    });
+  steveOption.addEventListener('click', () => {
+    almaSkin = 'steve';
+    steveOption.style.borderColor = '#a855f7';
+    alexOption.style.borderColor = 'transparent';
+    updateAlmaModel(almaModal, almaSkin);
+  });
+
+  alexOption.addEventListener('click', () => {
+    almaSkin = 'alex';
+    alexOption.style.borderColor = '#a855f7';
+    steveOption.style.borderColor = 'transparent';
+    updateAlmaModel(almaModal, almaSkin);
+  });
+
+  startBtn.addEventListener('click', () => {
+    alert('¡El viaje comienza! (Esta es una demo)');
+    closeAlmaModal(almaOverlay);
+  });
+
+  function closeAlmaModal(overlay) {
+    document.body.removeChild(overlay);
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
   }
 
-  // Escape para cerrar
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && gameContainer.style.display === 'flex') {
-      gameContainer.style.display = 'none';
-      document.documentElement.style.overflow = '';
-      document.documentElement.style.height = '';
-      document.body.style.overflow = '';
-      document.body.style.height = '';
-      document.documentElement.scrollBehavior = '';
-      document.documentElement.classList.remove('game-active');
-    }
+  document.documentElement.style.overflow = 'hidden';
+  document.body.style.overflow = 'hidden';
+}
+
+function initAlmaThreeJS(modal) {
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x1a1e1a);
+
+  const viewport = modal.querySelector('#threeAlmaViewport');
+  const camera = new THREE.PerspectiveCamera(75, viewport.clientWidth / 250, 0.1, 1000);
+  camera.position.z = 5;
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(viewport.clientWidth, 250);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  viewport.appendChild(renderer.domElement);
+
+  const ambientLight = new THREE.AmbientLight(0x404040, 1.5);
+  scene.add(ambientLight);
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+  directionalLight.position.set(1, 1, 1);
+  scene.add(directionalLight);
+
+  const geometry = new THREE.BoxGeometry(2, 2, 2);
+  const material = new THREE.MeshPhongMaterial({ color: 0xa855f7, shininess: 30, specular: 0xffffff });
+  const cube = new THREE.Mesh(geometry, material);
+  cube.position.y = 0.5;
+  scene.add(cube);
+
+  modal.scene = scene;
+  modal.camera = camera;
+  modal.renderer = renderer;
+  modal.cube = cube;
+
+  function animate() {
+    requestAnimationFrame(animate);
+    if (modal.cube) modal.cube.rotation.y += 0.005;
+    if (modal.renderer) modal.renderer.render(modal.scene, modal.camera);
+  }
+  animate();
+}
+
+function updateAlmaModel(modal, skin) {
+  if (modal.cube) {
+    const color = skin === 'steve' ? 0xa855f7 : 0x6d28d9;
+    const material = new THREE.MeshPhongMaterial({ color, shininess: 30, specular: 0xffffff });
+    modal.cube.material = material;
+  }
+}
+
+function checkAlmaReady(btn) {
+  btn.disabled = false;
+  btn.style.background = '#c4b5fd';
+  btn.style.cursor = 'pointer';
+}
+
+if (playBtn) {
+  playBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    openAlmaModal();
   });
 }

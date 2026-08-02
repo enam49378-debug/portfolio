@@ -2404,3 +2404,285 @@ html.game-active::-webkit-scrollbar {
   .battle-text-line { font-size: 0.8rem; letter-spacing: 2px; }
   .battle-text-name { font-size: 1.2rem; letter-spacing: 4px; }
 }
+
+/* ═══════════════════════════════════════════
+   ALMA PAGE - ¿Puedes domar tu alma?
+═══════════════════════════════════════════ */
+
+:root {
+  --purple: #a855f7;
+  --dark-purple: #6d28d9;
+  --light-purple: #c4b5fd;
+}
+
+.alma-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 60px 24px;
+  text-align: center;
+}
+
+.alma-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  line-height: 1.1;
+  margin-bottom: 32px;
+  color: var(--white);
+}
+
+.alma-subtitle {
+  font-family: 'Space Mono', monospace;
+  font-size: 1.1rem;
+  color: var(--muted);
+  margin-bottom: 48px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.alma-section {
+  background: var(--surface);
+  border: 2px solid rgba(168, 85, 247, 0.3);
+  border-radius: 8px;
+  padding: 40px;
+  margin-bottom: 40px;
+  text-align: left;
+}
+
+.alma-section h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.5rem;
+  color: var(--purple);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.alma-section p {
+  color: var(--stone);
+  line-height: 1.8;
+  margin-bottom: 16px;
+  font-size: 1rem;
+}
+
+.skin-upload-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+  margin-top: 32px;
+}
+
+.skin-upload-box {
+  width: 200px;
+  height: 200px;
+  border: 3px dashed var(--purple);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  background: rgba(168, 85, 247, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.skin-upload-box:hover {
+  border-color: var(--light-purple);
+  background: rgba(168, 85, 247, 0.1);
+  transform: scale(1.05);
+}
+
+.skin-upload-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.skin-upload-icon {
+  font-size: 3rem;
+  color: var(--purple);
+  margin-bottom: 16px;
+}
+
+.skin-upload-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--purple);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-align: center;
+}
+
+.skin-upload-desc {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--muted);
+  text-align: center;
+  max-width: 280px;
+}
+
+.skin-type-selector {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 32px;
+}
+
+.skin-type-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 12px;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.skin-type-option:hover {
+  transform: translateY(-4px);
+}
+
+.skin-type-option.active {
+  border-color: var(--purple);
+  background: rgba(168, 85, 247, 0.1);
+}
+
+.skin-type-option img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.skin-type-option span {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.skin-type-option.active span {
+  color: var(--purple);
+}
+
+.viewport-container {
+  margin-top: 40px;
+  background: var(--surface2);
+  border: 2px solid rgba(168, 85, 247, 0.2);
+  border-radius: 8px;
+  padding: 20px;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#threeViewport {
+  width: 100%;
+  height: 400px;
+  background: linear-gradient(135deg, #1a1e1a 0%, #2a2e2a 100%);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.viewport-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-top: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.alma-button {
+  display: inline-block;
+  margin-top: 32px;
+  padding: 14px 32px;
+  background: var(--purple);
+  color: white;
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 4px;
+}
+
+.alma-button:hover {
+  background: var(--light-purple);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+}
+
+.alma-button:disabled {
+  background: var(--muted);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.preview-container {
+  display: flex;
+  gap: 20px;
+  margin-top: 32px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.skin-preview {
+  width: 80px;
+  height: 80px;
+  border: 2px solid var(--purple);
+  border-radius: 8px;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.skin-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .alma-container {
+    padding: 40px 16px;
+  }
+
+  .alma-section {
+    padding: 24px 16px;
+  }
+
+  .skin-upload-box {
+    width: 160px;
+    height: 160px;
+  }
+
+  .skin-type-selector {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  #threeViewport {
+    height: 300px;
+  }
+}
