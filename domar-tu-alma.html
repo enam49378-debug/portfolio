@@ -1,784 +1,460 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>¿Puedes domar tu alma? — JesulutoXD</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>¿Puedes donar tu alma?</title>
   <link rel="icon" type="image/png" href="Imagenes/icon.png">
-  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
-    /* ═══════════════ ESTILO UNDERTALE ═══════════════ */
-    :root {
-      --ut-yellow: #ffff00;
-      --ut-white: #ffffff;
-      --ut-black: #000000;
-      --ut-red: #ff0040;
-      --ut-purple: #a855f7;
-    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-    html, body {
-      background: var(--ut-black) !important;
-    }
-
-    .alma-container {
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 48px 24px 140px;
-      text-align: center;
-      background: var(--ut-black);
-      position: relative;
-    }
-
-    /* ── PANTALLA DE TÍTULO ── */
-    .ut-title-screen {
-      margin-bottom: 56px;
-      padding-top: 24px;
-      position: relative;
-    }
-
-    .ut-soul {
-      width: 34px;
-      height: 34px;
-      background: var(--ut-red);
-      transform: rotate(-45deg);
-      position: relative;
-      margin: 0 auto 28px;
-      animation: soulFloat 2.4s ease-in-out infinite;
-    }
-
-    .ut-soul::before,
-    .ut-soul::after {
-      content: '';
-      position: absolute;
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      background: var(--ut-red);
-    }
-
-    .ut-soul::before { top: -17px; left: 0; }
-    .ut-soul::after  { top: 0; left: 17px; }
-
-    @keyframes soulFloat {
-      0%, 100% { transform: rotate(-45deg) translate(0, 0); }
-      50%      { transform: rotate(-45deg) translate(0, -10px); }
-    }
-
-    .ut-title {
+    body {
+      background: #000;
+      color: #fff;
       font-family: 'Press Start 2P', monospace;
-      color: var(--ut-yellow);
-      font-size: clamp(1.5rem, 5vw, 2.8rem);
-      line-height: 1.6;
-      text-shadow: 4px 4px 0 rgba(255,255,255,0.15);
-      margin-bottom: 24px;
-    }
-
-    .ut-subtitle {
-      font-family: 'Press Start 2P', monospace;
-      color: var(--ut-white);
-      font-size: 0.65rem;
-      line-height: 2;
-      letter-spacing: 0.15em;
-    }
-
-    /* ── CAJAS DE MENÚ ── */
-    .ut-box {
-      background: var(--ut-black);
-      border: 2px solid var(--ut-white);
-      padding: 24px;
-      margin-bottom: 40px;
-      text-align: left;
-      position: relative;
-    }
-
-    .ut-section-label {
-      font-family: 'Press Start 2P', monospace;
-      color: var(--ut-yellow);
-      font-size: 0.7rem;
-      line-height: 1.8;
-      margin-bottom: 18px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .ut-section-label .soul-mini {
-      width: 14px;
-      height: 14px;
-      background: var(--ut-red);
-      transform: rotate(-45deg);
-      position: relative;
-      display: inline-block;
-      flex-shrink: 0;
-    }
-
-    .ut-section-label .soul-mini::before,
-    .ut-section-label .soul-mini::after {
-      content: '';
-      position: absolute;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: var(--ut-red);
-    }
-
-    .ut-section-label .soul-mini::before { top: -7px; left: 0; }
-    .ut-section-label .soul-mini::after  { top: 0; left: 7px; }
-
-    .ut-text {
-      font-family: 'Press Start 2P', monospace;
-      color: var(--ut-white);
-      font-size: 0.55rem;
-      line-height: 2.1;
-      margin-bottom: 20px;
-    }
-
-    .ut-text span.ut-yellow { color: var(--ut-yellow); }
-
-    /* ── ZONA DE CARGA ── */
-    .ut-upload {
-      background: var(--ut-black);
-      border: 2px solid var(--ut-white);
-      padding: 28px 20px;
-      cursor: pointer;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 14px;
-      text-align: center;
-      transition: border-color 0.15s;
-    }
-
-    .ut-upload:hover,
-    .ut-upload.dragover {
-      border-color: var(--ut-yellow);
-    }
-
-    .ut-upload-icon {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 1.4rem;
-      color: var(--ut-yellow);
-    }
-
-    .ut-upload-label {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.6rem;
-      color: var(--ut-yellow);
-      letter-spacing: 0.1em;
-    }
-
-    .ut-upload-desc {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.45rem;
-      color: #888;
-      line-height: 1.8;
-      max-width: 340px;
-    }
-
-    .ut-preview {
-      width: 84px;
-      height: 84px;
-      border: 2px solid var(--ut-white);
-      background: var(--ut-black);
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
       justify-content: center;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .ut-preview img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .ut-preview-empty {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.5rem;
-      color: #555;
-    }
-
-    /* ── SELECTOR DE TIPO DE ALMA ── */
-    .ut-options {
-      display: flex;
-      justify-content: center;
+      padding: 40px 24px;
       gap: 24px;
-      flex-wrap: wrap;
+      overflow-x: hidden;
     }
 
-    .ut-option {
-      background: var(--ut-black);
-      border: 2px solid var(--ut-white);
-      padding: 18px 30px 14px;
-      cursor: pointer;
-      text-align: center;
-      position: relative;
-      transition: border-color 0.15s, transform 0.15s;
-      user-select: none;
-    }
-
-    .ut-option:hover {
-      transform: translateY(-2px);
-    }
-
-    .ut-option img {
-      width: 64px;
-      height: 64px;
-      object-fit: contain;
-      image-rendering: pixelated;
-      margin-bottom: 10px;
-    }
-
-    .ut-option-name {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.6rem;
-      color: var(--ut-white);
-      letter-spacing: 0.08em;
-    }
-
-    .ut-option.active {
-      border-color: var(--ut-yellow);
-    }
-
-    .ut-option.active .ut-option-name {
-      color: var(--ut-yellow);
-    }
-
-    .ut-option-heart {
-      position: absolute;
-      top: -8px;
-      right: -8px;
-      width: 16px;
-      height: 16px;
-      background: var(--ut-red);
+    /* ── PIXEL HEART (big) ── */
+    .soul {
+      width: 22px;
+      height: 22px;
+      background: #FF0033;
       transform: rotate(-45deg);
-      display: none;
+      position: relative;
+      animation: soulBounce 1.2s ease-in-out infinite;
+      flex-shrink: 0;
     }
-
-    .ut-option-heart::before,
-    .ut-option-heart::after {
+    .soul::before, .soul::after {
       content: '';
       position: absolute;
-      width: 16px;
-      height: 16px;
+      width: 22px;
+      height: 22px;
       border-radius: 50%;
-      background: var(--ut-red);
+      background: #FF0033;
+    }
+    .soul::before { top: -11px; left: 0; }
+    .soul::after { top: 0; left: 11px; }
+
+    @keyframes soulBounce {
+      0%, 100% { transform: rotate(-45deg) translateY(0); }
+      50% { transform: rotate(-45deg) translateY(-6px); }
     }
 
-    .ut-option-heart::before { top: -8px; left: 0; }
-    .ut-option-heart::after  { top: 0; left: 8px; }
-
-    .ut-option.active .ut-option-heart {
-      display: block;
-      animation: soulFloat 1.4s ease-in-out infinite;
-    }
-
-    /* ── VISTA PREVIA 3D ── */
-    .ut-viewport {
-      background: var(--ut-black);
-      border: 2px solid var(--ut-white);
-      padding: 12px;
+    /* ── PIXEL HEART (small inline) ── */
+    .ph {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background: #FF0033;
+      transform: rotate(-45deg);
       position: relative;
+      vertical-align: middle;
+      margin-right: 8px;
+      flex-shrink: 0;
+    }
+    .ph::before, .ph::after {
+      content: '';
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #FF0033;
+    }
+    .ph::before { top: -5px; left: 0; }
+    .ph::after { top: 0; left: 5px; }
+
+    /* ── TITLE ── */
+    h1 {
+      font-size: clamp(0.9rem, 3vw, 1.5rem);
+      line-height: 1.9;
+      text-align: center;
+      letter-spacing: 0.05em;
     }
 
-    #threeViewport {
+    .subtitle {
+      font-size: 0.4rem;
+      line-height: 2.1;
+      color: #888;
+      text-align: center;
+    }
+
+    /* ── PANEL ── */
+    .panel {
+      border: 2px solid #fff;
+      display: flex;
+      width: min(860px, 92vw);
+      flex: 1 1 auto;
+      max-height: 460px;
+      min-height: 320px;
+    }
+
+    .col-left {
+      width: 40%;
+      border-right: 2px solid #fff;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .col-right {
+      width: 60%;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .col-title {
+      font-size: 0.5rem;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+    }
+
+    /* ── DROPZONE ── */
+    .dropzone {
+      flex: 1;
+      border: 2px dashed #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: border-color 200ms, box-shadow 200ms;
+      position: relative;
+      overflow: hidden;
+      min-height: 100px;
+    }
+
+    .dropzone:hover,
+    .dropzone.dragover {
+      border-color: #FF0033;
+      box-shadow: 0 0 16px rgba(255, 0, 51, 0.25);
+    }
+
+    .dropzone-icon {
+      font-size: 1.4rem;
+      margin-bottom: 14px;
+      color: #fff;
+    }
+
+    .dropzone-text {
+      font-size: 0.38rem;
+      line-height: 2.2;
+      text-align: center;
+      color: #777;
+    }
+
+    .dropzone img {
       width: 100%;
-      height: 340px;
-      background: #050505;
+      height: 100%;
+      object-fit: contain;
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 10px;
+    }
+
+    /* ── MODEL LABEL ── */
+    .model-label {
+      font-size: 0.38rem;
+      color: #777;
+      margin-bottom: 12px;
+    }
+
+    /* ── MODEL BUTTONS ── */
+    .model-btns {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .model-btn {
+      flex: 1;
+      padding: 10px 8px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.45rem;
+      border: 2px solid transparent;
+      background: #222;
+      color: #666;
+      cursor: pointer;
+      transition: all 150ms;
+      text-align: center;
+    }
+
+    .model-btn.active {
+      border-color: #fff;
+      background: #000;
+      color: #fff;
+    }
+
+    .model-btn:hover:not(.active) {
+      background: #333;
+      color: #aaa;
+    }
+
+    /* ── VIEWER ── */
+    .viewer {
+      flex: 1;
+      background: #000;
+      min-height: 180px;
       position: relative;
       overflow: hidden;
     }
 
-    .viewport-label {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.5rem;
-      color: var(--ut-yellow);
-      text-align: center;
-      margin-top: 14px;
-      letter-spacing: 0.1em;
-      line-height: 1.8;
-    }
-
-    /* ── BOTÓN EMPEZAR ── */
-    .ut-btn {
+    .viewer canvas {
       display: block;
-      margin: 40px auto 0;
-      background: var(--ut-black);
-      color: var(--ut-white);
-      border: 2px solid var(--ut-white);
-      padding: 16px 40px;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.05em;
-      cursor: pointer;
-      transition: all 0.15s;
-      position: relative;
     }
 
-    .ut-btn:hover {
-      color: var(--ut-yellow);
-      border-color: var(--ut-yellow);
-      transform: translateY(-2px);
-    }
-
-    .ut-btn:disabled {
-      color: #555;
-      border-color: #444;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    /* ── CAJA DE DIÁLOGO (estilo Undertale) ── */
-    .ut-dialog {
-      position: fixed;
-      left: 50%;
-      bottom: 24px;
-      transform: translateX(-50%);
-      width: min(640px, 92vw);
-      min-height: 96px;
-      background: var(--ut-black);
-      border: 3px solid var(--ut-white);
-      padding: 22px 28px 30px;
-      z-index: 10000;
-      cursor: pointer;
-      box-shadow: 0 0 0 4px var(--ut-black);
-    }
-
-    .ut-dialog-text {
+    /* ── CONTINUE BUTTON ── */
+    .continue-btn {
       font-family: 'Press Start 2P', monospace;
       font-size: 0.55rem;
-      line-height: 2.1;
-      color: var(--ut-white);
-      white-space: pre-wrap;
-      min-height: 2.2em;
+      padding: 14px 40px;
+      background: #000;
+      color: #fff;
+      border: 2px solid #fff;
+      cursor: pointer;
+      transition: all 150ms;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 4px;
     }
 
-    .ut-dialog-text .ut-red { color: var(--ut-red); }
-    .ut-dialog-text .ut-yellow { color: var(--ut-yellow); }
-    .ut-dialog-text .ut-green { color: #0f0; }
+    .continue-btn:hover {
+      border-color: #FF0033;
+    }
 
-    .ut-dialog-next {
+    .continue-btn .btn-heart {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background: #FF0033;
+      transform: rotate(-45deg);
+      position: relative;
+      flex-shrink: 0;
+    }
+    .continue-btn .btn-heart::before,
+    .continue-btn .btn-heart::after {
+      content: '';
       position: absolute;
-      right: 14px;
-      bottom: 10px;
-      color: var(--ut-white);
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.6rem;
-      animation: nextBlink 0.8s step-end infinite;
-      display: none;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #FF0033;
     }
+    .continue-btn .btn-heart::before { top: -5px; left: 0; }
+    .continue-btn .btn-heart::after { top: 0; left: 5px; }
 
-    @keyframes nextBlink {
-      0%, 100% { opacity: 1; }
-      50%      { opacity: 0; }
+    .continue-btn:disabled {
+      border-color: #333;
+      color: #333;
+      cursor: not-allowed;
     }
+    .continue-btn:disabled .btn-heart { background: #333; }
+    .continue-btn:disabled .btn-heart::before,
+    .continue-btn:disabled .btn-heart::after { background: #333; }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
-      .alma-container { padding: 32px 16px 160px; }
-      .ut-box { padding: 18px 14px; }
-      .ut-text { font-size: 0.5rem; }
-      #threeViewport { height: 260px; }
-      .ut-options { gap: 16px; }
+      body { padding: 24px 16px; gap: 18px; }
+      .panel {
+        flex-direction: column;
+        max-height: none;
+        min-height: auto;
+        height: auto;
+      }
+      .col-left {
+        width: 100%;
+        border-right: none;
+        border-bottom: 2px solid #fff;
+        min-height: 200px;
+      }
+      .col-right {
+        width: 100%;
+        min-height: 300px;
+      }
+      .viewer { min-height: 220px; }
     }
   </style>
 </head>
 <body>
-  <!-- Custom cursor -->
-  <div class="cursor" id="cursor"></div>
-  <div class="cursor-trail" id="cursorTrail"></div>
 
-  <div class="page-main" id="pageMain">
-    <!-- NAV -->
-    <nav>
-      <div class="nav-logo">Jesuluto<span>XD</span></div>
-      <ul class="nav-links">
-        <li><a href="#about">Sobre mí</a></li>
-        <li><a href="#work">Animaciones</a></li>
-        <li><a href="#contact">Contacto</a></li>
-        <li><a href="#games" class="nav-games-link">Juegos ↗</a></li>
-        <li><a href="#" id="navWallpapers" class="nav-wp-link">Wallpapers ↗</a></li>
-      </ul>
-      <button class="nav-hamburger" id="navHamburger" aria-label="Menú">
-        <span></span><span></span><span></span>
-      </button>
-    </nav>
+  <!-- ── HEART ── -->
+  <div class="soul"></div>
 
-    <!-- MOBILE NAV DRAWER -->
-    <div class="nav-drawer" id="navDrawer">
-      <a href="#about" class="nav-drawer-link">Sobre mí</a>
-      <a href="#work" class="nav-drawer-link">Animaciones</a>
-      <a href="#contact" class="nav-drawer-link">Contacto</a>
-      <a href="#games" class="nav-drawer-link" style="color:var(--yellow)">Juegos ↗</a>
-      <a href="#" id="navWallpapersMobile" class="nav-drawer-link" style="color:var(--green)">Wallpapers ↗</a>
+  <!-- ── TITLE ── -->
+  <h1>¿Puedes donar<br>tu alma?</h1>
+  <p class="subtitle">"Para una mejor experiencia,<br>por favor sube tu skin de Minecraft."</p>
+
+  <!-- ── MAIN PANEL ── -->
+  <div class="panel">
+
+    <!-- COLUMNA IZQUIERDA: UPLOAD -->
+    <div class="col-left">
+      <div class="col-title"><span class="ph"></span> SUBE TU SKIN</div>
+      <div class="dropzone" id="dropzone">
+        <input type="file" id="fileInput" accept="image/*" hidden>
+        <div class="dropzone-content" id="dropzoneContent">
+          <div class="dropzone-icon">&#9650;</div>
+          <div class="dropzone-text">Arrastra o selecciona<br>tu archivo .png</div>
+        </div>
+        <img id="previewImg" hidden alt="Skin">
+      </div>
     </div>
 
-    <!-- ALMA CONTENT -->
-    <div class="alma-container">
-
-      <!-- PANTALLA DE TÍTULO -->
-      <div class="ut-title-screen">
-        <div class="ut-soul"></div>
-        <h1 class="ut-title">¿Puedes<br>domar<br>tu alma?</h1>
-        <div class="ut-subtitle">» Un viaje introspectivo «</div>
+    <!-- COLUMNA DERECHA: PREVIEW + MODELO 3D -->
+    <div class="col-right">
+      <div class="col-title"><span class="ph"></span> VISTA PREVIA</div>
+      <p class="model-label">Selecciona tu modelo</p>
+      <div class="model-btns">
+        <button class="model-btn active" data-skin="steve">STEVE</button>
+        <button class="model-btn" data-skin="alex">ALEX</button>
       </div>
-
-      <!-- SECCIÓN 1: TU ESENCIA -->
-      <div class="ut-box">
-        <div class="ut-section-label"><span class="soul-mini"></span> TU ESENCIA</div>
-        <p class="ut-text">Antes de comenzar, necesito entender <span class="ut-yellow">quién eres</span>.<br>Carga una imagen que represente tu verdadero yo.<br>Cualquier cosa: un dibujo, una foto, un símbolo...</p>
-
-        <div class="ut-upload" id="skinUploadBox">
-          <input type="file" id="skinFileInput" accept="image/*" style="display: none;">
-          <div class="ut-upload-icon">▼</div>
-          <div class="ut-upload-label">CARGAR IMAGEN</div>
-          <div class="ut-upload-desc">Arrastra aquí o haz clic para seleccionar una imagen</div>
-        </div>
-
-        <div class="ut-preview" id="skinPreview">
-          <span class="ut-preview-empty" id="skinPreviewEmpty">VACÍO</span>
-          <img id="skinPreviewImg" src="" alt="Vista previa de tu skin" style="display: none;">
-        </div>
-      </div>
-
-      <!-- SECCIÓN 2: TIPO DE ALMA -->
-      <div class="ut-box">
-        <div class="ut-section-label"><span class="soul-mini"></span> TIPO DE ALMA</div>
-        <p class="ut-text">¿Qué forma toma tu alma dentro del juego?</p>
-
-        <div class="ut-options">
-          <div class="ut-option active" id="steveOption">
-            <span class="ut-option-heart"></span>
-            <img src="Imagenes/Frame/Selector de skins/Normal/Normal.png" alt="Steve">
-            <div class="ut-option-name">STEVE</div>
-          </div>
-          <div class="ut-option" id="alexOption">
-            <span class="ut-option-heart"></span>
-            <img src="Imagenes/Frame/Selector de skins/Meid/Meid.png" alt="Alex">
-            <div class="ut-option-name">ALEX</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SECCIÓN 3: VISTA PREVIA 3D -->
-      <div class="ut-box">
-        <div class="ut-section-label"><span class="soul-mini"></span> VISTA PREVIA</div>
-        <p class="ut-text">Observa cómo se manifiesta tu alma en el espacio. Gira la vista con el mouse.</p>
-
-        <div class="ut-viewport">
-          <div id="threeViewport"></div>
-          <div class="viewport-label">◆ MODELO 3D DE TU ALMA ◆</div>
-        </div>
-      </div>
-
-      <button class="ut-btn" id="startButton" disabled>▶ EMPEZAR EL VIAJE</button>
+      <div class="viewer" id="viewer"></div>
     </div>
+
   </div>
 
-  <!-- CAJA DE DIÁLOGO -->
-  <div class="ut-dialog" id="utDialog">
-    <div class="ut-dialog-text" id="utDialogText"></div>
-    <div class="ut-dialog-next" id="utDialogNext">▼</div>
-  </div>
+  <!-- ── CONTINUAR ── -->
+  <button class="continue-btn" id="continueBtn" disabled>
+    <span class="btn-heart"></span> CONTINUAR
+  </button>
 
-  <!-- Three.js para el viewport 3D -->
+  <!-- Three.js -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
   <script>
-    // Lógica para la página de "¿Puedes domar tu alma?"
-    document.addEventListener('DOMContentLoaded', function() {
-      // ── Variables globales ──
+    document.addEventListener('DOMContentLoaded', () => {
+      const dropzone      = document.getElementById('dropzone');
+      const fileInput     = document.getElementById('fileInput');
+      const dropContent   = document.getElementById('dropzoneContent');
+      const previewImg    = document.getElementById('previewImg');
+      const viewer        = document.getElementById('viewer');
+      const continueBtn   = document.getElementById('continueBtn');
+      const modelBtns     = document.querySelectorAll('.model-btn');
+
       let selectedSkin = 'steve';
       let uploadedImage = null;
-      let scene, camera, renderer, cube;
+      let scene, camera, renderer, cube, controls;
 
-      // ── Elementos DOM ──
-      const skinUploadBox = document.getElementById('skinUploadBox');
-      const skinFileInput = document.getElementById('skinFileInput');
-      const skinPreviewImg = document.getElementById('skinPreviewImg');
-      const skinPreviewEmpty = document.getElementById('skinPreviewEmpty');
-      const steveOption = document.getElementById('steveOption');
-      const alexOption = document.getElementById('alexOption');
-      const startButton = document.getElementById('startButton');
-      const threeViewport = document.getElementById('threeViewport');
-
-      // ── Inicializar Three.js ──
-      initThreeJS();
-
-      // ── Carga de imagen (clic) ──
-      skinUploadBox.addEventListener('click', () => {
-        skinFileInput.click();
-      });
-
-      skinFileInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file && file.type.match('image.*')) {
-          const reader = new FileReader();
-          reader.onload = function(event) {
-            uploadedImage = event.target.result;
-            skinPreviewImg.src = uploadedImage;
-            skinPreviewImg.style.display = 'block';
-            skinPreviewEmpty.style.display = 'none';
-            updatePreview();
-            checkReadyState();
-          };
-          reader.readAsDataURL(file);
-        }
-      });
-
-      // ── Drag and drop ──
-      skinUploadBox.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        skinUploadBox.classList.add('dragover');
-      });
-
-      skinUploadBox.addEventListener('dragleave', (e) => {
-        e.preventDefault();
-        skinUploadBox.classList.remove('dragover');
-      });
-
-      skinUploadBox.addEventListener('drop', (e) => {
-        e.preventDefault();
-        skinUploadBox.classList.remove('dragover');
-        const file = e.dataTransfer.files[0];
-        if (file && file.type.match('image.*')) {
-          const reader = new FileReader();
-          reader.onload = function(event) {
-            uploadedImage = event.target.result;
-            skinPreviewImg.src = uploadedImage;
-            skinPreviewImg.style.display = 'block';
-            skinPreviewEmpty.style.display = 'none';
-            updatePreview();
-            checkReadyState();
-          };
-          reader.readAsDataURL(file);
-        }
-      });
-
-      // ── Seleccionar tipo de skin ──
-      steveOption.addEventListener('click', () => {
-        selectedSkin = 'steve';
-        steveOption.classList.add('active');
-        alexOption.classList.remove('active');
-        updateModel();
-      });
-
-      alexOption.addEventListener('click', () => {
-        selectedSkin = 'alex';
-        alexOption.classList.add('active');
-        steveOption.classList.remove('active');
-        updateModel();
-      });
-
-      // ── Botón de inicio ──
-      startButton.addEventListener('click', () => {
-        alert('¡El viaje comienza! (Esta es una demo, pronto tendrás más contenido)');
-      });
-
-      // ── Three.js ──
-      function initThreeJS() {
+      // ═══════ Three.js ═══════
+      function initThree() {
         scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x050505);
+        scene.background = new THREE.Color(0x000000);
 
-        camera = new THREE.PerspectiveCamera(75, threeViewport.clientWidth / 340, 0.1, 1000);
-        camera.position.z = 5;
+        const w = viewer.clientWidth || 1;
+        const h = viewer.clientHeight || 1;
+        camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 1000);
+        camera.position.set(3, 2, 4);
 
         renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(threeViewport.clientWidth, 340);
-        renderer.setPixelRatio(window.devicePixelRatio);
-        threeViewport.appendChild(renderer.domElement);
+        renderer.setSize(w, h);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        viewer.appendChild(renderer.domElement);
 
-        const ambientLight = new THREE.AmbientLight(0x404040, 1.5);
-        scene.add(ambientLight);
-
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-        directionalLight.position.set(1, 1, 1);
-        scene.add(directionalLight);
-
-        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
-        controls.dampingFactor = 0.05;
+        controls.dampingFactor = 0.08;
+        controls.enablePan = false;
+        controls.minDistance = 3;
+        controls.maxDistance = 8;
 
-        const geometry = new THREE.BoxGeometry(2, 2, 2);
-        const material = new THREE.MeshPhongMaterial({
-          color: 0xa855f7,
-          shininess: 30,
-          specular: 0xffffff
-        });
-        cube = new THREE.Mesh(geometry, material);
-        cube.position.y = 0.5;
+        scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+        const dir = new THREE.DirectionalLight(0xffffff, 0.8);
+        dir.position.set(2, 3, 2);
+        scene.add(dir);
+
+        const geo = new THREE.BoxGeometry(1.5, 2.5, 1);
+        const mat = new THREE.MeshPhongMaterial({ color: 0x6d28d9, shininess: 20 });
+        cube = new THREE.Mesh(geo, mat);
         scene.add(cube);
 
-        updateModel();
-
-        function animate() {
-          requestAnimationFrame(animate);
+        (function loop() {
+          requestAnimationFrame(loop);
+          cube.rotation.y += 0.004;
           controls.update();
-          cube.rotation.y += 0.005;
           renderer.render(scene, camera);
-        }
-        animate();
-
-        window.addEventListener('resize', onWindowResize);
-      }
-
-      function onWindowResize() {
-        camera.aspect = threeViewport.clientWidth / 340;
-        camera.updateProjectionMatrix();
-        renderer.setSize(threeViewport.clientWidth, 340);
+        })();
       }
 
       function updateModel() {
-        if (cube) {
-          if (uploadedImage) {
-            const textureLoader = new THREE.TextureLoader();
-            const texture = textureLoader.load(uploadedImage);
-            texture.colorSpace = THREE.SRGBColorSpace;
-
-            const color = selectedSkin === 'steve' ? 0xa855f7 : 0x6d28d9;
-            const material = new THREE.MeshPhongMaterial({
-              map: texture,
-              color: color,
-              shininess: 30,
-              specular: 0xffffff
-            });
-            cube.material = material;
-          } else {
-            const color = selectedSkin === 'steve' ? 0xa855f7 : 0x6d28d9;
-            const material = new THREE.MeshPhongMaterial({
-              color: color,
-              shininess: 30,
-              specular: 0xffffff
-            });
-            cube.material = material;
-          }
-        }
-      }
-
-      function updatePreview() {
-        if (uploadedImage) updateModel();
-      }
-
-      function checkReadyState() {
+        if (!cube) return;
+        const color = selectedSkin === 'steve' ? 0x6d28d9 : 0xa855f7;
         if (uploadedImage) {
-          startButton.disabled = false;
+          const tex = new THREE.TextureLoader().load(uploadedImage);
+          tex.colorSpace = THREE.SRGBColorSpace;
+          cube.material = new THREE.MeshPhongMaterial({ map: tex, color, shininess: 20 });
+        } else {
+          cube.material = new THREE.MeshPhongMaterial({ color, shininess: 20 });
         }
       }
 
-      // ── Caja de diálogo (typewriter estilo Undertale) ──
-      const dialog = document.getElementById('utDialog');
-      const dialogText = document.getElementById('utDialogText');
-      const dialogNext = document.getElementById('utDialogNext');
-
-      const dialogLines = [
-        '* Hola.',
-        '* Bienvenido a tu propio interior.',
-        '* Soy la voz de tu alma.',
-        '* Para domarme, primero debo ver <span class="ut-yellow">quién eres</span>.',
-        '* Carga una imagen que represente tu esencia.',
-        '* Luego elige el tipo de tu alma: <span class="ut-green">Steve</span> o <span class="ut-green">Alex</span>.',
-        '* Observa cómo se manifiesta en el espacio.',
-        '* Cuando estés listo, pulsa <span class="ut-red">EMPEZAR</span>.',
-        '* Que el viaje comience.'
-      ];
-
-      let lineIdx = 0;
-      let timer = null;
-      let finishedTyping = false;
-
-      function stripTags(html) {
-        const d = document.createElement('div');
-        d.innerHTML = html;
-        return d.textContent;
+      function onResize() {
+        if (!camera || !renderer) return;
+        const w = viewer.clientWidth || 1;
+        const h = viewer.clientHeight || 1;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
       }
 
-      function typeLine(text) {
-        const plain = stripTags(text);
-        let i = 0;
-        finishedTyping = false;
-        dialogText.textContent = '';
-        dialogNext.style.display = 'none';
-        clearInterval(timer);
-        timer = setInterval(() => {
-          i++;
-          dialogText.textContent = plain.slice(0, i);
-          if (i >= plain.length) {
-            clearInterval(timer);
-            dialogText.innerHTML = text;
-            finishedTyping = true;
-            dialogNext.style.display = 'block';
-          }
-        }, 25);
+      // ═══════ FILE UPLOAD ═══════
+      function handleFile(file) {
+        if (!file || !file.type.match('image.*')) return;
+        const reader = new FileReader();
+        reader.onload = ev => {
+          uploadedImage = ev.target.result;
+          previewImg.src = uploadedImage;
+          previewImg.hidden = false;
+          dropContent.style.display = 'none';
+          updateModel();
+          continueBtn.disabled = false;
+        };
+        reader.readAsDataURL(file);
       }
 
-      function finishTyping() {
-        clearInterval(timer);
-        dialogText.innerHTML = dialogLines[lineIdx];
-        finishedTyping = true;
-        dialogNext.style.display = 'block';
-      }
+      dropzone.addEventListener('click', () => fileInput.click());
+      fileInput.addEventListener('change', e => handleFile(e.target.files[0]));
 
-      function advanceDialog() {
-        if (!finishedTyping) { finishTyping(); return; }
-        lineIdx++;
-        if (lineIdx >= dialogLines.length) {
-          dialogText.innerHTML = '';
-          dialogNext.style.display = 'none';
-          dialog.style.display = 'none';
-          return;
-        }
-        typeLine(dialogLines[lineIdx]);
-      }
-
-      dialog.addEventListener('click', advanceDialog);
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.key === ' ' || e.key === 'x' || e.key === 'X' || e.key === 'z' || e.key === 'Z') {
-          if (dialog.style.display !== 'none') {
-            e.preventDefault();
-            advanceDialog();
-          }
-        }
+      dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('dragover'); });
+      dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+      dropzone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropzone.classList.remove('dragover');
+        handleFile(e.dataTransfer.files[0]);
       });
 
-      typeLine(dialogLines[0]);
-
-      // ── Cursor personalizado ──
-      const cursor = document.getElementById('cursor');
-      const trail = document.getElementById('cursorTrail');
-      let tx = 0, ty = 0, cx = 0, cy = 0;
-
-      document.addEventListener('mousemove', e => {
-        tx = e.clientX;
-        ty = e.clientY;
-        cursor.style.left = tx + 'px';
-        cursor.style.top = ty + 'px';
-      });
-
-      function animTrail() {
-        cx += (tx - cx) * 0.18;
-        cy += (ty - cy) * 0.18;
-        trail.style.left = cx + 'px';
-        trail.style.top = cy + 'px';
-        requestAnimationFrame(animTrail);
-      }
-      animTrail();
-
-      document.querySelectorAll('a, button, .ut-btn, .ut-option, .ut-upload, .ut-dialog').forEach(el => {
-        el.addEventListener('mouseenter', () => {
-          cursor.style.transform = 'translate(-50%,-50%) scale(2)';
-          trail.style.opacity = '0.5';
-        });
-        el.addEventListener('mouseleave', () => {
-          cursor.style.transform = 'translate(-50%,-50%) scale(1)';
-          trail.style.opacity = '1';
+      // ═══════ MODEL SELECTION ═══════
+      modelBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          modelBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          selectedSkin = btn.dataset.skin;
+          updateModel();
         });
       });
 
+      // ═══════ CONTINUE ═══════
+      continueBtn.addEventListener('click', () => {
+        if (!uploadedImage) return;
+        alert('¡El viaje comienza!');
+      });
+
+      // ═══════ RESIZE ═══════
+      window.addEventListener('resize', onResize);
+
+      initThree();
     });
   </script>
 </body>
