@@ -386,25 +386,47 @@
       }
 
       // ═══════ MODEL BUILDER (Blockbench JSON) ═══════
-      function buildBox(cube, tex) {
-        const [sx, sy, sz] = cube.size;
+      const BB_FACE_KEYS = ['east', 'west', 'up', 'down', 'south', 'north'];
+
+      function deg3(r) {
+        return [r[0], r[1], r[2]].map(v => v * Math.PI / 180);
+      }
+
+      function cubeSize(cube) {
+        if (cube.to) return cube.to.map((t, i) => t - cube.from[i]);
+        return cube.size;
+      }
+
+      function buildCube(cube, tex) {
+        if (!cube.from || cube.visibility === false) return null;
+        const s = cubeSize(cube);
+        const [sx, sy, sz] = s;
         const geo = new THREE.BoxGeometry(sx, sy, sz);
-        const uvs = cube.uvs;
-        if (uvs) {
-          const uvAttr = geo.attributes.uv;
+        const uvAttr = geo.attributes.uv;
+        const setRect = (i, u0, v0, u1, v1) => {
+          const o = i * 4;
+          uvAttr.setXY(o + 0, u0 / texW, v0 / texH);
+          uvAttr.setXY(o + 1, u1 / texW, v0 / texH);
+          uvAttr.setXY(o + 2, u0 / texW, v1 / texH);
+          uvAttr.setXY(o + 3, u1 / texW, v1 / texH);
+        };
+        if (cube.faces) {
           for (let i = 0; i < 6; i++) {
-            const r = uvs[FACE_KEYS[i]];
-            if (!r) continue;
-            const [u0, v0, u1, v1] = r;
-            const o = i * 4;
-            uvAttr.setXY(o + 0, u0 / texW, v0 / texH);
-            uvAttr.setXY(o + 1, u1 / texW, v0 / texH);
-            uvAttr.setXY(o + 2, u0 / texW, v1 / texH);
-            uvAttr.setXY(o + 3, u1 / texW, v1 / texH);
+            const face = cube.faces[BB_FACE_KEYS[i]];
+            if (!face || !face.uv) continue;
+            setRect(i, face.uv[0], face.uv[1], face.uv[2], face.uv[3]);
           }
-          uvAttr.needsUpdate = true;
+        } else if (cube.uvs) {
+          for (let i = 0; i < 6; i++) {
+            const r = cube.uvs[FACE_KEYS[i]];
+            if (!r) continue;
+            setRect(i, r[0], r[1], r[2], r[3]);
+          }
         }
-        const isOverlay = !!cube.offset;
+        uvAttr.needsUpdate = true;
+
+        const inflate = cube.offset ? 0.03 : (cube.inflate || 0) * 0.06;
+        const isOverlay = inflate > 0;
         const mat = new THREE.MeshPhongMaterial({
           map: tex,
           shininess: 20,
@@ -418,18 +440,125 @@
           cube.from[1] + sy / 2,
           cube.from[2] + sz / 2
         );
-        if (cube.offset) mesh.scale.set(1.03, 1.03, 1.03);
-        return mesh;
+        if (isOverlay) mesh.scale.set(1 + inflate, 1 + inflate, 1 + inflate);
+
+        let node = mesh;
+        if (cube.rotation && cube.pivot && cube.rotation.some(v => v)) {
+          const pivotGroup = new THREE.Group();
+          pivotGroup.position.set(cube.pivot[0], cube.pivot[1], cube.pivot[2]);
+          const rotGroup = new THREE.Group();
+          rotGroup.position.set(-cube.pivot[0], -cube.pivot[1], -cube.pivot[2]);
+          rotGroup.rotation.set(...deg3(cube.rotation));
+          pivotGroup.add(rotGroup);
+          rotGroup.add(mesh);
+          node = pivotGroup;
+        }
+        return node;
+      }
+
+      function buildBones(armature) {
+        const bones = armature.map(bone => {
+          const pivot = bone.pivot || bone.origin || [0, 0, 0];
+          const boneGroup = new THREE.Group();
+          const rotGroup = new THREE.Group();
+          if (bone.rotation) rotGroup.rotation.set(...deg3(bone.rotation));
+          boneGroup.add(rotGroup);
+          return { bone, boneGroup, rotGroup, pivot };
+        });
+        bones.forEach((g, i) => {
+          const p = g.bone.parent;
+          if (typeof p === 'number' && p >= 0 && p < bones.length && p !== i) {
+            const pp = bones[p].pivot;
+            g.boneGroup.position.set(
+              g.pivot[0] - pp[0],
+              g.pivot[1] - pp[1],
+              g.pivot[2] - pp[2]
+            );
+            bones[p].rotGroup.add(g.boneGroup);
+          } else {
+            g.boneGroup.position.set(g.pivot[0], g.pivot[1], g.pivot[2]);
+          }
+        });
+        return bones;
+      }
+
+      function groupArray(groups) {
+        if (Array.isArray(groups)) return groups;
+        if (groups && typeof groups === 'object') {
+          return Object.keys(groups).map(k => {
+            const g = groups[k];
+            g._name = k;
+            return g;
+          });
+        }
+        return [];
+      }
+
+      function buildFullModel(model, tex, root) {
+        const bones = Array.isArray(model.armature) ? buildBones(model.armature) : [];
+        const groups = groupArray(model.groups);
+        const groupNodes = groups.map(g => {
+          const node = new THREE.Group();
+          if (g.origin) node.position.set(g.origin[0], g.origin[1], g.origin[2]);
+          if (g.rotation) node.rotation.set(...deg3(g.rotation));
+          return node;
+        });
+        bones.forEach((g, i) => {
+          const p = g.bone.parent;
+          if (typeof p !== 'number' || p < 0 || p >= bones.length || p === i) {
+            root.add(g.boneGroup);
+          }
+        });
+        groupNodes.forEach((node, i) => {
+          const p = groups[i].parent;
+          if (typeof p === 'number' && p >= 0 && p < groupNodes.length && p !== i) {
+            groupNodes[p].add(node);
+          } else {
+            root.add(node);
+          }
+        });
+
+        const elements = Array.isArray(model.elements)
+          ? model.elements
+          : groups.reduce((acc, g) => acc.concat(g.cubes || []), []);
+        elements.forEach(cube => {
+          const node = buildCube(cube, tex);
+          if (!node) return;
+          let attached = false;
+          if (typeof cube.parent === 'number') {
+            if (bones[cube.parent]) {
+              const bp = bones[cube.parent].pivot;
+              node.position.x -= bp[0];
+              node.position.y -= bp[1];
+              node.position.z -= bp[2];
+              bones[cube.parent].rotGroup.add(node);
+              attached = true;
+            }
+            else if (groupNodes[cube.parent]) { groupNodes[cube.parent].add(node); attached = true; }
+          }
+          if (!attached) root.add(node);
+        });
       }
 
       function buildModel(json, tex) {
+        const model = json.model || {};
         const root = new THREE.Group();
-        const groups = json.model.groups;
-        Object.keys(groups).forEach(name => {
-          const g = groups[name];
-          if (!g.cubes) return;
-          g.cubes.forEach(cube => root.add(buildBox(cube, tex)));
-        });
+        const isFull = Array.isArray(model.elements) || (Array.isArray(model.armature) && model.armature.length > 0);
+        if (isFull) {
+          buildFullModel(model, tex, root);
+        } else {
+          const groups = model.groups;
+          if (groups) {
+            Object.keys(groups).forEach(name => {
+              const g = groups[name];
+              if (!g.cubes) return;
+              g.cubes.forEach(cube => {
+                const node = buildCube(cube, tex);
+                if (node) root.add(node);
+              });
+            });
+          }
+        }
         root.scale.set(1 / 16, 1 / 16, 1 / 16);
         return root;
       }
