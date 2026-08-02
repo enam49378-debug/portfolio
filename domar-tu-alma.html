@@ -350,10 +350,19 @@
       let texW = 64, texH = 64;
       let modelToken = 0;
 
+      // Animation state
+      let animTracks = null;
+      let animDuration = 0;
+      let animTime = 0;
+      let animPlayed = false;
+      let modelBones = new Map();
+      const IDENTITY = { r: [0,0,0], t: [0,0,0], s: [1,1,1] };
+
       const MODEL_URLS = {
         steve: 'Personajes/Undertale/Steve.bbs.json',
         alex:  'Personajes/Undertale/Alex.bbs.json'
       };
+      const ANIM_URL = 'Personajes/Undertale/anim_undertale_prewillegada.json';
 
       // BoxGeometry face order in three.js: px, nx, py, ny, pz, nz
       const FACE_KEYS = ['right', 'left', 'top', 'bottom', 'front', 'back'];
@@ -489,6 +498,8 @@
           } else {
             g.boneGroup.position.set(g.pivot[0], g.pivot[1], g.pivot[2]);
           }
+          g.restPos = [g.boneGroup.position.x, g.boneGroup.position.y, g.boneGroup.position.z];
+          if (g.bone.name) modelBones.set(g.bone.name, g);
         });
         return bones;
       }
@@ -584,6 +595,105 @@
         return root;
       }
 
+      function normalizePoseVal(v) {
+        if (!v || Object.keys(v).length === 0) return IDENTITY;
+        return { r: v.r || [0,0,0], t: v.t || [0,0,0], s: v.s || [1,1,1] };
+      }
+
+      function parseAnim(json) {
+        const boneTracks = new Map();
+        const rootTracks = [];
+        for (const [name, channel] of Object.entries(json || {})) {
+          const kfs = channel.keyframes || [];
+          const isPose = channel.type === 'pose' || name.startsWith('pose');
+          if (isPose) {
+            const bonesInChannel = new Set();
+            for (const kf of kfs) {
+              const pose = (kf.value && kf.value.pose) ? kf.value.pose : {};
+              for (const boneName of Object.keys(pose)) bonesInChannel.add(boneName);
+            }
+            for (const kf of kfs) {
+              const time = kf.tick / 20;
+              const pose = (kf.value && kf.value.pose) ? kf.value.pose : {};
+              for (const boneName of bonesInChannel) {
+                const boneVal = pose[boneName] || {};
+                let track = boneTracks.get(boneName);
+                if (!track) { track = []; boneTracks.set(boneName, track); }
+                track.push({ t: time, ...normalizePoseVal(boneVal) });
+              }
+            }
+          } else {
+            const track = [];
+            for (const kf of kfs) {
+              track.push({ t: kf.tick / 20, ...normalizePoseVal(kf.value) });
+            }
+            rootTracks.push(track);
+          }
+        }
+        return { boneTracks, rootTracks };
+      }
+
+      function hermite(p0, m0, p1, m1, u) {
+        const u2 = u * u;
+        const u3 = u2 * u;
+        const h00 = 2 * u3 - 3 * u2 + 1;
+        const h10 = u3 - 2 * u2 + u;
+        const h01 = -2 * u3 + 3 * u2;
+        const h11 = u3 - u2;
+        return h00 * p0 + h10 * m0 + h01 * p1 + h11 * m1;
+      }
+
+      function sampleTrack(track, time) {
+        if (!track || track.length === 0) return IDENTITY;
+        if (track.length === 1) return track[0];
+        let i = 0;
+        while (i < track.length - 2 && track[i + 1].t <= time) i++;
+        const a = track[i], b = track[i + 1];
+        const dt = b.t - a.t;
+        const u = dt <= 0 ? 0 : (time - a.t) / dt;
+        const res = {};
+        for (const comp of ['r', 't', 's']) {
+          res[comp] = [0, 1, 2].map(k => {
+            const p0 = a[comp][k], p1 = b[comp][k];
+            const prev = track[i - 1] || a;
+            const next = track[i + 2] || b;
+            const m0 = ((p1 - prev[comp][k]) / ((b.t - prev.t) || 1)) * dt;
+            const m1 = ((next[comp][k] - p0) / ((next.t - a.t) || 1)) * dt;
+            return hermite(p0, m0, p1, m1, u);
+          });
+        }
+        return res;
+      }
+
+      function applyAnim(time) {
+        if (!animTracks || !modelRoot) return;
+        const { boneTracks, rootTracks } = animTracks;
+        for (const [name, track] of boneTracks) {
+          const b = modelBones.get(name);
+          if (!b) continue;
+          const val = sampleTrack(track, time);
+          if (b.rotGroup) b.rotGroup.rotation.set(val.r[0], val.r[1], val.r[2]);
+          if (b.boneGroup && b.restPos) {
+            b.boneGroup.position.set(
+              b.restPos[0] + val.t[0],
+              b.restPos[1] + val.t[1],
+              b.restPos[2] + val.t[2]
+            );
+          }
+          if (b.rotGroup) b.rotGroup.scale.set(val.s[0], val.s[1], val.s[2]);
+        }
+        let r = [0, 0, 0], t = [0, 0, 0], s = [1, 1, 1];
+        for (const track of rootTracks) {
+          const v = sampleTrack(track, time);
+          r[0] += v.r[0]; r[1] += v.r[1]; r[2] += v.r[2];
+          t[0] += v.t[0]; t[1] += v.t[1]; t[2] += v.t[2];
+          s[0] *= v.s[0]; s[1] *= v.s[1]; s[2] *= v.s[2];
+        }
+        modelRoot.rotation.set(r[0], r[1], r[2]);
+        modelRoot.position.set(t[0], t[1], t[2]);
+        modelRoot.scale.set((1 / 16) * s[0], (1 / 16) * s[1], (1 / 16) * s[2]);
+      }
+
       function clearModel() {
         if (!modelRoot) return;
         scene.remove(modelRoot);
@@ -595,6 +705,7 @@
           }
         });
         modelRoot = null;
+        modelBones.clear();
       }
 
       // ═══════ Three.js ═══════
@@ -628,10 +739,36 @@
         rim.position.set(-2, 2, -3);
         scene.add(rim);
 
+        // Load animation
+        fetch(ANIM_URL)
+          .then(r => r.json())
+          .then(json => {
+            animTracks = parseAnim(json);
+            // duration = max tick across all keyframes / 20
+            let maxTick = 0;
+            for (const [, ch] of Object.entries(json || {})) {
+              for (const kf of ch.keyframes || []) {
+                if (kf.tick > maxTick) maxTick = kf.tick;
+              }
+            }
+            animDuration = maxTick / 20;
+          })
+          .catch(() => { animTracks = null; animDuration = 0; });
+
         updateModel();
 
+        const clock = new THREE.Clock();
         (function loop() {
           requestAnimationFrame(loop);
+          if (animTracks && !animPlayed) {
+            const dt = clock.getDelta();
+            animTime += dt;
+            if (animTime >= animDuration) {
+              animTime = animDuration;
+              animPlayed = true;
+            }
+            applyAnim(animTime);
+          }
           controls.update();
           renderer.render(scene, camera);
         })();
@@ -649,6 +786,8 @@
       }
 
       function updateModel() {
+        animTime = 0;
+        animPlayed = false;
         const token = ++modelToken;
         getTexture().then(tex => {
           if (token !== modelToken) return;
