@@ -23,54 +23,29 @@
       overflow-x: hidden;
     }
 
-    /* ── PIXEL HEART (big) ── */
+    /* ── SOUL HEART (big, asset) ── */
     .soul {
-      width: 22px;
-      height: 22px;
-      background: #FF0033;
-      transform: rotate(-45deg);
-      position: relative;
+      width: 44px;
+      height: 44px;
+      image-rendering: pixelated;
       animation: soulBounce 1.2s ease-in-out infinite;
       flex-shrink: 0;
     }
-    .soul::before, .soul::after {
-      content: '';
-      position: absolute;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: #FF0033;
-    }
-    .soul::before { top: -11px; left: 0; }
-    .soul::after { top: 0; left: 11px; }
 
     @keyframes soulBounce {
-      0%, 100% { transform: rotate(-45deg) translateY(0); }
-      50% { transform: rotate(-45deg) translateY(-6px); }
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-7px); }
     }
 
-    /* ── PIXEL HEART (small inline) ── */
+    /* ── SOUL HEART (small inline, asset) ── */
     .ph {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      background: #FF0033;
-      transform: rotate(-45deg);
-      position: relative;
+      width: 14px;
+      height: 14px;
+      image-rendering: pixelated;
       vertical-align: middle;
-      margin-right: 8px;
+      margin-right: 10px;
       flex-shrink: 0;
     }
-    .ph::before, .ph::after {
-      content: '';
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #FF0033;
-    }
-    .ph::before { top: -5px; left: 0; }
-    .ph::after { top: 0; left: 5px; }
 
     /* ── TITLE ── */
     h1 {
@@ -141,6 +116,30 @@
       box-shadow: 0 0 16px rgba(255, 0, 51, 0.25);
     }
 
+    .dropzone::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 110px;
+      height: 110px;
+      transform: translate(-50%, -50%);
+      background: url('Games/Under/Asset/Soul/Undertale_red_soul.png') center / contain no-repeat;
+      opacity: 0.06;
+      image-rendering: pixelated;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .dropzone-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
     .dropzone-icon {
       font-size: 1.4rem;
       margin-bottom: 14px;
@@ -162,6 +161,7 @@
       top: 0;
       left: 0;
       padding: 10px;
+      image-rendering: pixelated;
     }
 
     /* ── MODEL LABEL ── */
@@ -195,6 +195,18 @@
       border-color: #fff;
       background: #000;
       color: #fff;
+    }
+
+    .model-btn.active::before {
+      content: '';
+      display: inline-block;
+      width: 11px;
+      height: 11px;
+      margin-right: 6px;
+      background: url('Games/Under/Asset/Soul/Undertale_red_soul.png') center / contain no-repeat;
+      image-rendering: pixelated;
+      vertical-align: middle;
+      animation: soulBounce 1.2s ease-in-out infinite;
     }
 
     .model-btn:hover:not(.active) {
@@ -236,34 +248,20 @@
     }
 
     .continue-btn .btn-heart {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      background: #FF0033;
-      transform: rotate(-45deg);
-      position: relative;
+      width: 15px;
+      height: 15px;
+      image-rendering: pixelated;
       flex-shrink: 0;
     }
-    .continue-btn .btn-heart::before,
-    .continue-btn .btn-heart::after {
-      content: '';
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #FF0033;
-    }
-    .continue-btn .btn-heart::before { top: -5px; left: 0; }
-    .continue-btn .btn-heart::after { top: 0; left: 5px; }
 
     .continue-btn:disabled {
       border-color: #333;
       color: #333;
       cursor: not-allowed;
     }
-    .continue-btn:disabled .btn-heart { background: #333; }
-    .continue-btn:disabled .btn-heart::before,
-    .continue-btn:disabled .btn-heart::after { background: #333; }
+    .continue-btn:disabled .btn-heart {
+      opacity: 0.25;
+    }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
@@ -291,7 +289,7 @@
 <body>
 
   <!-- ── HEART ── -->
-  <div class="soul"></div>
+  <img class="soul" src="Games/Under/Asset/Soul/Undertale_red_soul.png" alt="">
 
   <!-- ── TITLE ── -->
   <h1>¿Puedes donar<br>tu alma?</h1>
@@ -302,7 +300,7 @@
 
     <!-- COLUMNA IZQUIERDA: UPLOAD -->
     <div class="col-left">
-      <div class="col-title"><span class="ph"></span> SUBE TU SKIN</div>
+      <div class="col-title"><img class="ph" src="Games/Under/Asset/Soul/Undertale_red_soul.png" alt=""> SUBE TU SKIN</div>
       <div class="dropzone" id="dropzone">
         <input type="file" id="fileInput" accept="image/*" hidden>
         <div class="dropzone-content" id="dropzoneContent">
@@ -315,7 +313,7 @@
 
     <!-- COLUMNA DERECHA: PREVIEW + MODELO 3D -->
     <div class="col-right">
-      <div class="col-title"><span class="ph"></span> VISTA PREVIA</div>
+      <div class="col-title"><img class="ph" src="Games/Under/Asset/Soul/Undertale_red_soul.png" alt=""> VISTA PREVIA</div>
       <p class="model-label">Selecciona tu modelo</p>
       <div class="model-btns">
         <button class="model-btn active" data-skin="steve">STEVE</button>
@@ -328,7 +326,7 @@
 
   <!-- ── CONTINUAR ── -->
   <button class="continue-btn" id="continueBtn" disabled>
-    <span class="btn-heart"></span> CONTINUAR
+    <img class="btn-heart" src="Games/Under/Asset/Soul/Undertale_red_soul.png" alt=""> CONTINUAR
   </button>
 
   <!-- Three.js -->
