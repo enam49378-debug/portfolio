@@ -358,56 +358,10 @@
       // BoxGeometry face order in three.js: px, nx, py, ny, pz, nz
       const FACE_KEYS = ['right', 'left', 'top', 'bottom', 'front', 'back'];
 
-      // ═══════ DEFAULT SKIN (64x64) ═══════
-      function makeDefaultSkin() {
-        const c = document.createElement('canvas');
-        c.width = 64; c.height = 64;
-        const g = c.getContext('2d');
-        const R = (x, y, w, h, col) => { g.fillStyle = col; g.fillRect(x, y, w, h); };
-        // head
-        R(8, 8, 8, 8, '#c68b5d');
-        R(10, 10, 1, 1, '#ffffff');
-        R(12, 10, 1, 1, '#ffffff');
-        R(10, 11, 1, 1, '#3f7ac4');
-        R(12, 11, 1, 1, '#3f7ac4');
-        R(10, 13, 3, 1, '#7a4a2a');
-        R(8, 0, 8, 8, '#3d2b1f');
-        R(8, 8, 8, 1, '#3d2b1f');
-        R(8, 8, 1, 2, '#3d2b1f');
-        R(15, 8, 1, 2, '#3d2b1f');
-        // hat overlay (top only)
-        R(40, 0, 8, 8, '#3d2b1f');
-        // torso
-        R(20, 20, 8, 12, '#00a8a8');
-        R(16, 20, 4, 12, '#00a8a8');
-        R(28, 20, 4, 12, '#00a8a8');
-        R(32, 20, 8, 12, '#00a8a8');
-        R(20, 16, 8, 4, '#00a8a8');
-        R(28, 16, 8, 4, '#00a8a8');
-        // right arm
-        R(40, 20, 4, 8, '#00a8a8'); R(40, 28, 4, 4, '#c68b5d');
-        R(44, 20, 4, 8, '#00a8a8'); R(44, 28, 4, 4, '#c68b5d');
-        R(48, 20, 4, 8, '#00a8a8'); R(48, 28, 4, 4, '#c68b5d');
-        R(52, 20, 4, 8, '#00a8a8'); R(52, 28, 4, 4, '#c68b5d');
-        // left arm
-        R(32, 52, 4, 8, '#00a8a8'); R(32, 60, 4, 4, '#c68b5d');
-        R(36, 52, 4, 8, '#00a8a8'); R(36, 60, 4, 4, '#c68b5d');
-        R(40, 52, 4, 8, '#00a8a8'); R(40, 60, 4, 4, '#c68b5d');
-        R(44, 52, 4, 8, '#00a8a8'); R(44, 60, 4, 4, '#c68b5d');
-        // right leg
-        R(0, 20, 4, 12, '#2f2f92'); R(4, 30, 4, 2, '#555555');
-        R(4, 20, 4, 12, '#2f2f92'); R(8, 30, 4, 2, '#555555');
-        R(8, 20, 4, 12, '#2f2f92');
-        R(12, 20, 4, 12, '#2f2f92');
-        R(4, 16, 4, 4, '#2f2f92'); R(8, 16, 4, 4, '#2f2f92');
-        // left leg
-        R(16, 52, 4, 12, '#2f2f92'); R(20, 62, 4, 2, '#555555');
-        R(20, 52, 4, 12, '#2f2f92'); R(24, 62, 4, 2, '#555555');
-        R(24, 52, 4, 12, '#2f2f92');
-        R(28, 52, 4, 12, '#2f2f92');
-        R(20, 48, 4, 4, '#2f2f92'); R(24, 48, 4, 4, '#2f2f92');
-        return c;
-      }
+      const SKIN_URLS = {
+        steve: 'Personajes/Undertale/steve.png',
+        alex:  'Personajes/Undertale/alex.png'
+      };
 
       function configureTexture(tex) {
         tex.flipY = false;
@@ -421,18 +375,13 @@
       // ═══════ TEXTURE ═══════
       function getTexture() {
         return new Promise(resolve => {
-          if (uploadedImage) {
-            const tex = new THREE.TextureLoader().load(uploadedImage, () => {
-              configureTexture(tex);
-              const img = tex.image;
-              if (img) { texW = img.width || 64; texH = img.height || 64; }
-              resolve(tex);
-            });
-          } else {
-            const tex = configureTexture(new THREE.CanvasTexture(makeDefaultSkin()));
-            texW = 64; texH = 64;
+          const url = uploadedImage || SKIN_URLS[selectedSkin];
+          const tex = new THREE.TextureLoader().load(url, () => {
+            configureTexture(tex);
+            const img = tex.image;
+            if (img) { texW = img.width || 64; texH = img.height || 64; }
             resolve(tex);
-          }
+          });
         });
       }
 
