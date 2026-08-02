@@ -405,6 +405,13 @@
         const uvAttr = geo.attributes.uv;
         const setRect = (i, u0, v0, u1, v1) => {
           const o = i * 4;
+          // BoxGeometry face order is [right, left, top, bottom, front, back] (i = 0..5).
+          // three.js genera los vertices de "top" (i=2) y "bottom" (i=3) en el orden
+          // opuesto al de las otras 4 caras, así que hay que invertir las esquinas UV
+          // solo para esas dos o la textura queda rotada/mal encajada arriba y abajo.
+          if (i === 2 || i === 3) {
+            [u0, v0, u1, v1] = [u1, v1, u0, v0];
+          }
           uvAttr.setXY(o + 0, u0 / texW, v0 / texH);
           uvAttr.setXY(o + 1, u1 / texW, v0 / texH);
           uvAttr.setXY(o + 2, u0 / texW, v1 / texH);
