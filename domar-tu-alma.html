@@ -356,6 +356,7 @@
       let animTime = 0;
       let animPlayed = false;
       let modelBones = new Map();
+      let cameraOffset = null; // offset fijo cámara -> modelo (frontal)
       const IDENTITY = { r: [0,0,0], t: [0,0,0], s: [1,1,1] };
 
       const MODEL_URLS = {
@@ -690,7 +691,8 @@
           s[0] *= v.s[0]; s[1] *= v.s[1]; s[2] *= v.s[2];
         }
         modelRoot.rotation.set(r[0], r[1], r[2]);
-        modelRoot.position.set(t[0], t[1], t[2]);
+        // transform.t está en unidades Blockbench; modelRoot escala 1/16
+        modelRoot.position.set(t[0] / 16, t[1] / 16, t[2] / 16);
         modelRoot.scale.set((1 / 16) * s[0], (1 / 16) * s[1], (1 / 16) * s[2]);
       }
 
@@ -706,6 +708,7 @@
         });
         modelRoot = null;
         modelBones.clear();
+        cameraOffset = null;
       }
 
       // ═══════ Three.js ═══════
@@ -769,6 +772,13 @@
             }
             applyAnim(animTime);
           }
+          // Cámara sigue la posición del modelo (traducción) pero mantiene orientación frontal fija
+          if (modelRoot && cameraOffset) {
+            const center = new THREE.Vector3().copy(modelRoot.position);
+            // El centro del modelo en mundo; para mayor precisión podríamos usar bounding sphere
+            camera.position.copy(center).add(cameraOffset);
+            camera.lookAt(center);
+          }
           controls.update();
           renderer.render(scene, camera);
         })();
@@ -782,6 +792,8 @@
         controls.target.copy(center);
         camera.position.set(center.x, center.y, center.z + dist * 1.2);
         camera.lookAt(center);
+        // Guardar offset cámara -> centro del modelo (en espacio mundo)
+        cameraOffset = new THREE.Vector3().subVectors(camera.position, center);
         controls.update();
       }
 
