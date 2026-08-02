@@ -344,7 +344,166 @@
 
       let selectedSkin = 'steve';
       let uploadedImage = null;
-      let scene, camera, renderer, cube, controls;
+      let scene, camera, renderer, controls;
+      let modelRoot = null;
+      let activeTexture = null;
+      let texW = 64, texH = 64;
+      let modelToken = 0;
+
+      const MODEL_URLS = {
+        steve: 'Personajes/Undertale/Steve.bbs.json',
+        alex:  'Personajes/Undertale/Alex.bbs.json'
+      };
+
+      // BoxGeometry face order in three.js: px, nx, py, ny, pz, nz
+      const FACE_KEYS = ['right', 'left', 'top', 'bottom', 'front', 'back'];
+
+      // ═══════ DEFAULT SKIN (64x64) ═══════
+      function makeDefaultSkin() {
+        const c = document.createElement('canvas');
+        c.width = 64; c.height = 64;
+        const g = c.getContext('2d');
+        const R = (x, y, w, h, col) => { g.fillStyle = col; g.fillRect(x, y, w, h); };
+        // head
+        R(8, 8, 8, 8, '#c68b5d');
+        R(10, 10, 1, 1, '#ffffff');
+        R(12, 10, 1, 1, '#ffffff');
+        R(10, 11, 1, 1, '#3f7ac4');
+        R(12, 11, 1, 1, '#3f7ac4');
+        R(10, 13, 3, 1, '#7a4a2a');
+        R(8, 0, 8, 8, '#3d2b1f');
+        R(8, 8, 8, 1, '#3d2b1f');
+        R(8, 8, 1, 2, '#3d2b1f');
+        R(15, 8, 1, 2, '#3d2b1f');
+        // hat overlay (top only)
+        R(40, 0, 8, 8, '#3d2b1f');
+        // torso
+        R(20, 20, 8, 12, '#00a8a8');
+        R(16, 20, 4, 12, '#00a8a8');
+        R(28, 20, 4, 12, '#00a8a8');
+        R(32, 20, 8, 12, '#00a8a8');
+        R(20, 16, 8, 4, '#00a8a8');
+        R(28, 16, 8, 4, '#00a8a8');
+        // right arm
+        R(40, 20, 4, 8, '#00a8a8'); R(40, 28, 4, 4, '#c68b5d');
+        R(44, 20, 4, 8, '#00a8a8'); R(44, 28, 4, 4, '#c68b5d');
+        R(48, 20, 4, 8, '#00a8a8'); R(48, 28, 4, 4, '#c68b5d');
+        R(52, 20, 4, 8, '#00a8a8'); R(52, 28, 4, 4, '#c68b5d');
+        // left arm
+        R(32, 52, 4, 8, '#00a8a8'); R(32, 60, 4, 4, '#c68b5d');
+        R(36, 52, 4, 8, '#00a8a8'); R(36, 60, 4, 4, '#c68b5d');
+        R(40, 52, 4, 8, '#00a8a8'); R(40, 60, 4, 4, '#c68b5d');
+        R(44, 52, 4, 8, '#00a8a8'); R(44, 60, 4, 4, '#c68b5d');
+        // right leg
+        R(0, 20, 4, 12, '#2f2f92'); R(4, 30, 4, 2, '#555555');
+        R(4, 20, 4, 12, '#2f2f92'); R(8, 30, 4, 2, '#555555');
+        R(8, 20, 4, 12, '#2f2f92');
+        R(12, 20, 4, 12, '#2f2f92');
+        R(4, 16, 4, 4, '#2f2f92'); R(8, 16, 4, 4, '#2f2f92');
+        // left leg
+        R(16, 52, 4, 12, '#2f2f92'); R(20, 62, 4, 2, '#555555');
+        R(20, 52, 4, 12, '#2f2f92'); R(24, 62, 4, 2, '#555555');
+        R(24, 52, 4, 12, '#2f2f92');
+        R(28, 52, 4, 12, '#2f2f92');
+        R(20, 48, 4, 4, '#2f2f92'); R(24, 48, 4, 4, '#2f2f92');
+        return c;
+      }
+
+      function configureTexture(tex) {
+        tex.flipY = false;
+        tex.magFilter = THREE.NearestFilter;
+        tex.minFilter = THREE.NearestFilter;
+        tex.generateMipmaps = false;
+        tex.encoding = THREE.sRGBEncoding;
+        return tex;
+      }
+
+      // ═══════ TEXTURE ═══════
+      function getTexture() {
+        return new Promise(resolve => {
+          if (uploadedImage) {
+            const tex = new THREE.TextureLoader().load(uploadedImage, () => {
+              configureTexture(tex);
+              const img = tex.image;
+              if (img) { texW = img.width || 64; texH = img.height || 64; }
+              resolve(tex);
+            });
+          } else {
+            const tex = configureTexture(new THREE.CanvasTexture(makeDefaultSkin()));
+            texW = 64; texH = 64;
+            resolve(tex);
+          }
+        });
+      }
+
+      // ═══════ MODEL BUILDER (Blockbench JSON) ═══════
+      function buildBox(cube, tex) {
+        const [sx, sy, sz] = cube.size;
+        const geo = new THREE.BoxGeometry(sx, sy, sz);
+        const uvs = cube.uvs;
+        if (uvs) {
+          const uvAttr = geo.attributes.uv;
+          for (let i = 0; i < 6; i++) {
+            const r = uvs[FACE_KEYS[i]];
+            if (!r) continue;
+            const [u0, v0, u1, v1] = r;
+            const o = i * 4;
+            uvAttr.setXY(o + 0, u0 / texW, v0 / texH);
+            uvAttr.setXY(o + 1, u1 / texW, v0 / texH);
+            uvAttr.setXY(o + 2, u0 / texW, v1 / texH);
+            uvAttr.setXY(o + 3, u1 / texW, v1 / texH);
+          }
+          uvAttr.needsUpdate = true;
+        }
+        const mat = new THREE.MeshPhongMaterial({
+          map: tex,
+          shininess: 20,
+          transparent: true
+        });
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.position.set(
+          cube.from[0] + sx / 2,
+          cube.from[1] + sy / 2,
+          cube.from[2] + sz / 2
+        );
+        if (cube.offset) mesh.scale.set(1.03, 1.03, 1.03);
+        return mesh;
+      }
+
+      function buildModel(json, tex) {
+        const root = new THREE.Group();
+        const groups = json.model.groups;
+        Object.keys(groups).forEach(name => {
+          const g = groups[name];
+          if (!g.cubes) return;
+          g.cubes.forEach(cube => root.add(buildBox(cube, tex)));
+        });
+        root.scale.set(1 / 16, 1 / 16, 1 / 16);
+        return root;
+      }
+
+      function buildFallback(tex) {
+        const root = new THREE.Group();
+        const geo = new THREE.BoxGeometry(16, 32, 8);
+        const mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({ map: tex, shininess: 20, transparent: true }));
+        mesh.position.y = 16;
+        root.add(mesh);
+        root.scale.set(1 / 16, 1 / 16, 1 / 16);
+        return root;
+      }
+
+      function clearModel() {
+        if (!modelRoot) return;
+        scene.remove(modelRoot);
+        modelRoot.traverse(obj => {
+          if (obj.geometry) obj.geometry.dispose();
+          if (obj.material) {
+            if (Array.isArray(obj.material)) obj.material.forEach(m => m.dispose());
+            else obj.material.dispose();
+          }
+        });
+        modelRoot = null;
+      }
 
       // ═══════ Three.js ═══════
       function initThree() {
@@ -354,48 +513,63 @@
         const w = viewer.clientWidth || 1;
         const h = viewer.clientHeight || 1;
         camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 1000);
-        camera.position.set(3, 2, 4);
+        camera.position.set(0, 1.5, 3.4);
 
         renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(w, h);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.outputEncoding = THREE.sRGBEncoding;
         viewer.appendChild(renderer.domElement);
 
         controls = new THREE.OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.dampingFactor = 0.08;
         controls.enablePan = false;
-        controls.minDistance = 3;
-        controls.maxDistance = 8;
+        controls.target.set(0, 1, 0);
+        controls.minDistance = 1.2;
+        controls.maxDistance = 4.5;
 
-        scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-        const dir = new THREE.DirectionalLight(0xffffff, 0.8);
-        dir.position.set(2, 3, 2);
+        scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+        const dir = new THREE.DirectionalLight(0xffffff, 0.9);
+        dir.position.set(3, 5, 2);
         scene.add(dir);
+        const rim = new THREE.DirectionalLight(0xffffff, 0.35);
+        rim.position.set(-2, 2, -3);
+        scene.add(rim);
 
-        const geo = new THREE.BoxGeometry(1.5, 2.5, 1);
-        const mat = new THREE.MeshPhongMaterial({ color: 0x6d28d9, shininess: 20 });
-        cube = new THREE.Mesh(geo, mat);
-        scene.add(cube);
+        updateModel();
 
         (function loop() {
           requestAnimationFrame(loop);
-          cube.rotation.y += 0.004;
+          if (modelRoot) modelRoot.rotation.y += 0.005;
           controls.update();
           renderer.render(scene, camera);
         })();
       }
 
       function updateModel() {
-        if (!cube) return;
-        const color = selectedSkin === 'steve' ? 0x6d28d9 : 0xa855f7;
-        if (uploadedImage) {
-          const tex = new THREE.TextureLoader().load(uploadedImage);
-          tex.colorSpace = THREE.SRGBColorSpace;
-          cube.material = new THREE.MeshPhongMaterial({ map: tex, color, shininess: 20 });
-        } else {
-          cube.material = new THREE.MeshPhongMaterial({ color, shininess: 20 });
-        }
+        const token = ++modelToken;
+        getTexture().then(tex => {
+          if (token !== modelToken) return;
+          fetch(MODEL_URLS[selectedSkin])
+            .then(r => { if (!r.ok) throw new Error('http'); return r.json(); })
+            .then(json => {
+              if (token !== modelToken) return;
+              clearModel();
+              modelRoot = buildModel(json, tex);
+              scene.add(modelRoot);
+              if (activeTexture && activeTexture !== tex) activeTexture.dispose();
+              activeTexture = tex;
+            })
+            .catch(() => {
+              if (token !== modelToken) return;
+              clearModel();
+              modelRoot = buildFallback(tex);
+              scene.add(modelRoot);
+              if (activeTexture && activeTexture !== tex) activeTexture.dispose();
+              activeTexture = tex;
+            });
+        });
       }
 
       function onResize() {
