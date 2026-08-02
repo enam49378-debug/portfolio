@@ -614,12 +614,11 @@
         viewer.appendChild(renderer.domElement);
 
         controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.08;
+        controls.enabled = false;
+        controls.enableRotate = false;
+        controls.enableZoom = false;
         controls.enablePan = false;
         controls.target.set(0, 1, 0);
-        controls.minDistance = 0.8;
-        controls.maxDistance = 8;
 
         scene.add(new THREE.AmbientLight(0xffffff, 0.7));
         const dir = new THREE.DirectionalLight(0xffffff, 0.9);
@@ -633,7 +632,6 @@
 
         (function loop() {
           requestAnimationFrame(loop);
-          if (modelRoot) modelRoot.rotation.y += 0.005;
           controls.update();
           renderer.render(scene, camera);
         })();
@@ -645,10 +643,8 @@
         const center = sphere.center;
         const dist = sphere.radius / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
         controls.target.copy(center);
-        const dir = new THREE.Vector3(0.45, 0.25, 1).normalize();
-        camera.position.copy(center).add(dir.multiplyScalar(dist * 1.2));
-        controls.minDistance = sphere.radius * 0.8;
-        controls.maxDistance = sphere.radius * 6;
+        camera.position.set(center.x, center.y, center.z + dist * 1.2);
+        camera.lookAt(center);
         controls.update();
       }
 
