@@ -404,12 +404,15 @@
           }
           uvAttr.needsUpdate = true;
         }
+        const isOverlay = !!cube.offset;
         const mat = new THREE.MeshPhongMaterial({
           map: tex,
           shininess: 20,
-          transparent: true
+          transparent: isOverlay,
+          depthWrite: !isOverlay
         });
         const mesh = new THREE.Mesh(geo, mat);
+        mesh.renderOrder = isOverlay ? 1 : 0;
         mesh.position.set(
           cube.from[0] + sx / 2,
           cube.from[1] + sy / 2,
@@ -434,7 +437,7 @@
       function buildFallback(tex) {
         const root = new THREE.Group();
         const geo = new THREE.BoxGeometry(16, 32, 8);
-        const mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({ map: tex, shininess: 20, transparent: true }));
+        const mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({ map: tex, shininess: 20 }));
         mesh.position.y = 16;
         root.add(mesh);
         root.scale.set(1 / 16, 1 / 16, 1 / 16);
@@ -475,8 +478,8 @@
         controls.dampingFactor = 0.08;
         controls.enablePan = false;
         controls.target.set(0, 1, 0);
-        controls.minDistance = 1.2;
-        controls.maxDistance = 4.5;
+        controls.minDistance = 0.8;
+        controls.maxDistance = 8;
 
         scene.add(new THREE.AmbientLight(0xffffff, 0.7));
         const dir = new THREE.DirectionalLight(0xffffff, 0.9);
@@ -496,6 +499,19 @@
         })();
       }
 
+      function frameCamera(root) {
+        const box = new THREE.Box3().setFromObject(root);
+        const sphere = box.getBoundingSphere(new THREE.Sphere());
+        const center = sphere.center;
+        const dist = sphere.radius / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+        controls.target.copy(center);
+        const dir = new THREE.Vector3(0.45, 0.25, 1).normalize();
+        camera.position.copy(center).add(dir.multiplyScalar(dist * 1.2));
+        controls.minDistance = sphere.radius * 0.8;
+        controls.maxDistance = sphere.radius * 6;
+        controls.update();
+      }
+
       function updateModel() {
         const token = ++modelToken;
         getTexture().then(tex => {
@@ -507,6 +523,7 @@
               clearModel();
               modelRoot = buildModel(json, tex);
               scene.add(modelRoot);
+              frameCamera(modelRoot);
               if (activeTexture && activeTexture !== tex) activeTexture.dispose();
               activeTexture = tex;
             })
@@ -515,6 +532,7 @@
               clearModel();
               modelRoot = buildFallback(tex);
               scene.add(modelRoot);
+              frameCamera(modelRoot);
               if (activeTexture && activeTexture !== tex) activeTexture.dispose();
               activeTexture = tex;
             });
